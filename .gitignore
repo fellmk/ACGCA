@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+R_Package
+*.o
+*.so
+*.dll
