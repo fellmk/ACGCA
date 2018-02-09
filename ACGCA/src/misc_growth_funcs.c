@@ -13,17 +13,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-/*
-#include <C:/Program Files/R/local323/include/gsl/gsl_math.h>          
-#include <C:/Program Files/R/local323/include/gsl/gsl_blas.h>
+#include <gsl/gsl_math.h>          
+#include <gsl/gsl_blas.h>
 //#include <gsl/gsl_matrix.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_sf_gamma.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_linalg.h>
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_linalg.h>
 //#include <gsl/gsl_sf.h>
 #include <gsl/gsl_cdf.h>                                                                     
-*/
 #include "head_files/misc_growth_funcs.h"
-///#include "head_files/misc_func.h"
+#include "head_files/misc_func.h"
 // Would use the following syntax to call initialize inside another function
 // initialize(&sparms, &tparms, &gparms, &tstates);
 

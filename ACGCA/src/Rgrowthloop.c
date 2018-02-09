@@ -1,35 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-/*
-#include <C:/Program Files/R/local323/include/gsl/gsl_math.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_vector.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_blas.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_matrix.h>
-*/ 
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_matrix.h>
 
 #include "head_files/misc_growth_funcs.h"
-///#include "head_files/misc_func.h"
+#include "head_files/misc_func.h"
 #include "head_files/excessgrowing.h"
 #include "head_files/rebuildstaticstate.h"
 #include "head_files/putonallometry.h"
 #include "head_files/shrinkingsize.h"
 #include "head_files/growthloop.h"
 
-/*
 #ifdef DATA
-#include <C:/Program Files/R/local323/include/gsl/gsl_randist.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_rng.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_vector.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_statistics.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_math.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_blas.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_matrix.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_linalg.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_sf.h>
-#include <C:/Program Files/R/local323/include/gsl/gsl_cdf.h>
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_statistics.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_sf.h>
+#include <gsl/gsl_cdf.h>
 #endif 
-*/
+
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
 // I am hoping to avoid the structure problem that is causing problems.

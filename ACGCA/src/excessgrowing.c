@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-///#include <C:/Program Files/R/local323/include/gsl/gsl_math.h>
+#include <gsl/gsl_math.h>
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/excessgrowing.h"
 
