@@ -34,6 +34,7 @@ test2 <- ACGCA::growthloopR(sparms2=theta.j, gparms2=gparm, r0=0.05)
 source("acruparms.R")
 light.levels <- seq(1,.1,-.1)
 
+# This tests the package code at multiple light levels
 test <- list()
 test.s <- list()
 for(i in 1:length(light.levels)){
