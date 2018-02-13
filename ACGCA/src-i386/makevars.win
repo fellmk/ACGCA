@@ -1,0 +1,2 @@
+#PKG_LIBS=-lgsl -lgslcblas
+LDLIBS=-L C:/Users/mkf58/Documents/R/win-library/3.4/Rcpp/lib -lgsl -lgslcblas -lm

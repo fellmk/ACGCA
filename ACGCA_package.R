@@ -11,7 +11,7 @@ devtools::install_github("klutometis/roxygen")
 
 # Load the development library and roxygen which helps with documentation.
 library("devtools")
-#options(devtools.install.args = "--no-multiarch")
+options(devtools.install.args = "--no-multiarch")
 library("roxygen2")
 
 # A devtools function that produces a barebones folder for a package
