@@ -27,8 +27,11 @@ setwd("..")
 install("ACGCA")
 help(package="ACGCA")
 library(ACGCA)
+help("growthloopR")
+
 
 load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
+load("names_thetaj.R")
 test2 <- ACGCA::growthloopR(sparms2=theta.j, gparms2=gparm, r0=0.05)
 
 source("acruparms.R")
@@ -50,7 +53,7 @@ for(i in 1:length(light.levels)){
   }
 }
 
-cbind(acru, theta.j)
+cbind(parameter.names[1:36], acru, theta.j)
 # Test the scafold to make sure it runs. This call is for development and
 # would in no way work with the full funciton. That should be tested using
 # inputs from the origional paper by Ogle and Pacala (2009).

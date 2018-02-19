@@ -50,7 +50,11 @@
 #'
 #' This function provides an easy interface for running the ACGCA model.
 #'
-#' @param sparms A vector containing the parameters for the simulationl.
+#' @param sparms A vector containing the parameters for the simulation.
+#' \describe{
+#'    \item{hmax}{Maximum tree height}
+#'    \item{phih}{Slope of H vs. r curve at r = 0 m}{
+#'  }
 #' @param gparms A vector containing values that control simulation behavior.
 #' @param r0 The starting radius. Defaults to 0.05.
 #' @keywords IBM

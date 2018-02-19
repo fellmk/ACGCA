@@ -9,7 +9,11 @@ growthloopR(sparms2, gparms2, r0)
 \arguments{
 \item{r0}{The starting radius. Defaults to 0.05.}
 
-\item{sparms}{A vector containing the parameters for the simulationl.}
+\item{sparms}{A vector containing the parameters for the simulation.
+\enumerate{
+   \hmax{tt}
+   \phih{dd}
+ }}
 
 \item{gparms}{A vector containing values that control simulation behavior.}
 }
