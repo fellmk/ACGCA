@@ -97,7 +97,6 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 
 	//*t2 = t;
 
-
 	sparms p;
   	gparms gp;
 

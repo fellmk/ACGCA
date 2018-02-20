@@ -53,9 +53,54 @@
 #' @param sparms A vector containing the parameters for the simulation.
 #' \describe{
 #'    \item{hmax}{Maximum tree height}
-#'    \item{phih}{Slope of H vs. r curve at r = 0 m}{
+#'    \item{phih}{Slope of H vs. r curve at r = 0 m}
+#'    \item{eta}{Relative height at which trunk transitions from paraboloid to
+#'     cone}
+#'    \item{swmax}{Maximum sapwood width}
+#'    \item{lamdas}{Proportionality between BT and BO for sapwood}
+#'    \item{lamdah}{Proportionality between BT and BO for heartwood}
+#'    \item{rho}{Wood density}
+#'    \item{rhomin}{Not in use. Dissabled in C code}
+#'    \item{f2}{Leaf area-to-xylem conducting area ratio}
+#'    \item{f1}{Fine root area-to-leaf area ratio}
+#'    \item{gamma}{Maximum storage capacity of living sapwood cells}
+#'    \item{gammaw}{(Inverse) density of sapwood structural tissue}
+#'    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
+#'    \item{cgl}{Construction costs of producing leaves}
+#'    \item{cgr}{Construction costs of producing fine roots}
+#'    \item{cgw}{Construction costs of producing sapwood} 
+#'    \item{deltal}{Labile carbon storage capacity of leaves}
+#'    \item{deltar}{Labile carbon storage capacity of fine roots}
+#'    \item{sl}{Senescence rate of leaves} 
+#'    \item{sla}{Specific leaf area}
+#'    \item{sr}{Senescence rate of fine roots}
+#'    \item{so}{Senescence rate of coarse roots and branches} 
+#'    \item{rr}{Average fine root radius}
+#'    \item{rhor}{Tissue density of fine roots}
+#'    \item{rml}{Maintenance respiration rate of leaves}
+#'    \item{rms}{Maintenance respiration rate of sapwood}
+#'    \item{rmr}{Maintenance respiration rate of fine roots}
+#'    \item{etaB}{Relative height at which trunk transitions from a neiloid to
+#'     paraboloid}
+#'    \item{k}{Crown light extinction coefficient}
+#'    \item{epsg}{Radiation-use-efficiency}
+#'    \item{m}{Maximum relative crown depth}
+#'    \item{alpha}{Crown Curvature parameter}
+#'    \item{R0}{Maximum potential crown radius of a tree with diameter at
+#'     breast height of 0m (i.e., for a tree that is exactly 1.37 m tall}
+#'    \item{R40}{Maximum potential crown radius of a tree with diameter at
+#'     brrest height or 0.4m (40 cm)}
+#'    \item{drinit}{NA}
+#'    \item{drcrit}{NA}
 #'  }
 #' @param gparms A vector containing values that control simulation behavior.
+#' \describe{
+#'    \item{deltat}{1/16 of a year or 0.0625}
+#'    \item{years}{no default}
+#'    \item{tolerance}{Set to 0.00001}
+#'    \item{breast height}{Set to 1.37}
+#'    \item{PARmax}{Default is 2060}
+#' }
 #' @param r0 The starting radius. Defaults to 0.05.
 #' @keywords IBM
 #' @export
@@ -72,7 +117,10 @@ growthloopR <- function(sparms2, gparms2, r0){
   # Set up the variables needed for lengths of output
   #lenvars2 <- (gparms2[2,1]/gparms2[1,1])*dim[1]+dim[1]
   lenvars <- (gparms2[2,1]/gparms2[1,1])+1
-  output2 <- list(h=numeric(0), r=numeric(0), rBH=numeric(0), status=numeric(0), errorind=as.integer(numeric(0)),cs=numeric(0), clr=numeric(0), growth_st=as.integer(numeric(0)))
+  output2 <- list(h=numeric(0), r=numeric(0), rBH=numeric(0),
+                  status=numeric(0), errorind=as.integer(numeric(0)),
+                  cs=numeric(0), clr=numeric(0), 
+                  growth_st=as.integer(numeric(0)))
 
   # Loop through each set of variables and then check the output against
   # a probability array and apply the metropolis criteria where the acceptance
@@ -86,8 +134,8 @@ growthloopR <- function(sparms2, gparms2, r0){
     gparms <- gparms2[,j]
     r02 <- r0[j]
 
-    output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms), r0=as.double
-      (r0), t=integer(1),
+    output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
+      r0=as.double(r0), t=integer(1),
       #la=double(gparm[2]/gparm[1]+1), #// double
       #LAI=double(gparm[2]/gparm[1]+1), #//double
       #egrow=double(gparm[2]/gparm[1]+1), #//double
