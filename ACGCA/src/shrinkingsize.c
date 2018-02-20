@@ -108,7 +108,7 @@ void shrinkingsizeA(sparms *p, tstates *st, gparms *gp, int i,
                     double *pnet){
 
   //local variables
-  double eo=0,el=0,er=0,sigo=0,sigr=0,sigl=0,nuoht=0,denom;
+  double eo=0,el=0,er=0,sigr=0,sigl=0,sigo=0,nuoht=0,denom;
 
   // Determine if able to bring all tissues up to "largest" tissue (i.e., BOSmax):
   // Initial calculation.  Only one is non true since bosmax is one of either boso, 
@@ -262,7 +262,7 @@ void shrinkingsizeA(sparms *p, tstates *st, gparms *gp, int i,
         eo=0.0;
         el=0.0;
         er=0.0;
-        sigo=0.0;
+        sigo=0.0; //remove 2/20/18
         sigr=0.0;
         sigl=0.0;
         nuoht=0.0;
@@ -385,7 +385,7 @@ void shrinkingsizeB(sparms *p, tstates *st, gparms *gp, int i,
                     double *pnet){
 
   // set all "excess" senescence at zero.
-  double eo=0,el=0,er=0,ce,sigr=0,sigl=0,Al,Ar,nuoht=0,denom, new_bl, new_br;
+  double eo=0,el=0,er=0,ce,sigr=0,sigl=0,Al,Ar,denom, new_bl, new_br; // removed ,nuoht=0 on 2/20/18
  
   // if-else block
   if (bio->bosr > bio->bosl){
@@ -436,6 +436,7 @@ void shrinkingsizeB(sparms *p, tstates *st, gparms *gp, int i,
   // Now need to determine BOS.
   st->bos=new_bl*p->sla*p->lamdas*st->bts/(p->f2*st->sa);  // bos that matches new_bl; bos if need to drop bos.
  
+  double nuoht=0.0;
   //eo=0.0;
   if(bio->bosst < st->bos){ // too little BOS, drop extra BL and BR & build BOS.
     st->bos=2*st->bts*p->sla*p->lamdas*(p->deltal*new_bl+p->deltar*new_br+(p->cgw+*deltaw)*(bio->bohst+bio->bosst))/

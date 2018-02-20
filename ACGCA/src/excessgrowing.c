@@ -537,7 +537,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
  
 /// All error code added to this file by mkf was done between 5/19 and 5/21 2013
 /// to capture errors for the end user.  These errors are interpreted by the 
-/// part of the code implemented in R.  The R code interprets the sequence3 of
+/// part of the code implemented in R.  The R code interprets the sequence of
 /// bits from the integer values to return the error messages that are printed
 /// out by this code.  All of the line numbers in this code are wrong unless the
 /// getchar(); line is removed from the code.

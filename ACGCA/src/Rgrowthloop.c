@@ -1,30 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_matrix.h>
-
 #include "head_files/misc_growth_funcs.h"
-#include "head_files/excessgrowing.h"
-#include "head_files/rebuildstaticstate.h"
-#include "head_files/putonallometry.h"
-#include "head_files/shrinkingsize.h"
 #include "head_files/growthloop.h"
-
-#ifdef DATA
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_statistics.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_sf.h>
-#include <gsl/gsl_cdf.h>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
@@ -111,8 +86,7 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 			p.lamdah = p2[5];
 			p.rhomax = p2[6]; //exp(13.2);
 			p.rhomin = p2[7]; //exp(13.2);
-		 	p.rhomin = p.rhomax;
-			// p->rhomin=p->rhomax; // I don't know why this line is needed?
+		 	p.rhomin = p.rhomax; // this could be changed if rhomin != rhomax.
 			p.f2 = p2[8]; //exp(8.456);//   //f2=gammax*NEWf2
 			p.f1 = p2[9];
 			p.gammac = p2[10];
@@ -143,6 +117,9 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 			p.drcrit = p2[35];
 
 			/*
+			// This section will print all the parameters if the comment is removed.
+			// This code was added while testing the fuction to make sure the variables
+			// from R were passed with the correct values.
 			printf("hmax=%g \n",p.hmax);
 			printf("phih=%g \n",p.phih);
 			printf("eta=%g \n",p.eta);
@@ -182,19 +159,11 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 			*/
 
 			// define gp values based on input from R
-			gp.deltat=gp2[0];
-			gp.T=gp2[1];
-			gp.tolerance=gp2[2];
-			gp.BH=gp2[3];
-			gp.Io=gp2[4];  // make sure =9500*0.3 for real data
-
-				//R Code//
-				//gparm[1] <- 0.0625 # gp.deltat
-				//gparm[2] <- 10 # gp.T length of run in years
-				//gparm[3] <- 0.00001 # gp.tolerance
-				//gparm[4] <- 1.37 # gp.BH
-				//#gparm[5] <- 9500*0.13 # gp.Io from MCMC part for Acer
-				//gparm[5] <- 9500*0.3
+			gp.deltat=gp2[0]; // gparm[1] <- 0.0625 # gp.deltat
+			gp.T=gp2[1]; // gparm[2] <- 10 # gp.T length of run in years
+			gp.tolerance=gp2[2]; // gparm[3] <- 0.00001 # gp.tolerance
+			gp.BH=gp2[3]; // gparm[4] <- 1.37 # gp.BH
+			gp.Io=gp2[4];  // annual par APAR
 
 			/*
 			printf("Rgrowthloop \n");
@@ -204,18 +173,12 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 
 			//printf("Testvar %g, i %d, k %d \n", testvar[(i-1)+(k-1)*dim[1]],i,k);
 
-
-			// This all comes from the main loop
-			//r0=0.1;
-
-
 			/*
 			The code in the following section is to facilitate transfer of
 			parameter values to R.  It could be done more efficiently by
 			updating the values in the above code but I decided not to modify
 			the original code (MKF 4/7/2013).
-			*/
-			/*
+
 			I modified the code to make it work better.  p and gp are structures
 			passed to the growthloop function.  However; the rest are pointers.
 			The pointers do not need to be dereferenced at this point since they
