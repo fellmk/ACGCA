@@ -32,7 +32,7 @@ help("growthloopR")
 
 load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
-test2 <- ACGCA::growthloopR(sparms2=theta.j, gparms2=gparm, r0=0.05)
+test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE)
 
 source("acruparms.R")
 light.levels <- seq(1,.1,-.1)
@@ -41,10 +41,9 @@ light.levels <- seq(1,.1,-.1)
 test <- list()
 test.s <- list()
 for(i in 1:length(light.levels)){
-  gparm[5] <- 2060*light.levels[i]
   acru <- as.matrix(acru)
   # This uses the smallest radius I can get
-  test <- ACGCA::growthloopR(sparms2=acru, gparms2=gparm, r0=0.0054)
+  test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=light.levels[i]*2060, fulloutput=TRUE)
   test.s[[i]] <- test
   if(i == 1){
     plot(1:801, test$r, type="l")

@@ -68,13 +68,13 @@
 #'    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
 #'    \item{cgl}{Construction costs of producing leaves}
 #'    \item{cgr}{Construction costs of producing fine roots}
-#'    \item{cgw}{Construction costs of producing sapwood} 
+#'    \item{cgw}{Construction costs of producing sapwood}
 #'    \item{deltal}{Labile carbon storage capacity of leaves}
 #'    \item{deltar}{Labile carbon storage capacity of fine roots}
-#'    \item{sl}{Senescence rate of leaves} 
+#'    \item{sl}{Senescence rate of leaves}
 #'    \item{sla}{Specific leaf area}
 #'    \item{sr}{Senescence rate of fine roots}
-#'    \item{so}{Senescence rate of coarse roots and branches} 
+#'    \item{so}{Senescence rate of coarse roots and branches}
 #'    \item{rr}{Average fine root radius}
 #'    \item{rhor}{Tissue density of fine roots}
 #'    \item{rml}{Maintenance respiration rate of leaves}
@@ -93,15 +93,75 @@
 #'    \item{drinit}{NA}
 #'    \item{drcrit}{NA}
 #'  }
-#' @param gparms A vector containing values that control simulation behavior.
+#'
+#' @param r0 The starting radius. Defaults to 0.05
+#' @param parmax The maximum yearly iradiance, defaults to 2060
+#' @param years The number of years to run the simulation, defaults to 50.
+#' @param steps The number of time steps per year, defaults to 16.
+#' @param breast.height The height DBH is taken at, defaults to 1.37.
+#' @param tolerance The tolerance for the algorithm that balances excess labile
+#'   carbon in the difference equations describing carbon dynamics of a healthy
+#'   tree (Ogle and Pacala, 2009). The default is 0.00001 and should likely not
+#'   be changed.
+#' @param fulloutput Is the full output desired if so set this to TRUE. The
+#'                   default is FALSE.
+#'
+#' @return Function output:
 #' \describe{
-#'    \item{deltat}{1/16 of a year or 0.0625}
-#'    \item{years}{no default}
-#'    \item{tolerance}{Set to 0.00001}
-#'    \item{breast height}{Set to 1.37}
-#'    \item{PARmax}{Default is 2060}
+#'    \item{p}{sparms, input parameters}
+#'    \item{gp}{Vector: (timestep, years, tolerance, breast.height,parmax)}
+#'    \item{r0}{The starting radius.}
+#'    \item{h}{A time series of tree height from the simulation for each time
+#'    step. The length is steps*years+1 due to the initialization (time 0).}
+#'    \item{hh}{...}
+#'    \item{hC}{...}
+#'    \item{hB}{...}
+#'    \item{hBH}{...}
+#'    \item{r}{A time series of tree radius (m) from the simulation for each
+#'    time step. The length is steps*years+1 due to the initialization
+#'    (time 0).}
+#'    \item{rB}{...}
+#'    \item{rBH}{...}
+#'    \item{sw}{Sapwood width which has a maximum of SWmax (m).}
+#'    \item{vts}{}
+#'    \item{vt}{}
+#'    \item{vth}{}
+#'    \item{sa}{}
+#'    \item{la}{}
+#'    \item{ra}{}
+#'    \item{dr}{}
+#'    \item{xa}{}
+#'    \item{bl}{}
+#'    \item{br}{}
+#'    \item{bt}{}
+#'    \item{bts}{}
+#'    \item{bth}{}
+#'    \item{boh}{}
+#'    \item{bos}{}
+#'    \item{bo}{}
+#'    \item{bs}{}
+#'    \item{cs}{}
+#'    \item{clr}{}
+#'    \item{fl}{}
+#'    \item{fr}{}
+#'    \item{ft}{}
+#'    \item{fo}{}
+#'    \item{rfl}{}
+#'    \item{rfr}{}
+#'    \item{rfs}{}
+#'    \item{egrow}{}
+#'    \item{ex}{}
+#'    \item{rtrans}{}
+#'    \item{light}{}
+#'    \item{nut}{}
+#'    \item{deltas}{}
+#'    \item{LAI}{}
+#'    \item{status}{}
+#'    \item{lenvars}{}
+#'    \item{errorind}{}
+#'    \item{growth_st}{}
 #' }
-#' @param r0 The starting radius. Defaults to 0.05.
+#'
 #' @keywords IBM
 #' @export
 # @examples
@@ -111,36 +171,26 @@
 ###############################################################################
 
 ## This code creates the function that runs the growth loop once it is loaded
-growthloopR <- function(sparms2, gparms2, r0){
-  #t<- numeric(0)
+growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
+                        steps=16, breast.height=1.37, tolerance=0.00001,
+                        fulloutput=FALSE){
+
+  # I replaced this in the function call with the five variables it contains.
+  # It still makes sense to send a combined object to C. 2/21/18
+  gparms <- matrix(data = c(1/steps, years, tolerance, breast.height, parmax), ncol=1)
 
   # Set up the variables needed for lengths of output
   #lenvars2 <- (gparms2[2,1]/gparms2[1,1])*dim[1]+dim[1]
-  lenvars <- (gparms2[2,1]/gparms2[1,1])+1
+  lenvars <- (gparms[2,1]/gparms[1,1])+1
   output2 <- list(h=numeric(0), r=numeric(0), rBH=numeric(0),
                   status=numeric(0), errorind=as.integer(numeric(0)),
-                  cs=numeric(0), clr=numeric(0), 
+                  cs=numeric(0), clr=numeric(0),
                   growth_st=as.integer(numeric(0)))
 
-  # Loop through each set of variables and then check the output against
-  # a probability array and apply the metropolis criteria where the acceptance
-  # rate should be near 0.24-0.40.  This is accomplished by modifying adjusting
-  # sigma until the acceptance is 0.24-0.40 for the last 100 iterations.
-  lenvars2 <- 1
-  for(j in 1:lenvars2){
-
-    # Create a vector of variables for each run
-    sparms <- sparms2[,j]
-    gparms <- gparms2[,j]
-    r02 <- r0[j]
-
+    # Call the growthloop function using R's C interface.
     output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
       r0=as.double(r0), t=integer(1),
-      #la=double(gparm[2]/gparm[1]+1), #// double
-      #LAI=double(gparm[2]/gparm[1]+1), #//double
-      #egrow=double(gparm[2]/gparm[1]+1), #//double
-      #ex=double(gparm[2]/gparm[1]+1), #//double
-      #status=integer(gparm[2]/gparm[1]+1) #//int
+
       h=double(lenvars),
       hh=double(lenvars),
       hC=double(lenvars),
@@ -194,26 +244,25 @@ growthloopR <- function(sparms2, gparms2, r0){
       growth_st=integer(lenvars)
     )# End growthloop call
 
-    # Output to be saved this can be added to as desired
-    output2$h <- c(output2$h, output1$h)
-    output2$r <- c(output2$r, output1$r)
-    output2$rBH <-c(output2$rBH, output1$rBH)
-    output2$status <-c(output2$status, output1$status)
-    output2$errorind <- c(output2$errorind, output1$errorind)
+    if(fulloutput == FALSE){
+      # Output to be saved this can be added to as desired
+      output2$h <- c(output2$h, output1$h)
+      output2$r <- c(output2$r, output1$r)
+      output2$rBH <-c(output2$rBH, output1$rBH)
+      output2$status <-c(output2$status, output1$status)
+      output2$errorind <- c(output2$errorind, output1$errorind)
 
-    output2$cs <- c(output2$cs, output1$cs) # Added 7/21/2014
-    output2$clr <- c(output2$clr, output1$clr) # Added 7/21/2014
-    output2$growth_st <-c(output2$growth_st, output1$growth_st) # Added 9/22/2014
-  }#growth loop
+      output2$cs <- c(output2$cs, output1$cs) # Added 7/21/2014
+      output2$clr <- c(output2$clr, output1$clr) # Added 7/21/2014
+      output2$growth_st <-c(output2$growth_st, output1$growth_st) # Added 9/22/2014
 
-  return(output2)
-
+      return(output2)
+    }else if(fulloutput==TRUE){
+      # remove t which is left over from testing.
+      output1[[4]] <- NULL
+      return(output1)
+    }else{
+      stop("The fulloutput input to this function must be either TRUE or
+           FALSE.")
+    }
 } #end of growthloop function
-
-# I have no idea why I did this it just sends the values to another function
-# without doing anything.
-#growthloopR2 <- function(sparms2, gparms2, r0, dim,lenvars2){
-#  growthloopR(sparms2, gparms2, r0, dim,lenvars2)
-#}
-
-

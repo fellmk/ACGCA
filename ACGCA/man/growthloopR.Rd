@@ -4,11 +4,10 @@
 \alias{growthloopR}
 \title{ACGCA model function}
 \usage{
-growthloopR(sparms2, gparms2, r0)
+growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
+  breast.height = 1.37, tolerance = 1e-05, fulloutput = FALSE)
 }
 \arguments{
-\item{r0}{The starting radius. Defaults to 0.05.}
-
 \item{sparms}{A vector containing the parameters for the simulation.
 \describe{
    \item{hmax}{Maximum tree height}
@@ -27,13 +26,13 @@ growthloopR(sparms2, gparms2, r0)
    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
    \item{cgl}{Construction costs of producing leaves}
    \item{cgr}{Construction costs of producing fine roots}
-   \item{cgw}{Construction costs of producing sapwood} 
+   \item{cgw}{Construction costs of producing sapwood}
    \item{deltal}{Labile carbon storage capacity of leaves}
    \item{deltar}{Labile carbon storage capacity of fine roots}
-   \item{sl}{Senescence rate of leaves} 
+   \item{sl}{Senescence rate of leaves}
    \item{sla}{Specific leaf area}
    \item{sr}{Senescence rate of fine roots}
-   \item{so}{Senescence rate of coarse roots and branches} 
+   \item{so}{Senescence rate of coarse roots and branches}
    \item{rr}{Average fine root radius}
    \item{rhor}{Tissue density of fine roots}
    \item{rml}{Maintenance respiration rate of leaves}
@@ -53,14 +52,134 @@ growthloopR(sparms2, gparms2, r0)
    \item{drcrit}{NA}
  }}
 
-\item{gparms}{A vector containing values that control simulation behavior.
+\item{r0}{The starting radius. Defaults to 0.05}
+
+\item{parmax}{The maximum yearly iradiance, defaults to 2060}
+
+\item{years}{The number of years to run the simulation, defaults to 50.}
+
+\item{steps}{The number of time steps per year, defaults to 16.}
+
+\item{breast.height}{The height DBH is taken at, defaults to 1.37.}
+
+\item{tolerance}{The tolerance for the algorithm that balances excess labile
+carbon in the difference equations describing carbon dynamics of a healthy
+tree (Ogle and Pacala, 2009). The default is 0.00001 and should likely not
+be changed.}
+
+\item{fulloutput}{Is the full output desired if so set this to TRUE. The
+default is FALSE.}
+}
+\value{
+Function output:
 \describe{
-   \item{deltat}{1/16 of a year or 0.0625}
-   \item{years}{no default}
-   \item{tolerance}{Set to 0.00001}
-   \item{breast height}{Set to 1.37}
-   \item{PARmax}{Default is 2060}
-}}
+   \item{p}{sparms, input parameters}
+   \item{gp}{Vector: (timestep, years, tolerance, breast.height,parmax)}
+   \item{r0}{The starting radius.}
+   \item{t}{}
+}
+
+p
+
+gp
+
+r0
+
+t
+
+h
+
+hh
+
+hC
+
+hB
+
+hBH
+
+r
+
+rB
+
+rC
+
+rBH
+
+sw
+
+vts
+
+vt
+
+vth
+
+sa
+
+la
+
+ra
+
+dr
+
+xa
+
+bl
+
+br
+
+bt
+
+bts
+
+bth
+
+boh
+
+bos
+
+bo
+
+bs
+
+cs
+
+clr
+
+fl
+
+fr
+
+ft
+
+fo
+
+rfl
+
+rfr
+
+rfs
+
+egrow
+
+ex
+
+rtrans
+
+light
+
+nut
+
+deltas
+
+LAI
+
+status
+
+lenvars
+
+errorind
+
+growth_st
 }
 \description{
 This function provides an easy interface for running the ACGCA model.

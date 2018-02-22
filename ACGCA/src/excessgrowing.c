@@ -1,12 +1,12 @@
 ///
 /// \file excessgrowing.c
 /// \brief Contains functions excessgrowingon(), and excessgrowingoff()
-/// 
+///
 /// \author Kiona Ogle (translated into C by Darren Gemoets)
 /// \date 11-23-2010
 ///
 /// No growthmodel-type errors in this file.  Only numerical.
-/// TODO: still need to set status=0 for failures of numerical 
+/// TODO: still need to set status=0 for failures of numerical
 /// checks in this file.
 
 #include <stdio.h>
@@ -17,7 +17,7 @@
 #include "head_files/excessgrowing.h"
 
 /// excessgrowingon is used to grow a tree (that is currently on the target allometry)
-/// along the target allometry.  
+/// along the target allometry.
 ///
 /// \param p            Species parameters (sparms)
 /// \param gp           Misc. growth parameters (gparms)
@@ -25,21 +25,22 @@
 /// \param i            iteration value from growth model loop
 /// \param growthflag   0 if tree is currently off allometry, = 1 if tree is on allometry
 /// \param r            array of tree radii
-/// 
 ///
-/// Returns updated st (state variables), r and h.  Calls on functions trunkradii() and 
+///
+/// Returns updated st (state variables), r and h.  Calls on functions trunkradii() and
 /// trunkvolume().  This has been mostly tested with Matlab code.  Should be checked
 /// again.
 ///
 /// \todo remove the hin, rin temp structures
-///   
+///
 /// \author Kiona Ogle (translated into C by Darren Gemoets)
 ///
 /// \date 11-23-2010
 ///
-void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, double r[], int *errorind2){  
 
-  
+void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, double r[], int *errorind2){
+
+
 
   height hin; radius rin; volume v;
 
@@ -52,32 +53,32 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   double nuo=0, rhow=0,la_new=0,ra_new=0;
 
   double r_new=0;  // new radius
-   
+
   int j=1;
-    
+
   double deltaw=0; // Is this a local (temp) variable? need to check on this.
 
   int eflag=0;                  // initialize while loop index
-  
+
   double error = fabs(st->ex*gp->tolerance)+10;         // initialize error w/ high value
 
-  
+
   while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
-      
-    if (j>998){ 
+
+    if (j>998){
       st->status=0;
     }
-    eflag=0; // eflag=1 when dr=0 
+    eflag=0; // eflag=1 when dr=0
 
     if (j==1){  // j=1 is the first iteration in while loop
-       
+
       if ((i<2) || (growthflag==0) || (r[i-1]==r[i-2])){// error check, if the tree is currenlty off allometry:
-	odr=p->drinit;  // initial default radius increment 
+	odr=p->drinit;  // initial default radius increment
 	dr=odr;         // new dr updated as old dr (odr)
-      }  
+      }
       else{
 	odemand=st->egrow;        // egrow is excess labile carbon available for growth
-	odr = r[i-1]-r[i-2];      // old dr.  should not =0 based on first if statement       
+	odr = r[i-1]-r[i-2];      // old dr.  should not =0 based on first if statement
 	if ((odr > 0) && (odemand != 0)){
 	  slope=odemand/odr;
 	  dr=st->ex/slope;
@@ -90,7 +91,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	}  // end else
       } // end outer else
     } //end if j==1
-        
+
     else if ((j==2) && ((i<2) || (growthflag==0) || (r[i-1]==r[i-2]))){
       odemand=demand;   // demand saved to old demand
       odr = dr;         // dr saved to old dr
@@ -98,25 +99,25 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	slope=odemand/odr;
 	dr=st->ex/slope;
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 102 \n");
-	*errorind2 = *errorind2 | 8;                       
+	*errorind2 = *errorind2 | 8;
 	st->status=0;
 	break;
       }  // end else
     } // end else if
-        
+
 
     else {  // else if none of those conditions are met
       if (dr != odr){
 	slope=(demand-odemand)/(dr-odr);
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 111 \n");
 	//getchar();
 	st->status=0;
 	break;
-      }  
+      }
       intercept=demand-slope*dr;
       odemand=demand;
       odr=dr;
@@ -151,21 +152,21 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	//printf("set demand = excess in excessgrowingon \n");
       }
     } //end else
-       
+
     // ***** end block of if, else if, else  *****
-      
-      
+
+
     // Calculate demand and error based on r and dr:
     // Begin if error ...
     if (error >= fabs(st->ex*gp->tolerance)){
-        
+
       r_new=st->r+dr;  // new radius calc. from new dr
 
       if (r_new < 0){
 	//printf("error in excessgrowingon, line 162 \n");
 	//printf("dr=%g, slope=%g, odemand=%g, demand=%g, intercept=%g, j=%d \n",
 	//       dr, slope, odemand,demand,intercept,j);
-	//printf("sla=%g, hmax=%g, phih=%g, st->r=%g, st->ex=%g, rhomax=%g \n",p->sla, 
+	//printf("sla=%g, hmax=%g, phih=%g, st->r=%g, st->ex=%g, rhomax=%g \n",p->sla,
 	//       p->hmax, p->phih, st->r, st->ex, p->rhomax);
 	r_new=st->r;
 	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
@@ -177,44 +178,44 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       if (p->hmax > 0){
 	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 161 \n");
 	*errorind2 = *errorind2 | 32;
-      }  
+      }
       st->hh=p->eta*st->h;
-             
+
       if (r_new < p->swmax){
 	st->sw=r_new;
       }
       else {
 	st->sw=p->swmax;
       }
-            
+
       // maybe should eliminate the need for these temp variables (i.e. the radius
       // and height structures)
       hin.hB=p->etaB*st->h;
       hin.hC=st->hh;
       hin.H=st->h;
       hin.hBH=gp->BH;
-              
-             
+
+
       trunkradii(r_new, &hin, &rin, st);
-             
+
       trunkvolume(&rin, &hin, st->sw, &v, st);
-                  
+
       // end new radii and volume calculations.
-        
-      
+
+
       if((st->vts*gp->deltat != 0) && ((1.0+st->deltas)*st->bos != 0)){
-	st->nut=(v.vth-st->vth)/(st->vts*gp->deltat);   
+	st->nut=(v.vth-st->vth)/(st->vts*gp->deltat);
 	nuo=(p->so*st->boh+(1.0+st->deltas)*p->lamdah*st->nut*st->bts)/((1.0+st->deltas)*st->bos);
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 195 \n");
 	*errorind2 = *errorind2 | 64;
 	st->status=0;
-      }  
-        
+      }
+
       if (dr<(p->drcrit*gp->deltat)){
 	rhow=p->rhomax-((p->rhomax-p->rhomin)/p->drcrit)*dr/gp->deltat;
       }
@@ -229,60 +230,60 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       else if (rhow != 0) {
 	deltaw=p->gammac*(1.0-p->gammax-p->gammaw*rhow)/rhow;
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 214 \n");
 	st->status=0;
 	*errorind2 = *errorind2 | 128;
-                
-      }  
+
+      }
 
       st->sa=M_PI*st->sw*(2.0*r_new-st->sw);
       // need la_new and ra_new since we find the difference between new and old
       // below
-      la_new=p->f2*st->sa; 
+      la_new=p->f2*st->sa;
       ra_new=p->f1*la_new;
-            
+
       if (p->sla != 0){
 	efl=(p->cgl+p->deltal)*(la_new-st->la+p->sl*p->sla*st->bl*gp->deltat)/(p->sla*gp->deltat);
 	efr=(p->cgr+p->deltar)*(p->rr*p->rhor*(ra_new-st->ra)+2*p->sr*st->br*gp->deltat)/(2.0*gp->deltat);
 	eft=(p->cgw+deltaw)*((v.vt-st->vt)*rhow-st->deltas*st->nut*st->bts*gp->deltat)/gp->deltat;
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line 232 \n");
 	st->status=0;
 	*errorind2 = *errorind2 | 256;
-      } 
+      }
       if ((1+st->deltas) != 0){
 	efo=(p->cgw+deltaw)*(p->so*gp->deltat*st->boh+(1+st->deltas)*
 			     ((v.vt-st->vt)*p->lamdas*rhow+p->so*st->bos*gp->deltat+
 			      (p->lamdah-(1+st->deltas)*p->lamdas)*st->nut*st->bts*
 			      gp->deltat))/((1+st->deltas)*gp->deltat);
-                                      
+
       }
-      else{ 
+      else{
 	//printf("problem in excessgrowingon, line244 \n");
 	st->status=0;
 	*errorind2 = *errorind2 | 512;
-      } 
+      }
       // update demand
       if (eflag==0) {
-	demand=efl+efr+eft+efo;      
+	demand=efl+efr+eft+efo;
       }
       else {
 	demand=st->ex;
-                                      
+
       }
-      
+
       error=fabs(demand-st->ex);  // update the error
-        
+
       j=j+1;   // change this to ++j
-       
-    
+
+
     } //end "if (error..."
   }  //end while loop
 
- 
-  
+
+
   // allocation fractions
   denom=efl+efr+eft+efo;
   st->fl=GSL_MAX(0,efl/denom);
@@ -298,24 +299,24 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
     st->ft=st->ft/denom;
     st->fo=st->fo/denom;
   }
-  else{ 
+  else{
     //printf("problem with allocation fractions in excessgrowingon or putonallometry \n");
     st->status=0;
     *errorind2 = *errorind2 | 1024;
-  } 
-    
+  }
+
 
   // Now that we have the new trunk radius, calculate new state variables:
-  if ((p->cgw+deltaw) != 0){ 
+  if ((p->cgw+deltaw) != 0){
     st->cs=st->cs+gp->deltat*(st->ft+st->fo)*st->ex*deltaw/(p->cgw+deltaw)
       -gp->deltat*st->deltas*(st->nut*st->bts+(nuo+p->so)*st->bos);
   }
-  else{ 
+  else{
     //printf("problem in excessgrowingon, line 302 \n");
     st->status=0;
     *errorind2 = *errorind2 | 2048;
-  } 
-    
+  }
+
 
 
 
@@ -336,25 +337,25 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   }
 
   // update state variables that have been modified
-    
+
   st->bth=st->bth+(1.0+st->deltas)*st->nut*st->bts*gp->deltat;
   st->bts=st->bts+rhow*(v.vt-st->vt)-st->nut*st->bts*gp->deltat;
-    
-   
+
+
   if ((isnan(st->cs) !=0) || (isnan(st->deltas) !=0) ||
       (isnan(st->bos) !=0) || (isnan(st->bl) !=0)  || (isnan(st->ex) !=0)){
     printf("inside excess growing on \n");
-       
+
     printf("st.r=%g, st.bos=%g, st.bts=%g \n", st->r,st->bos,st->bts);
     printf("f2=%g, st.sa=%g, st.bl=%g, p->sla=%g \n",log(p->f2), st->sa, st->bl, p->sla);
-    printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st->br, st->bl, p->sl, p->sr); 
-       
+    printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st->br, st->bl, p->sl, p->sr);
+
     printf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
 	   st->bts,st->boh,p->lamdah,st->bth,st->bos);
-       
+
     printf("dr=%g, slope=%g, odr=%g \n",dr,slope,odr);
-       
-     
+
+
     printf("st->cs=%g, gp->deltat=%g, excess=%g, st->deltas=%g, p->so=%g, st->bos=%g \n",
 	   st->cs, gp->deltat, st->ex, st->deltas, p->so, st->bos);
 
@@ -362,7 +363,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 
   }
 
-  
+
   st->bl=la_new/p->sla;
   st->br=p->rhor*p->rr*ra_new/2;
   st->bt=st->bts+st->bth;
@@ -374,15 +375,15 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   st->dr=r_new-st->r;
   st->r  = r_new;
   // st->dr=dr;
-  st->rB = rin.rB;  
+  st->rB = rin.rB;
   st->rC = rin.rC;
-  st->rBH= rin.rBH; 
-  st->vts= v.vts;  
+  st->rBH= rin.rBH;
+  st->vts= v.vts;
   st->vt = v.vt;
   st->vth= v.vth;
   st->la = la_new;
   st->ra = ra_new;
-  st->egrow=st->ex; 
+  st->egrow=st->ex;
 } //end excessgrowingon
 
 
@@ -398,13 +399,13 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 /// \param deltaw       storage capicity of newly-built "other" sapwood, calc'd in 'growthloop'
 ///
 /// Returns update st (state variables).    THIS NEEDS TO BE TESTED against the Matlab code.
-///   
+///
 /// \author Kiona Ogle (translated into C by Darren Gemoets)
 ///
 /// \date 12-07-2010
 ///
 
-void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, int *errorind2){  
+void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, int *errorind2){
 
   //temp local variables for intermediate calculations
   double nuo=0,bos_new=0;
@@ -478,7 +479,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   }
   st->fo=1.0-st->fl-st->fr;
   st->ft=0.0;
-  
+
   // Retranslocation fractions, only due to retranslocation during senescence.
   st->rfl=p->deltal*p->sl*st->bl;
   st->rfr=p->deltar*p->sr*st->br;
@@ -494,7 +495,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
     st->status=0;
     *errorind2 = *errorind2 | 131072;
   }
-  
+
   //update state variables
   if ((p->lamdas*st->bts) > 0){
     st->la=p->f2*st->sa*bos_new/(p->lamdas*st->bts);  // use bos_new
@@ -508,7 +509,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   st->bl=st->la/p->sla;
   st->br=p->rhor*p->rr*st->ra/2.0;
   if ((p->cgw+deltaw) != 0){
-    st->cs=st->cs+gp->deltat*(st->fo*deltaw*st->ex/(p->cgw+deltaw)-st->deltas*(nuo+p->so)*st->bos);  
+    st->cs=st->cs+gp->deltat*(st->fo*deltaw*st->ex/(p->cgw+deltaw)-st->deltas*(nuo+p->so)*st->bos);
     // use old bos
   }
   else {
@@ -518,25 +519,25 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
 
   st->bos=bos_new;
   if ((p->lamdas*st->bts) > 0){
-    st->boh=p->lamdah*st->bth*st->bos/(p->lamdas*st->bts);  
+    st->boh=p->lamdah*st->bth*st->bos/(p->lamdas*st->bts);
   }
   else {
     //printf("error in excessgrowingoff, line 516 \n");
     st->status=0;
     *errorind2 = *errorind2 | 524288;
   }
-    
+
   st->bo=st->bos+st->boh;
   st->bs=st->bos+st->bts;
 
   st->clr=p->deltal*st->bl+p->deltar*st->br;
   st->egrow=0.0;
   //st->status=1;
- 
+
 }
- 
+
 /// All error code added to this file by mkf was done between 5/19 and 5/21 2013
-/// to capture errors for the end user.  These errors are interpreted by the 
+/// to capture errors for the end user.  These errors are interpreted by the
 /// part of the code implemented in R.  The R code interprets the sequence of
 /// bits from the integer values to return the error messages that are printed
 /// out by this code.  All of the line numbers in this code are wrong unless the
