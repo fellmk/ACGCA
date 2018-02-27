@@ -113,53 +113,58 @@
 #'    \item{r0}{The starting radius.}
 #'    \item{h}{A time series of tree height from the simulation for each time
 #'    step. The length is steps*years+1 due to the initialization (time 0).}
-#'    \item{hh}{...}
-#'    \item{hC}{...}
-#'    \item{hB}{...}
+#'    \item{hh}{Height at which trunc transitions from a paraaboloid to a cone.
+#'    Also the height to the base of the crown (m).}
+#'    \item{hC}{see hh}
+#'    \item{hB}{}
 #'    \item{hBH}{...}
 #'    \item{r}{A time series of tree radius (m) from the simulation for each
-#'    time step. The length is steps*years+1 due to the initialization
+#'    time step. The length is steps*years+1
 #'    (time 0).}
-#'    \item{rB}{...}
-#'    \item{rBH}{...}
+#'    \item{rB}{Radius at the tree's base (m).}
+#'    \item{rBH}{Radius at breast height (3.37 m).}
 #'    \item{sw}{Sapwood width which has a maximum of SWmax (m).}
-#'    \item{vts}{}
-#'    \item{vt}{}
-#'    \item{vth}{}
-#'    \item{sa}{}
-#'    \item{la}{}
-#'    \item{ra}{}
-#'    \item{dr}{}
-#'    \item{xa}{}
-#'    \item{bl}{}
-#'    \item{br}{}
-#'    \item{bt}{}
-#'    \item{bts}{}
-#'    \item{bth}{}
-#'    \item{boh}{}
-#'    \item{bos}{}
-#'    \item{bo}{}
-#'    \item{bs}{}
-#'    \item{cs}{}
-#'    \item{clr}{}
-#'    \item{fl}{}
-#'    \item{fr}{}
-#'    \item{ft}{}
-#'    \item{fo}{}
-#'    \item{rfl}{}
-#'    \item{rfr}{}
-#'    \item{rfs}{}
-#'    \item{egrow}{}
-#'    \item{ex}{}
-#'    \item{rtrans}{}
-#'    \item{light}{}
-#'    \item{nut}{}
-#'    \item{deltas}{}
-#'    \item{LAI}{}
-#'    \item{status}{}
-#'    \item{lenvars}{}
-#'    \item{errorind}{}
-#'    \item{growth_st}{}
+#'    \item{vts}{Volume of trunk sapwood (m^3).}
+#'    \item{vt}{Volume of trunk (m^3).}
+#'    \item{vth}{Volume of trunk heartwood (m^3).}
+#'    \item{sa}{Sapwood area at base of trunk (m^2).}
+#'    \item{la}{Total one-sided leaf area (m^2).}
+#'    \item{ra}{Fine root area (m^2)}
+#'    \item{dr}{incremental increase in radius}
+#'    \item{xa}{Not in use}
+#'    \item{bl}{Biomass of leaves (g dw)}
+#'    \item{br}{Biomass of roots (g dw)}
+#'    \item{bt}{Biomass of trunk (g dw)}
+#'    \item{bts}{Biomass of trunk sapwood (g dw)}
+#'    \item{bth}{Biomass of trunk heartwood (g dw)}
+#'    \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood 
+#'    (g dw)}
+#'    \item{bos}{Biomass of other sapwood (g dw)}
+#'    \item{bo}{Biomass of other wood (coarse roots, branches)}
+#'    \item{bs}{Biomass of sapwood (trunk, coarse roots, branches, g dw)}
+#'    \item{cs}{Labile carbon in sapwood (g glucose)}
+#'    \item{clr}{Labile carbon in leaves and fine roots (g glucose)}
+#'    \item{fl}{Fraction of excess labile barbon (E) allocated to leaves}
+#'    \item{fr}{Fraction of E allocated to fine roots}
+#'    \item{ft}{Fraction of E allocated to trunk}
+#'    \item{fo}{Fraction of E allocated to coarse roots and branches}
+#'    \item{rfl}{Retranslocation fraction leaves}
+#'    \item{rfr}{Retranslocation fraction roots}
+#'    \item{rfs}{Retranslocation fraction stem}
+#'    \item{egrow}{Excess labile carbon available for growth}
+#'    \item{ex}{...}
+#'    \item{rtrans}{Total retranslocation fraction}
+#'    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009).}
+#'    \item{nut}{...}
+#'    \item{deltas}{Actual labile C stored in sapwood, calculated in the 
+#'    growthloop.}
+#'    \item{LAI}{leaf area index (m^2/m^2}
+#'    \item{status}{The status of the tree (i.e. living=1 or dead=0) at each 
+#'    iteration. Always 0 for the first iteration (initialization).}
+#'    \item{lenvars}{The length of time series outputs steps*years+1}
+#'    \item{errorind}{Contains error codes for each iteration of the model}
+#'    \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced, 
+#'    3=recovery, 4=static, 5=shrinking, 6=dead.}
 #' }
 #'
 #' @keywords IBM

@@ -32,7 +32,7 @@ help("growthloopR")
 
 load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
-test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE)
+test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=100)
 
 source("acruparms.R")
 light.levels <- seq(1,.1,-.1)

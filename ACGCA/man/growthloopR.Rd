@@ -76,110 +76,56 @@ Function output:
    \item{p}{sparms, input parameters}
    \item{gp}{Vector: (timestep, years, tolerance, breast.height,parmax)}
    \item{r0}{The starting radius.}
-   \item{t}{}
+   \item{h}{A time series of tree height from the simulation for each time
+   step. The length is steps*years+1 due to the initialization (time 0).}
+   \item{hh}{...}
+   \item{hC}{...}
+   \item{hB}{...}
+   \item{hBH}{...}
+   \item{r}{A time series of tree radius (m) from the simulation for each
+   time step. The length is steps*years+1 due to the initialization
+   (time 0).}
+   \item{rB}{...}
+   \item{rBH}{...}
+   \item{sw}{Sapwood width which has a maximum of SWmax (m).}
+   \item{vts}{Volume of trunk sapwood (\eqn{2^{2}})}
+   \item{vt}{}
+   \item{vth}{}
+   \item{sa}{}
+   \item{la}{}
+   \item{ra}{}
+   \item{dr}{}
+   \item{xa}{}
+   \item{bl}{}
+   \item{br}{}
+   \item{bt}{}
+   \item{bts}{}
+   \item{bth}{}
+   \item{boh}{}
+   \item{bos}{}
+   \item{bo}{}
+   \item{bs}{}
+   \item{cs}{}
+   \item{clr}{}
+   \item{fl}{}
+   \item{fr}{}
+   \item{ft}{}
+   \item{fo}{}
+   \item{rfl}{}
+   \item{rfr}{}
+   \item{rfs}{}
+   \item{egrow}{}
+   \item{ex}{}
+   \item{rtrans}{}
+   \item{light}{}
+   \item{nut}{}
+   \item{deltas}{}
+   \item{LAI}{}
+   \item{status}{}
+   \item{lenvars}{}
+   \item{errorind}{}
+   \item{growth_st}{}
 }
-
-p
-
-gp
-
-r0
-
-t
-
-h
-
-hh
-
-hC
-
-hB
-
-hBH
-
-r
-
-rB
-
-rC
-
-rBH
-
-sw
-
-vts
-
-vt
-
-vth
-
-sa
-
-la
-
-ra
-
-dr
-
-xa
-
-bl
-
-br
-
-bt
-
-bts
-
-bth
-
-boh
-
-bos
-
-bo
-
-bs
-
-cs
-
-clr
-
-fl
-
-fr
-
-ft
-
-fo
-
-rfl
-
-rfr
-
-rfs
-
-egrow
-
-ex
-
-rtrans
-
-light
-
-nut
-
-deltas
-
-LAI
-
-status
-
-lenvars
-
-errorind
-
-growth_st
 }
 \description{
 This function provides an easy interface for running the ACGCA model.
