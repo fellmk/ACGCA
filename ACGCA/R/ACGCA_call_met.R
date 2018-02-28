@@ -115,9 +115,6 @@
 #'    step. The length is steps*years+1 due to the initialization (time 0).}
 #'    \item{hh}{Height at which trunc transitions from a paraaboloid to a cone.
 #'    Also the height to the base of the crown (m).}
-#'    \item{hC}{see hh}
-#'    \item{hB}{}
-#'    \item{hBH}{...}
 #'    \item{r}{A time series of tree radius (m) from the simulation for each
 #'    time step. The length is steps*years+1
 #'    (time 0).}
@@ -152,7 +149,7 @@
 #'    \item{rfr}{Retranslocation fraction roots}
 #'    \item{rfs}{Retranslocation fraction stem}
 #'    \item{egrow}{Excess labile carbon available for growth}
-#'    \item{ex}{...}
+#'    \item{ex}{Excess labile carbon, The same as egrow}
 #'    \item{rtrans}{Total retranslocation fraction}
 #'    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009).}
 #'    \item{nut}{...}
@@ -180,6 +177,15 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
                         steps=16, breast.height=1.37, tolerance=0.00001,
                         fulloutput=FALSE){
 
+  ##### Checks added to ensure proper use 2/27/2018 #####
+  if(!is.matrix(sparms)){
+    sparms <- as.matrix(sparms)
+  }
+  
+  if(r0 < 0.0054){
+    stop("The radius must be greater than 0.0054 or the function will fail.") 
+  }
+  
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
   gparms <- matrix(data = c(1/steps, years, tolerance, breast.height, parmax), ncol=1)
@@ -256,15 +262,18 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
       output2$rBH <-c(output2$rBH, output1$rBH)
       output2$status <-c(output2$status, output1$status)
       output2$errorind <- c(output2$errorind, output1$errorind)
-
       output2$cs <- c(output2$cs, output1$cs) # Added 7/21/2014
       output2$clr <- c(output2$clr, output1$clr) # Added 7/21/2014
       output2$growth_st <-c(output2$growth_st, output1$growth_st) # Added 9/22/2014
 
       return(output2)
     }else if(fulloutput==TRUE){
-      # remove t which is left over from testing.
-      output1[[4]] <- NULL
+      # remove a few variables
+      output1[[4]] <- NULL # remove t left over from testing
+      output1[[6]] <- NULL # remove hC left over from development
+      output1[[6]] <- NULL # remove hB left over from development
+      output1[[6]] <- NULL # remove hBH left over from development
+      
       return(output1)
     }else{
       stop("The fulloutput input to this function must be either TRUE or

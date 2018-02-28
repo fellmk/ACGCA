@@ -60,3 +60,5 @@ cbind(parameter.names[1:36], acru, theta.j)
 #ACGCArun(as.matrix(c(1, 1, 1)), as.matrix(c(1,1,1)), 1)
 #dyn.load("ACGCA.dll")
 
+#Make sure data is used correctly
+
