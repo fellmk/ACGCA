@@ -3,7 +3,7 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
-// I am hoping to avoid the structure problem that is causing problems.
+// I am hoping to avoid the structure that is causing problems.
 // I need to create the structures needed by the growth loop but they need to be
 // pointers so I need to send the variables to the loop indirectly.  The goal
 // of the below function is to do this.  MKF 03/26/2013
@@ -71,7 +71,7 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 
 	//*t2 = t;
 
-	sparms p;
+	  sparms p;
   	gparms gp;
 
 	//for(i=0; i<(dim[0]); ++i){

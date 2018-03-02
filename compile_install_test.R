@@ -8,3 +8,5 @@ document()
 setwd("..")
 install("ACGCA")
 help(package="ACGCA")
+
+browseVignettes("ACGCA")

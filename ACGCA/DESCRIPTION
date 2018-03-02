@@ -1,11 +1,15 @@
 Package: ACGCA
 Title: Simulates Tree Growth and Mortality
 Version: 0.1
-Authors@R: person("Michael", "Fell", email = "michael.fell@nau.edu", role = c("aut", "cre"))
+Authors@R: c(person("Michael", "Fell", email = "michael.fell@nau.edu", role = "cre"),
+             person("Darren", "Gemoets", role = "aut"),
+             person("Kiona", "Ogle", email = "kiona.ogle@nau.edu", role = "aut"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.3)
-Suggests: knitr, kableExtra
-VignetteBuilder:knitr,
+Suggests: knitr, kableExtra,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
 License: We need to pick one (if we keep gsl then GPLv3)
 Encoding: UTF-8
 LazyData: true

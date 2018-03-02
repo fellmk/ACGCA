@@ -11,7 +11,7 @@ devtools::install_github("klutometis/roxygen")
 
 # Load the development library and roxygen which helps with documentation.
 library("devtools")
-options(devtools.install.args = "--no-multiarch")
+#options(devtools.install.args = "--no-multiarch")
 library("roxygen2")
 
 # A devtools function that produces a barebones folder for a package
@@ -22,6 +22,8 @@ create("ACGCA")
 setwd("./ACGCA")
 use_rcpp()
 document()
+devtools::use_vignette("ACGCA_Vignette")
+devtools::use_testthat()
 
 setwd("..")
 install("ACGCA")
@@ -32,9 +34,12 @@ help("growthloopR")
 
 load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
-test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=100)
+
+theta.j <- theta.j[-c(8,12,35,36)]
+test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
 
 source("acruparms.R")
+acru <- acru[-c(8,12,35,36)]
 light.levels <- seq(1,.1,-.1)
 
 # This tests the package code at multiple light levels
