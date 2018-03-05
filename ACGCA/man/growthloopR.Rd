@@ -10,30 +10,30 @@ growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
 \arguments{
 \item{sparms}{A vector containing the parameters for the simulation.
 \describe{
-   \item{hmax}{Maximum tree height}
+   \item{hmax}{Maximum tree height (m)}
    \item{phih}{Slope of H vs. r curve at r = 0 m}
    \item{eta}{Relative height at which trunk transitions from paraboloid to
     cone}
-   \item{swmax}{Maximum sapwood width}
+   \item{swmax}{Maximum sapwood width (m)}
    \item{lamdas}{Proportionality between BT and BO for sapwood}
    \item{lamdah}{Proportionality between BT and BO for heartwood}
-   \item{rho}{Wood density}
-   \item{rhomin}{Not in use. Dissabled in C code}
+   \item{rho}{Wood density (g dw m^-3)}
    \item{f2}{Leaf area-to-xylem conducting area ratio}
    \item{f1}{Fine root area-to-leaf area ratio}
-   \item{gamma}{Maximum storage capacity of living sapwood cells}
-   \item{gammaw}{(Inverse) density of sapwood structural tissue}
+   \item{gammac}{Maximum storage capacity of living sapwood cells 
+   (g gluc m^2)}
    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
-   \item{cgl}{Construction costs of producing leaves}
-   \item{cgr}{Construction costs of producing fine roots}
-   \item{cgw}{Construction costs of producing sapwood}
-   \item{deltal}{Labile carbon storage capacity of leaves}
-   \item{deltar}{Labile carbon storage capacity of fine roots}
-   \item{sl}{Senescence rate of leaves}
-   \item{sla}{Specific leaf area}
-   \item{sr}{Senescence rate of fine roots}
-   \item{so}{Senescence rate of coarse roots and branches}
-   \item{rr}{Average fine root radius}
+   \item{cgl}{Construction costs of producing leaves (g gluc g dw^-1))}
+   \item{cgr}{Construction costs of producing fine roots (g gluc g dw^-1)}
+   \item{cgw}{Construction costs of producing sapwood (g gluc g dw^-1)}
+   \item{deltal}{Labile carbon storage capacity of leaves (g gluc g dw^-1)}
+   \item{deltar}{Labile carbon storage capacity of fine 
+   roots(g gluc g dw^-1)}
+   \item{sl}{Senescence rate of leaves (yr^-1)}
+   \item{sla}{Specific leaf area (m^2 g dw^-1)}
+   \item{sr}{Senescence rate of fine roots (yr^-1)}
+   \item{so}{Senescence rate of coarse roots and branches (yr^-1)}
+   \item{rr}{Average fine root radius (m)}
    \item{rhor}{Tissue density of fine roots}
    \item{rml}{Maintenance respiration rate of leaves}
    \item{rms}{Maintenance respiration rate of sapwood}
@@ -48,8 +48,6 @@ growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
     breast height of 0m (i.e., for a tree that is exactly 1.37 m tall}
    \item{R40}{Maximum potential crown radius of a tree with diameter at
     brrest height or 0.4m (40 cm)}
-   \item{drinit}{NA}
-   \item{drcrit}{NA}
  }}
 
 \item{r0}{The starting radius. Defaults to 0.05}
