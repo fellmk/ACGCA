@@ -1,7 +1,6 @@
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/growthloop.h"
 
-<<<<<<< HEAD
 // I think I can remove this part of the code
 #ifdef DATA
 #include <gsl/gsl_randist.h>
@@ -16,8 +15,6 @@
 #include <gsl/gsl_cdf.h>
 #endif
 
-=======
->>>>>>> c83228a9bd4ecb2e0ea021bcc113ebaaed557c4e
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
 // I am hoping to avoid the structure that is causing problems.
@@ -25,7 +22,6 @@
 // pointers so I need to send the variables to the loop indirectly.  The goal
 // of the below function is to do this.  MKF 03/26/2013
 //////////////////////////////////////////////////////////////////////////////////
-
 
 void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 	double *h,

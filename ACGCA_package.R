@@ -24,6 +24,8 @@ use_rcpp()
 document()
 devtools::use_vignette("ACGCA_Vignette")
 devtools::use_testthat()
+# This will build the package and Vignetttes
+devtools::build()
 
 setwd("..")
 install("ACGCA")
