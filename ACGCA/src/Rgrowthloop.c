@@ -13,6 +13,7 @@
 #include "head_files/shrinkingsize.h"
 #include "head_files/growthloop.h"
 
+// I think I can remove this part of the code
 #ifdef DATA
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
