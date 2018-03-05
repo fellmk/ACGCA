@@ -13,13 +13,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <gsl/gsl_math.h>          
-#include <gsl/gsl_blas.h>
+//#include <gsl/gsl_math.h>          
+//#include <gsl/gsl_blas.h>
 //#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_sf_gamma.h>
-#include <gsl/gsl_linalg.h>
+//#include <gsl/gsl_sf_gamma.h>
+//#include <gsl/gsl_linalg.h>
 //#include <gsl/gsl_sf.h>
-#include <gsl/gsl_cdf.h>                                                                     
+//#include <gsl/gsl_cdf.h>                                                                     
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/misc_func.h"
 // Would use the following syntax to call initialize inside another function
@@ -545,6 +545,7 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
 ///
 /// \date 01-11-2010
 ///
+/*
 void acruparms(sparms *p){
   p->hmax=27.5;
   p->phih=263.0;
@@ -584,7 +585,7 @@ void acruparms(sparms *p){
   p->drinit=0.000010;
   p->drcrit=0.00750;
 } // end acruparms()
-
+*/
   
 ///
 /// Initializes species parameters (p) for growthoop for loblolly pine (sp 1)
@@ -600,6 +601,7 @@ void acruparms(sparms *p){
 ///
 /// \date 01-11-2010
 ///
+/*
   void pitaparms(sparms *p){
   p->hmax=42;
   p->phih=220;
@@ -639,5 +641,5 @@ void acruparms(sparms *p){
   p->drinit=0.00001;
   p->drcrit=0.01;
 }
-
+*/
 

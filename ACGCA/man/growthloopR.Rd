@@ -4,14 +4,128 @@
 \alias{growthloopR}
 \title{ACGCA model function}
 \usage{
-growthloopR(sparms2, gparms2, r0)
+growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
+  breast.height = 1.37, tolerance = 1e-05, fulloutput = FALSE)
 }
 \arguments{
-\item{r0}{The starting radius. Defaults to 0.05.}
+\item{sparms}{A vector containing the parameters for the simulation.
+\describe{
+   \item{hmax}{Maximum tree height (m)}
+   \item{phih}{Slope of H vs. r curve at r = 0 m}
+   \item{eta}{Relative height at which trunk transitions from paraboloid to
+    cone}
+   \item{swmax}{Maximum sapwood width (m)}
+   \item{lamdas}{Proportionality between BT and BO for sapwood}
+   \item{lamdah}{Proportionality between BT and BO for heartwood}
+   \item{rho}{Wood density (g dw m^-3)}
+   \item{f2}{Leaf area-to-xylem conducting area ratio}
+   \item{f1}{Fine root area-to-leaf area ratio}
+   \item{gammac}{Maximum storage capacity of living sapwood cells 
+   (g gluc m^2)}
+   \item{gammax}{Xylem conducting area-to-sapwood area ratio}
+   \item{cgl}{Construction costs of producing leaves (g gluc g dw^-1))}
+   \item{cgr}{Construction costs of producing fine roots (g gluc g dw^-1)}
+   \item{cgw}{Construction costs of producing sapwood (g gluc g dw^-1)}
+   \item{deltal}{Labile carbon storage capacity of leaves (g gluc g dw^-1)}
+   \item{deltar}{Labile carbon storage capacity of fine 
+   roots(g gluc g dw^-1)}
+   \item{sl}{Senescence rate of leaves (yr^-1)}
+   \item{sla}{Specific leaf area (m^2 g dw^-1)}
+   \item{sr}{Senescence rate of fine roots (yr^-1)}
+   \item{so}{Senescence rate of coarse roots and branches (yr^-1)}
+   \item{rr}{Average fine root radius (m)}
+   \item{rhor}{Tissue density of fine roots}
+   \item{rml}{Maintenance respiration rate of leaves}
+   \item{rms}{Maintenance respiration rate of sapwood}
+   \item{rmr}{Maintenance respiration rate of fine roots}
+   \item{etaB}{Relative height at which trunk transitions from a neiloid to
+    paraboloid}
+   \item{k}{Crown light extinction coefficient}
+   \item{epsg}{Radiation-use-efficiency}
+   \item{m}{Maximum relative crown depth}
+   \item{alpha}{Crown Curvature parameter}
+   \item{R0}{Maximum potential crown radius of a tree with diameter at
+    breast height of 0m (i.e., for a tree that is exactly 1.37 m tall}
+   \item{R40}{Maximum potential crown radius of a tree with diameter at
+    brrest height or 0.4m (40 cm)}
+ }}
 
-\item{sparms}{A vector containing the parameters for the simulationl.}
+\item{r0}{The starting radius. Defaults to 0.05}
 
-\item{gparms}{A vector containing values that control simulation behavior.}
+\item{parmax}{The maximum yearly iradiance, defaults to 2060}
+
+\item{years}{The number of years to run the simulation, defaults to 50.}
+
+\item{steps}{The number of time steps per year, defaults to 16.}
+
+\item{breast.height}{The height DBH is taken at, defaults to 1.37.}
+
+\item{tolerance}{The tolerance for the algorithm that balances excess labile
+carbon in the difference equations describing carbon dynamics of a healthy
+tree (Ogle and Pacala, 2009). The default is 0.00001 and should likely not
+be changed.}
+
+\item{fulloutput}{Is the full output desired if so set this to TRUE. The
+default is FALSE.}
+}
+\value{
+Function output:
+\describe{
+   \item{p}{sparms, input parameters}
+   \item{gp}{Vector: (timestep, years, tolerance, breast.height,parmax)}
+   \item{r0}{The starting radius.}
+   \item{h}{A time series of tree height from the simulation for each time
+   step. The length is steps*years+1 due to the initialization (time 0).}
+   \item{hh}{Height at which trunc transitions from a paraaboloid to a cone.
+   Also the height to the base of the crown (m).}
+   \item{r}{A time series of tree radius (m) from the simulation for each
+   time step. The length is steps*years+1
+   (time 0).}
+   \item{rB}{Radius at the tree's base (m).}
+   \item{rBH}{Radius at breast height (3.37 m).}
+   \item{sw}{Sapwood width which has a maximum of SWmax (m).}
+   \item{vts}{Volume of trunk sapwood (m^3).}
+   \item{vt}{Volume of trunk (m^3).}
+   \item{vth}{Volume of trunk heartwood (m^3).}
+   \item{sa}{Sapwood area at base of trunk (m^2).}
+   \item{la}{Total one-sided leaf area (m^2).}
+   \item{ra}{Fine root area (m^2)}
+   \item{dr}{incremental increase in radius}
+   \item{xa}{Not in use}
+   \item{bl}{Biomass of leaves (g dw)}
+   \item{br}{Biomass of roots (g dw)}
+   \item{bt}{Biomass of trunk (g dw)}
+   \item{bts}{Biomass of trunk sapwood (g dw)}
+   \item{bth}{Biomass of trunk heartwood (g dw)}
+   \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood 
+   (g dw)}
+   \item{bos}{Biomass of other sapwood (g dw)}
+   \item{bo}{Biomass of other wood (coarse roots, branches)}
+   \item{bs}{Biomass of sapwood (trunk, coarse roots, branches, g dw)}
+   \item{cs}{Labile carbon in sapwood (g glucose)}
+   \item{clr}{Labile carbon in leaves and fine roots (g glucose)}
+   \item{fl}{Fraction of excess labile barbon (E) allocated to leaves}
+   \item{fr}{Fraction of E allocated to fine roots}
+   \item{ft}{Fraction of E allocated to trunk}
+   \item{fo}{Fraction of E allocated to coarse roots and branches}
+   \item{rfl}{Retranslocation fraction leaves}
+   \item{rfr}{Retranslocation fraction roots}
+   \item{rfs}{Retranslocation fraction stem}
+   \item{egrow}{Excess labile carbon available for growth}
+   \item{ex}{Excess labile carbon, The same as egrow}
+   \item{rtrans}{Total retranslocation fraction}
+   \item{light}{APAR from eqn 27 in Ogle and Pacala (2009).}
+   \item{nut}{...}
+   \item{deltas}{Actual labile C stored in sapwood, calculated in the 
+   growthloop.}
+   \item{LAI}{leaf area index (m^2/m^2}
+   \item{status}{The status of the tree (i.e. living=1 or dead=0) at each 
+   iteration. Always 0 for the first iteration (initialization).}
+   \item{lenvars}{The length of time series outputs steps*years+1}
+   \item{errorind}{Contains error codes for each iteration of the model}
+   \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced, 
+   3=recovery, 4=static, 5=shrinking, 6=dead.}
+}
 }
 \description{
 This function provides an easy interface for running the ACGCA model.

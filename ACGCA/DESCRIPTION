@@ -1,10 +1,16 @@
 Package: ACGCA
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Title: Simulates Tree Growth and Mortality
+Version: 0.1
+Authors@R: c(person("Michael", "Fell", email = "michael.fell@nau.edu", role = "cre"),
+             person("Darren", "Gemoets", role = "aut"),
+             person("Kiona", "Ogle", email = "kiona.ogle@nau.edu", role = "aut"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.3)
-License: What license is it under?
+Suggests: knitr, kableExtra,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+License: We need to pick one (if we keep gsl then GPLv3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1.9000
