@@ -10,11 +10,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Vignette Author" />
+<meta name="author" content="Michael Fell" />
 
-<meta name="date" content="2018-03-02" />
+<meta name="date" content="2018-03-05" />
 
-<title>Vignette Title</title>
+<title>ACGCA Vignette</title>
 
 
 
@@ -68,214 +68,308 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Vignette Title</h1>
-<h4 class="author"><em>Vignette Author</em></h4>
-<h4 class="date"><em>2018-03-02</em></h4>
+<h1 class="title toc-ignore">ACGCA Vignette</h1>
+<h4 class="author"><em>Michael Fell</em></h4>
+<h4 class="date"><em>2018-03-05</em></h4>
 
 
 
-<p>Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The <code>html_vignette</code> output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The <code>html_vignette</code> format:</p>
-<ul>
-<li>Never uses retina figures</li>
-<li>Has a smaller default figure size</li>
-<li>Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style</li>
-</ul>
-<div id="vignette-info" class="section level2">
-<h2>Vignette Info</h2>
-<p>Note the various macros within the <code>vignette</code> section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the <code>title</code> field and the <code>\VignetteIndexEntry</code> to match the title of your vignette.</p>
+<div id="acgca-introduction" class="section level2">
+<h2>ACGCA Introduction</h2>
+<p>The Allometrically Constrained Growth and Carbon Allocation (ACGCA) model is an individually based model of tree growth and mortality originally developed by Ogle and Pacala (2009). As the name implies the ACGCA model makes use of functional traits and allometries between tissue types (i.e. leaves, roots, and stems) combined with functional traits to determine carbon allocation in a tree.</p>
+<p>Carbon dynamics within the tree are essential to this model. Carbon is allocated between a structural and two storage pools in a way that satisfies the aforementioned allometric relationships (Ogle and Pacala (2009). One storage pool is associated with leaf and fine root tissue. Labile carbon in this pool is retranslocated when the tissue senesceses (Ogle and Pacala 2009). The other storage pool is in the sapwood and is used in times of stress (high labile carbon demand relative to carbon inputs). Finally there is a transient labile carbon pool representative of recent photosynthate and retranslocated carbon. It is not associated with a specific tissue and is immediately redistributed within the tree to accommodate biomass production, respiration, and allocation to storage. If the labile carbon available to the tree is depleted the tree dies (Ogle and Pacala 2009).</p>
+<p>There are six possible physiological states in the ACGCA model: healthy, static, shrinking, recovering, recovered, or dead (Ogle and Pacala 2009). Each state is described by a set of difference equations satisfying mass-balance relationshipts between structuran and labile carbon pools. The only environmental driver included in the model is parmax (annual radiation for a site).</p>
+<p>For a full description of the model see Ogle and Pacala (2009) and the accompanying supplemental material. The model has also been used in several other studies (Fell et al. 2018 and Gemoets et al 2013).</p>
 </div>
-<div id="styles" class="section level2">
-<h2>Styles</h2>
-<p>The <code>html_vignette</code> template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:</p>
-<pre><code>output: 
-  rmarkdown::html_vignette:
-    css: mystyles.css</code></pre>
-</div>
-<div id="figures" class="section level2">
-<h2>Figures</h2>
-<p>The figure sizes have been customised so that you can easily put two images side-by-side.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)
-<span class="kw">plot</span>(<span class="dv">10</span><span class="op">:</span><span class="dv">1</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,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" /></p>
-<p>You can enable figure captions by <code>fig_caption: yes</code> in YAML:</p>
-<pre><code>output:
-  rmarkdown::html_vignette:
-    fig_caption: yes</code></pre>
-<p>Then you can use the chunk option <code>fig.cap = &quot;Your figure caption.&quot;</code> in <strong>knitr</strong>.</p>
-</div>
-<div id="more-examples" class="section level2">
-<h2>More Examples</h2>
-<p>You can write math expressions, e.g. <span class="math inline">\(Y = X\beta + \epsilon\)</span>, footnotes<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, and tables, e.g. using <code>knitr::kable()</code>.</p>
-<table>
+<div id="using-the-model" class="section level2">
+<h2>Using the Model</h2>
+<p>To use the model requires setting up a vector of parameters. The following parameter values are taken from Ogle and Pacala (2009) and are based on inputs to the C version of the code translated from Matlab by Darren Gemoets. Units for each parameter can be found in Ogle and Pacala (2009) or Fell el al. (2018). Fell et al. (2018). is published in an open source journal and thus should be available to all users of this code.</p>
+<table class="table" style="width: auto !important; ">
 <thead>
-<tr class="header">
-<th></th>
-<th align="right">mpg</th>
-<th align="right">cyl</th>
-<th align="right">disp</th>
-<th align="right">hp</th>
-<th align="right">drat</th>
-<th align="right">wt</th>
-<th align="right">qsec</th>
-<th align="right">vs</th>
-<th align="right">am</th>
-<th align="right">gear</th>
-<th align="right">carb</th>
+<tr>
+<th style="text-align:left;">
+parameter.names
+</th>
+<th style="text-align:right;">
+parameter.values
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>Mazda RX4</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.620</td>
-<td align="right">16.46</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
+<tr>
+<td style="text-align:left;">
+p.hmax
+</td>
+<td style="text-align:right;">
+27.50000
+</td>
 </tr>
-<tr class="even">
-<td>Mazda RX4 Wag</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.875</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
+<tr>
+<td style="text-align:left;">
+p.phih
+</td>
+<td style="text-align:right;">
+263.00000
+</td>
 </tr>
-<tr class="odd">
-<td>Datsun 710</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">108.0</td>
-<td align="right">93</td>
-<td align="right">3.85</td>
-<td align="right">2.320</td>
-<td align="right">18.61</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
+<tr>
+<td style="text-align:left;">
+p.eta
+</td>
+<td style="text-align:right;">
+0.64000
+</td>
 </tr>
-<tr class="even">
-<td>Hornet 4 Drive</td>
-<td align="right">21.4</td>
-<td align="right">6</td>
-<td align="right">258.0</td>
-<td align="right">110</td>
-<td align="right">3.08</td>
-<td align="right">3.215</td>
-<td align="right">19.44</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
+<tr>
+<td style="text-align:left;">
+p.swmax
+</td>
+<td style="text-align:right;">
+0.10000
+</td>
 </tr>
-<tr class="odd">
-<td>Hornet Sportabout</td>
-<td align="right">18.7</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">175</td>
-<td align="right">3.15</td>
-<td align="right">3.440</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">2</td>
+<tr>
+<td style="text-align:left;">
+lamdas
+</td>
+<td style="text-align:right;">
+0.95000
+</td>
 </tr>
-<tr class="even">
-<td>Valiant</td>
-<td align="right">18.1</td>
-<td align="right">6</td>
-<td align="right">225.0</td>
-<td align="right">105</td>
-<td align="right">2.76</td>
-<td align="right">3.460</td>
-<td align="right">20.22</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
+<tr>
+<td style="text-align:left;">
+lamdah
+</td>
+<td style="text-align:right;">
+0.95000
+</td>
 </tr>
-<tr class="odd">
-<td>Duster 360</td>
-<td align="right">14.3</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">245</td>
-<td align="right">3.21</td>
-<td align="right">3.570</td>
-<td align="right">15.84</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">4</td>
+<tr>
+<td style="text-align:left;">
+rhomax
+</td>
+<td style="text-align:right;">
+525000.00000
+</td>
 </tr>
-<tr class="even">
-<td>Merc 240D</td>
-<td align="right">24.4</td>
-<td align="right">4</td>
-<td align="right">146.7</td>
-<td align="right">62</td>
-<td align="right">3.69</td>
-<td align="right">3.190</td>
-<td align="right">20.00</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
+<tr>
+<td style="text-align:left;">
+p.f2
+</td>
+<td style="text-align:right;">
+7000.00000
+</td>
 </tr>
-<tr class="odd">
-<td>Merc 230</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">140.8</td>
-<td align="right">95</td>
-<td align="right">3.92</td>
-<td align="right">3.150</td>
-<td align="right">22.90</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
+<tr>
+<td style="text-align:left;">
+p.f1
+</td>
+<td style="text-align:right;">
+4.00000
+</td>
 </tr>
-<tr class="even">
-<td>Merc 280</td>
-<td align="right">19.2</td>
-<td align="right">6</td>
-<td align="right">167.6</td>
-<td align="right">123</td>
-<td align="right">3.92</td>
-<td align="right">3.440</td>
-<td align="right">18.30</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">4</td>
+<tr>
+<td style="text-align:left;">
+p.gammac
+</td>
+<td style="text-align:right;">
+131000.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.gammax
+</td>
+<td style="text-align:right;">
+0.12000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.cgl
+</td>
+<td style="text-align:right;">
+1.45000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.cgr
+</td>
+<td style="text-align:right;">
+1.25000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.cgw
+</td>
+<td style="text-align:right;">
+1.37000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.deltal
+</td>
+<td style="text-align:right;">
+0.09500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.deltar
+</td>
+<td style="text-align:right;">
+0.15000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.sl
+</td>
+<td style="text-align:right;">
+1.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.sla
+</td>
+<td style="text-align:right;">
+0.01410
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.sr
+</td>
+<td style="text-align:right;">
+1.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.so
+</td>
+<td style="text-align:right;">
+0.05000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.rr
+</td>
+<td style="text-align:right;">
+0.00015
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.rhor
+</td>
+<td style="text-align:right;">
+160000.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.rml
+</td>
+<td style="text-align:right;">
+1.25000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.rms
+</td>
+<td style="text-align:right;">
+0.02500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.rmr
+</td>
+<td style="text-align:right;">
+0.75000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.etaB
+</td>
+<td style="text-align:right;">
+0.04500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.k
+</td>
+<td style="text-align:right;">
+0.70000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.epsg
+</td>
+<td style="text-align:right;">
+6.75000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.M
+</td>
+<td style="text-align:right;">
+0.95000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.alpha
+</td>
+<td style="text-align:right;">
+0.36500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.R0
+</td>
+<td style="text-align:right;">
+1.90900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p.R40
+</td>
+<td style="text-align:right;">
+5.59200
+</td>
 </tr>
 </tbody>
 </table>
-<p>Also a quote using <code>&gt;</code>:</p>
-<blockquote>
-<p>“He who gives up [code] safety for [code] speed deserves neither.” (<a href="https://twitter.com/hadleywickham/status/504368538874703872">via</a>)</p>
-</blockquote>
+<p>Once the data are loaded they can be used to call the ACGCA model. There are a few other parameters that can be set. The value of parmax (2060 MJ m<sup>-2</sup> year<sup>-1</sup>) is taken from Ogle and Pacala (2009) and is full sunlight for a site in North Carolina. There are 801 data points in the time series for radius because the time step defaults to 16 steps per year. The extra point is for initilization. <strong>NOTE: If the radius is set too low (any lower than it is set here) the tree will not grow</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Call the ACGCA model (growthloopR)</span>
+acgcaout &lt;-<span class="st"> </span>ACGCA<span class="op">::</span><span class="kw">growthloopR</span>(<span class="dt">sparms=</span>acru, <span class="dt">r0=</span><span class="fl">0.0054</span>, <span class="dt">parmax=</span><span class="dv">2060</span>, <span class="dt">years=</span><span class="dv">50</span>, <span class="dt">fulloutput=</span><span class="ot">TRUE</span>)
+
+<span class="co"># Plot the radius and height output from the model.</span>
+<span class="kw">plot</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span><span class="dv">800</span><span class="op">/</span><span class="dv">16</span>, <span class="dt">y=</span>acgcaout<span class="op">$</span>r, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;time (years)&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;radius (m)&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span><span class="dv">800</span><span class="op">/</span><span class="dv">16</span>, <span class="dt">y=</span>acgcaout<span class="op">$</span>h, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;time (years)&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;height (m)&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Other parameters can be set as outlined in the function documentation for “growthloopR.”</p>
 </div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>A footnote here.<a href="#fnref1">↩</a></p></li>
-</ol>
+<div id="references" class="section level2">
+<h2>References:</h2>
+<p>Fell, M., J. Barber, J. W. Lichstein, and K. Ogle. 2018. Multidimensional trait space informed by a mechanistic model of tree growth and carbon allocation. Ecosphere 9. <a href="DOI:10.1002/ecs2.2060" class="uri">DOI:10.1002/ecs2.2060</a></p>
+<p>Gemoets, D., J. Barber, and K. Ogle. 2013. Reversible jump MCMC for inference in a deterministic individual-based model of tree growth for studying forest dynamics. Environmetrics 24:433–448.</p>
+<p>Ogle, K., and S. W. Pacala. 2009. A modeling framework for inferring tree growth and allocation from physiological, morphological and allometric traits. Tree Physiology 29:587–605.</p>
 </div>
 
 

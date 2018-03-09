@@ -82,7 +82,7 @@ typedef struct{
 ///
 typedef struct{
   double BH; ///< breast hight.  Fixed at 1.37m
-  double Io; ///< light intensity
+  //double Io; ///< light intensity
   double deltat; ///< timestep in growthmodel.  Fixed at 1/16
   double T; ///< maximum year for growthmodel.  Should be allowed to vary at some point.
   double tolerance; ///< tolerance for numerical solver

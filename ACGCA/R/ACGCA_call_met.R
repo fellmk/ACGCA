@@ -93,7 +93,8 @@
 #'  }
 #'
 #' @param r0 The starting radius. Defaults to 0.05
-#' @param parmax The maximum yearly iradiance, defaults to 2060
+#' @param parmax The maximum yearly iradiance, defaults to 2060 and can be 
+#' either a vector of length steps*years or a single value.
 #' @param years The number of years to run the simulation, defaults to 50.
 #' @param steps The number of time steps per year, defaults to 16.
 #' @param breast.height The height DBH is taken at, defaults to 1.37.
@@ -203,9 +204,22 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
     stop("fulloutput must be logical (TRUE or FALSE)") 
   }
   
+  ##### PARMAX #####
+  # This can come in as a single value or as a vector. The vector should be of
+  # length steps*years+1 but the user enters steps*years.
+  ##################
+  if(length(parmax)==1){
+    parmax <- rep(x=parmax, times=(steps*years+1))
+  }else if(length(parmax)==steps*years){
+    parmax <- c(0, parmax)
+  }else{
+    stop("Parmax should have length 1 or length steps*years. The default is 
+         2060.")
+  }
+  
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
-  gparms <- matrix(data = c(1/steps, years, tolerance, breast.height, parmax), ncol=1)
+  gparms <- matrix(data = c(1/steps, years, tolerance, breast.height), ncol=1)
 
   # Set up the variables needed for lengths of output
   #lenvars2 <- (gparms2[2,1]/gparms2[1,1])*dim[1]+dim[1]
@@ -217,8 +231,7 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
 
     # Call the growthloop function using R's C interface.
     output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
-      r0=as.double(r0), t=integer(1),
-
+                 Io=as.double(parmax), r0=as.double(r0), t=integer(1),
       h=double(lenvars),
       hh=double(lenvars),
       hC=double(lenvars),
@@ -297,3 +310,4 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
            FALSE.")
     }
 } #end of growthloop function
+

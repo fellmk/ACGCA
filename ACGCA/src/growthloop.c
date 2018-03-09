@@ -52,7 +52,7 @@
 /// \date 01-13-2010
 /// TODO: need numerical checks here
 ///
-void growthloop(sparms *p, gparms *gp, double *r0, int *t,
+void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	double h[],
 	double hh2[],
 	double hC2[],
@@ -193,7 +193,7 @@ void growthloop(sparms *p, gparms *gp, double *r0, int *t,
     f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
 
     // update light value
-    st.light = gp->Io*f_abs*(st.la/LAI.tot);
+    st.light = Io[i]*f_abs*(st.la/LAI.tot);
 
     // Determine labile carbon needed to bring all tissues in-line with target allometry (ea),
     // and labile carbon needed to rebuild all senescesed tissues (erb):

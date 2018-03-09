@@ -23,7 +23,7 @@
 // of the below function is to do this.  MKF 03/26/2013
 //////////////////////////////////////////////////////////////////////////////////
 
-void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
+void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *h,
 	double *hh,
 	double *hC,
@@ -175,7 +175,7 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 			gp.T=gp2[1]; // gparm[2] <- 10 # gp.T length of run in years
 			gp.tolerance=gp2[2]; // gparm[3] <- 0.00001 # gp.tolerance
 			gp.BH=gp2[3]; // gparm[4] <- 1.37 # gp.BH
-			gp.Io=gp2[4];  // annual par APAR
+			//gp.Io=gp2[4];  // annual par APAR
 
 			/*
 			printf("Rgrowthloop \n");
@@ -200,7 +200,7 @@ void Rgrowthloop( double *p2, double *gp2, double *r0, int *t,
 			this is working (MKF 7/21/2014).
 			*/
 
-		 	growthloop(&p,&gp, r0, t,
+		 	growthloop(&p,&gp, Io, r0, t,
 				h,
 				hh,
 				hC,
