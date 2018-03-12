@@ -52,7 +52,8 @@ growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
 
 \item{r0}{The starting radius. Defaults to 0.05}
 
-\item{parmax}{The maximum yearly iradiance, defaults to 2060}
+\item{parmax}{The maximum yearly iradiance, defaults to 2060 and can be 
+either a vector of length steps*years or a single value.}
 
 \item{years}{The number of years to run the simulation, defaults to 50.}
 
