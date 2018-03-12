@@ -1,5 +1,5 @@
 ---
-title: "ACGCA"
+title: "ACGCA Vignette"
 author: "Michael Fell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,12 +9,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = TRUE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
+
 
 ## ACGCA Introduction
 The Allometrically Constrained Growth and Carbon Allocation (ACGCA) model is an individually based model of tree growth and mortality originally developed by Ogle and Pacala (2009). As the name implies the ACGCA model makes use of functional traits and allometries between tissue types (i.e. leaves, roots, and stems) combined with functional traits to determine carbon allocation in a tree. 
@@ -31,9 +32,8 @@ To use the model requires setting up a vector of parameters. The following param
 ```{r, echo=FALSE}
 # A code block to show the values for acru taken from Ogle and Pacala (2009)
 
-load("../data/acru.rda")
-load("../data/parms.rda")
-
+load("../data/acru.Rdata")
+load("../data/parms.Rdata")
 # disable scientific notation
 options(scipen = 999) # default is 1
 
@@ -51,10 +51,9 @@ Once the data are loaded they can be used to call the ACGCA model. There are a f
 
 ```{r}
 # Call the ACGCA model (growthloopR)
-acgcaout <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060*0.5, years=50, fulloutput=TRUE)
+acgcaout <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, years=50, fulloutput=TRUE)
 
 # Plot the radius and height output from the model.
-par(mar=c(4,4,1,1))
 plot(x=0:800/16, y=acgcaout$r, type="l", xlab="time (years)", ylab="radius (m)")
 plot(x=0:800/16, y=acgcaout$h, type="l", xlab="time (years)", ylab="height (m)")
 ```
