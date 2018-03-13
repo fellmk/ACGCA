@@ -1,4 +1,3 @@
-
 ///
 /// \file misc_growth_funcs.c
 /// \brief Contains functions initialize(), trunkradii(), trunkvolume(), LAIcalc(), 
