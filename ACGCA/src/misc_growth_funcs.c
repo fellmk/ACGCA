@@ -9,6 +9,7 @@
 ///
 ///  Updated numerical checks.
 ///
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -21,6 +22,13 @@
 //#include <gsl/gsl_cdf.h>                                                                     
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/misc_func.h"
+
+// Only define M_PI if it is not defined already
+// Added by MKF for compilers that don't define this
+#ifndef M_PI
+  #define M_PI 3.14159265358979323846
+#endif
+
 // Would use the following syntax to call initialize inside another function
 // initialize(&sparms, &tparms, &gparms, &tstates);
 
@@ -135,7 +143,7 @@ void initialize(sparms *p, gparms *gp, tstates *st, double *r0){
     }
     else {
       st->cs=p->gammac*st->bs*((1-p->gammax)*(st->vts/st->bts)-
-			       p->gammaw);
+  		       p->gammaw);
     }
   }
   else {
@@ -389,6 +397,8 @@ void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st){
 
 
 
+/// 
+/// NOTE all MKF comments added in 2018 by Michael Fell
 ///
 /// Need to find comments on this function in Matlab code
 /// \param LAI         LAindex structure
@@ -402,11 +412,17 @@ void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st){
 ///
 /// Returns LAI and LA
 ///   
-/// Note: need to allow for scalar or vector values of LA 
+/// Note: need to allow for scalar or vector values of LA
+/// I don't think this is necessary MKF
 /// 
 /// \author Kiona Ogle (translated into C by Darren Gemoets)
 ///
 /// \date 01-11-2010
+///
+/// Furthur modified by Michael Fell to address leftover comments and allow
+/// use of the gap dynamics code.
+/// 
+/// date March 14, 2018
 ///
 
 void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0, 
@@ -429,19 +445,19 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
 	   % OUTPUTS:
 	   %   LAI = tree's leaf area index (if Hc is missing, scalar with total LAI)
 	   %   LAI(1) = total LAI of target tree; 
-	   %	LAI(2) = LAI of target tree above the forest canopy (LAItop);
-	   %	LAI(3) =  LAI of target tree below the forest canopy (LAIbot);
+	   %	 LAI(2) = LAI of target tree above the forest canopy (LAItop);
+	   %	 LAI(3) =  LAI of target tree below the forest canopy (LAIbot);
 	   %   LA = tree's leaf area (if Hc is missing, scalar with total LA)
 	   %   LA(1) = total leaf area (LA) of target tree; 
-	   %	LA(2) = LA of target tree above the forest canopy (LAtop);
-	   %	LA(3) = LA of target tree below the forest canopy (LAbot);
+	   %	 LA(2) = LA of target tree above the forest canopy (LAtop);
+	   %	 LA(3) = LA of target tree below the forest canopy (LAbot);
 
 	   % Compute maximum radius of tree's crown (Rmax) based on: trunk diamter
 	   % (diam) in cm; canopy maximum potential radius (Rmax) in m; canopy area
 	   % (CanArea) at base of canopy in m^2. Model modified from Purves et al.
 	   % PLOS
   ***************/
-  double diam,Rmax,r0star=0,CAtot,Vtot,LAItot,z,CAz,Vz;
+  double diam, Rmax, r0star=0, CAtot, Vtot, LAItot, z, CAz, Vz;
   //printf("in LAIcalc: rBH=%g, p->R0=%g, p->R40=%g, r0=%g \n",rBH,p->R0,p->R40,r0);
   //printf("p->hmax=%g, p->phih=%g, gp->BH=%g \n",p->hmax,p->phih,gp->BH);
   if (rBH > 0){
@@ -495,21 +511,20 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
         
       // If bottom of tree's crown is below forest canopy:
       if (z < (1-p->eta)*H){
-	  
-	CAz= M_PI*pow(Rmax,2)*pow(z/(H*p->M),(2*p->alpha));
-	Vz = CAz*(z/(1+2*p->alpha));
-	LA->top = LAtot*Vz/Vtot;
-	LA->bot = LAtot - LA->top;
-	//LAI->top = LAtop/CAz;
-	LAI->top = LA->top/CAtot;
-	LAI->bot = LA->bot/CAtot;
+      	CAz= M_PI*pow(Rmax,2)*pow(z/(H*p->M),(2*p->alpha));
+      	Vz = CAz*(z/(1+2*p->alpha));
+      	LA->top = LAtot*Vz/Vtot;
+      	LA->bot = LAtot - LA->top;
+      	//LAI->top = LAtop/CAz;
+      	LAI->top = LA->top/CAtot;
+      	LAI->bot = LA->bot/CAtot;
       }
       // Below, if forest canopy is below tree's crown:
       else{
-	LA->top = LAtot;
-	LA->bot = 0;
-	LAI->top = LAItot;
-	LAI->bot = 0;
+      	LA->top = LAtot;
+      	LA->bot = 0;
+      	LAI->top = LAItot;
+      	LAI->bot = 0;
       }
     }
     // Below, if forest canopy it taller than tree:
@@ -519,15 +534,13 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       LA->top = 0;
       LA->bot = LAtot;
     }
-
-  }
+  } // End of else above
   LA->tot=LAtot;
   LAI->tot=LAItot;
 
   if (isnan(LAItot)!=0){
     //printf("error in LAI_calc: LAItot is nan \n");
   }
- 
 } // end LAIcalc()
 
 ///

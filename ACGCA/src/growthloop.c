@@ -103,7 +103,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	int growth_st[]
 ){
 
-//, double la[],double LAI[], double egrow[], double ex[], int status[]
+    //, double la[],double LAI[], double egrow[], double ex[], int status[]
 
     // state variables
     tstates st;
@@ -128,21 +128,21 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     Larea LA;
 
 	//printf(" Initialize start=%d \n",i);
-    //Initialze the state variables.  Returns the state structure st.
+  //Initialze the state variables.  Returns the state structure st.
     initialize(p,gp,&st,r0);
 	//printf(" Initialize complete=%d \n",i);
 
-    //Initialize the radius and height arrays to be returned (needed in the MCMC)
-    //The if statement was added by MKF for multiple parameter sets on 5/5/2013
+  //Initialize the radius and height arrays to be returned (needed in the MCMC)
+  //The if statement was added by MKF for multiple parameter sets on 5/5/2013
 	//if(*iout < 1){
 		r[0]=r[1]=st.r;  //same as initial radius
-    		h[0]=h[1]=st.h;
-    		rBH[0]=rBH[1]=st.rBH;
+    h[0]=h[1]=st.h;
+    rBH[0]=rBH[1]=st.rBH;
 	//}
 	//if(*iout > 0){
 	//	r[(*lenvars * *iout) + *iout]=r[(*lenvars * *iout) + *iout + 1]=st.r;  //same as initial radius
-   	//	h[(*lenvars * *iout) + *iout]=h[(*lenvars * *iout) + *iout + 1]=st.h;
-    	//	rBH[(*lenvars * *iout) + *iout]=rBH[(*lenvars * *iout) + *iout + 1]=st.rBH;
+  //	h[(*lenvars * *iout) + *iout]=h[(*lenvars * *iout) + *iout + 1]=st.h;
+  //	rBH[(*lenvars * *iout) + *iout]=rBH[(*lenvars * *iout) + *iout + 1]=st.rBH;
 	//}
 
     //Compute the LAI of the tree canopy (initially)
@@ -159,10 +159,10 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
             growth_st[i]=6;
             //printf(" loop broke at iteration=%d \n",i);
             //printf("p->sla=%g,p->hmax=%g,p->phih=%g \n",p->sla,p->hmax,p->phih);
-	    //printf("p->rhomax=%g,p->gammac=%g,p->epsg=%g \n",p->rhomax,p->gammac,p->epsg);
+	          //printf("p->rhomax=%g,p->gammac=%g,p->epsg=%g \n",p->rhomax,p->gammac,p->epsg);
             //printf("p->alpha=%g,p->K=%g \n",p->alpha,p->K);
             //printf("r=%g, init r=%g \n",st.r,r[0]);
-         //getchar(); // REMOVE
+            //getchar(); // REMOVE
          break;
         }
 
@@ -193,7 +193,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
 
     // update light value
-    st.light = Io[i]*f_abs*(st.la/LAI.tot);
+    st.light = Io[i]*f_abs*(st.la/LAI.tot); // 138b in appendix for Scn. A
 
     // Determine labile carbon needed to bring all tissues in-line with target allometry (ea),
     // and labile carbon needed to rebuild all senescesed tissues (erb):
@@ -206,7 +206,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     if ((p->gammac > 0) && (st.cs > 0)){
       // respiring sapwood also due to cells with labile carbon:
       bsstar = bsstar + (1-p->gammaw*st.bts/((1-p->gammax)*st.vts))*((st.cs/p->gammac)*(st.bts/st.vts));
-     }
+    }
 
     rm=p->rml*st.bl+p->rmr*st.br+p->rms*bsstar;
 
@@ -229,7 +229,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     pton.nuoa=((p->so*gp->deltat-1.0)*st.boh+p->lamdah*st.bth)/((1.0+st.deltas)*st.bos*gp->deltat);
     if (pton.nuoa<0.0){
       pton.nuoa=0.0;
-     }
+    }
 
     //These are used in putonallometry()
     pton.eo=((p->cgw+deltaw)*(((p->so+pton.nuoa)*gp->deltat-1.0)*st.bos+p->lamdas*st.bts))/gp->deltat;
@@ -253,7 +253,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
           }
           else{ // growthflag==1.  tree growing along target allometry.
             //printf("ExcessGrowingOn \n");
-	    //MKF 04/20/2013 I added errorind to excessgrowing on to catch errors
+	          //MKF 04/20/2013 I added errorind to excessgrowing on to catch errors
             excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i]);
             growthflag=1;
             growth_st[i]=1;
@@ -306,12 +306,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
       //       st.cs, gp->deltat, st.deltas, p->so, st.bos);
       errorind[i] = errorind[i] | 1;
       //getchar(); // keep
-     }
+    }
     if ((r[i]<=0) || ( h[i]<=0) || (rBH[i]<=0) || (isnan(r[i]) !=0) || (isnan(h[i]) !=0)){
       printf("error in growthloop: r or h is negative or nan \n");
       //getchar(); // keep
       errorind[i] = errorind[i] | 2;
-     }
+    }
 
 	//la2[i]=st.la;// double
 	//LAI2[i]=st.LAI; //double

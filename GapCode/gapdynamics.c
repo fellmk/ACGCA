@@ -27,16 +27,16 @@
 
 // NOTE: once done this can be moved to the header file
 typedef struct{
-	double LAI; // tree's leaf area index (if Hc is missing, scalar with 
-			    //total LAI
+	double LAI;    // tree's leaf area index (if Hc is missing, scalar with 
+			       //total LAI
 	double LAItot; // total LAI of target tree;
 	double LAItop; // LAI of target tree above the forest canopy (LAItop)
 	double LAIbot; // LAI of target tree below the forest canopy (LAIbot)
 	
-	double LA; // tree's leaf area (if Hc is missing, scalar with total LA)
-	double LAtot; // total leaf area (LA) of target tree (LAtot)
-	double LAtop; // LA of target tree above the forest canopy (LAtop) 
-	double LAbot; // LA of target tree below the forest canopy (LAbot)
+	double LA;     // tree's leaf area (if Hc is missing, scalar with total LA)
+	double LAtot;  // total leaf area (LA) of target tree (LAtot)
+	double LAtop;  // LA of target tree above the forest canopy (LAtop) 
+	double LAbot;  // LA of target tree below the forest canopy (LAbot)
 } gap;
 
 // this is temporary and will be removed in the final version
@@ -127,23 +127,3 @@ int main(int argc, char **argv){
 	}
 	
 } // End of main
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
