@@ -145,16 +145,16 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   //	h[(*lenvars * *iout) + *iout]=h[(*lenvars * *iout) + *iout + 1]=st.h;
   //	rBH[(*lenvars * *iout) + *iout]=rBH[(*lenvars * *iout) + *iout + 1]=st.rBH;
 	//}
-    
+
     //Compute the LAI of the tree canopy (initially)
     LAIcalc(&LAI, &LA, st.la,  st.r, st.h, st.rBH, p, gp, 0, &st);  //0 is Hc=0
     // add new function APARcalc()
     // APARcalc(eta, H, Hc, &LAI, &LA, &ForParms) // write function
-    //APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H, 
+    //APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
              //double Hc, double FLAI, double Io, Forestparms *ForParms)
     st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[0], LAIF[0], Io[0], ForParms);
-    
-    printf("Light value at iteration 0 is: %f.\n", st.light);
+
+    //printf("Light value at iteration 0 is: %f.\n", st.light);
   /****************** Start growthloop *****************************************/
 
   // gp->T number of years, gp->deltat is increment (=1/16)
@@ -303,7 +303,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     /* Recalculate st.light */
     LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
     st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
-    if(i == 647 || i ==648){
+    /*if(i == 647 || i ==648){
       printf("M value at iteration %i is: %f.\n", i, p->M);
       printf("alpha value at iteration %i is: %f.\n", i, p->alpha);
       printf("Hc value at iteration %i is: %f.\n", i, Hc[i]);
@@ -323,8 +323,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
       printf("st.light value at iteration %i is: %f.\n", i, st.light);
       printf("\n");
       printf("\n");
-    }
-    
+    }*/
+
     if (isnan(st.ex) !=0){
       //printf("st.r=%g, st.bos=%g, st.bts=%g \n", st.r,st.bos,st.bts);
       //printf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));

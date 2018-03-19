@@ -41,7 +41,7 @@ load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
 
 theta.j <- theta.j[-c(8,12,35,36)]
-test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
+#test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
 
 source("acruparms.R")
 acru <- acru[-c(8,12,35,36)]
