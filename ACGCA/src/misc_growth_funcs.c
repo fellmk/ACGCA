@@ -476,12 +476,12 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       Rmax = (p->R0/r0star)*r0;
     }
   }
-  //printf("Rmax=%g, p->eta=%g, p->M=%g, p->alpha=%g \n",Rmax,p->eta,p->M,p->alpha);
+  printf("Rmax=%g, p->eta=%g, p->M=%g, p->alpha=%g \n",Rmax,p->eta,p->M,p->alpha);
   // Total projected crown area of tree at base of crown
   CAtot = M_PI*pow(Rmax,2)*pow((1-p->eta)/p->M,(2*p->alpha));
   // Total volume of tree's crown:
   Vtot = CAtot*(((1-p->eta)*H)/(1+2*p->alpha));
-  //printf("CAtot=%g, Vtot=%g \n",CAtot,Vtot);
+  printf("CAtot=%g, Vtot=%g \n",CAtot,Vtot);
   // Total leaf area index of tree's crown
   if (CAtot > 0){
     LAItot = LAtot/CAtot;
@@ -510,9 +510,11 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       z = H-Hc;
         
       // If bottom of tree's crown is below forest canopy:
+      printf("z=%g, H=%g, Hc=%g. \n");
       if (z < (1-p->eta)*H){
       	CAz= M_PI*pow(Rmax,2)*pow(z/(H*p->M),(2*p->alpha));
       	Vz = CAz*(z/(1+2*p->alpha));
+      	printf("CAz=%g, Vz=%g. \n");
       	LA->top = LAtot*Vz/Vtot;
       	LA->bot = LAtot - LA->top;
       	//LAI->top = LAtop/CAz;
@@ -542,6 +544,152 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
     //printf("error in LAI_calc: LAItot is nan \n");
   }
 } // end LAIcalc()
+
+
+
+/// 
+/// Function APARcalc()
+///
+///
+///
+///
+///
+
+//(LAindex *LAI, Larea *LA, double LAtot, double r0, 
+ //double H, double rBH, sparms *p, gparms *gp, double Hc,
+ //tstates *st)
+
+ // Hc and FLAI can just pass the double values with minimal issue
+double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H, 
+                double Hc, double FLAI, double Io, Forestparms *ForParms){
+  // Define internal variables
+  double APAR;
+  double Ioint; //Io internal to this function
+  // First block
+  double logitLAImin;
+  double pLAImin;
+  double logitLAImax;
+  double pLAImax;
+  // First if
+  double logitLAIc1;
+  double pLAIc1; 
+  double LAIc1;
+  double logitLAIc2;
+  double pLAIc2;
+  double LAIc2;
+  double LAIc;
+  double Kboth;
+  double LAIboth;
+  double fabs_both;
+  double fabs_tree;
+  double fabs_can;
+  double fabs;
+  // Third if
+  double LogitLAIc;
+  double pLAIc;
+  double fabs_top;
+  double APAR_top;
+  double APAR_bot;
+  
+  // Predicted, unscaled forest canopy LAI at top of canopy:
+  logitLAImin = ForParms->intF + ForParms->slopeF;
+  pLAImin = exp(logitLAImin) / (1 + exp(logitLAImin));
+  // Predicted, unscaled forest canopy LAI at ground level:
+  logitLAImax = ForParms->intF;
+  pLAImax = exp(logitLAImax) / (1 + exp(logitLAImax));
+  
+  if(H < Hc){
+    // Calculate forest canopy LAI from top of forest canopy (height H meters) 
+    // to top of target tree (height H):
+    logitLAIc1 = ForParms->intF + ForParms->slopeF * (H/Hc);
+    pLAIc1 = exp(logitLAIc1) / (1 + exp(logitLAIc1));
+    // Rescale distribution of forest canopy LAI so that LAI = 0 at top of 
+    // canopy and LAI maximum LAI at ground level:
+    pLAIc1 = (pLAIc1 - pLAImin) / (pLAImax - pLAImin);
+    LAIc1 = FLAI * pLAIc1;
+    // Io is light level incedent at top of target tree's canopy, after having 
+    // accounted for the light absorbed by the forest canopy above the tree.
+    Ioint = Io * exp(-ForParms->kF * LAIc1);
+    
+    // Now calculate the amount of light absorbed within a cylinder containing 
+    // the target tree's canopy and partitioning the abount absorbed by the 
+    // tree's canopy according to its potential fraction absorbed.
+    
+    // Calculate forest canopy LAI between the top and bottom of the target 
+    // tree's canopy:
+    logitLAIc2 = ForParms->intF + ForParms->slopeF * (eta * H / Hc);
+    // Rescale distribution of forest canopy LAI:
+    pLAIc2 = exp(logitLAIc2) / (1 + exp(logitLAIc2));
+    pLAIc2 = (pLAIc2 - pLAImin) / (pLAImax - pLAImin);
+    LAIc2 = FLAI * pLAIc2;
+    LAIc = LAIc2 - LAIc1;
+    // Total LAI (forest + tree's canopies) within a cylinder containing the 
+    // target tree's canopy:
+    LAIboth = LAIc + LAI->tot;
+    // Combined light ext coef of forest and tree's canopies:
+    Kboth = (ForParms->kF * LAIc + k * LAI->tot) / LAIboth;
+    // Fraction of light absorbed by both canopies:
+    fabs_both = 1 - exp(-Kboth * LAIboth);
+    // Fraction of light that would have been absorbed by the tree's canopy if 
+    // not competing with the forest canopy:
+    fabs_tree = 1 - exp(-k * LAI->tot);
+    // Fraction of light that would have been absorbed by the forest's canopy 
+    // if not competing with the tree's canopy:
+    fabs_can = 1 - exp(-ForParms->kF * LAIc);
+    // "Correction" fraction of light absorbed by the tree's canopy, and total 
+    // amount of light absorbed by the tree:
+    fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    APAR = Ioint * fabs * LA->tot / LAI->tot;
+  }
+  else if((eta * H) > Hc){
+    // Fraction and total amount of light absorbed by the target tree's canopy 
+    // when not competing for light with the forest canopy.
+    fabs = 1 - exp(-k * LAI->tot);
+    APAR = Io * fabs * LA->tot / LAI->tot;
+  }
+  else if((eta * H) < Hc){
+    // For the portion of the target tree's canopy that is above the forest 
+    // canopy, compute the fractionand total amount of light absorbed by the 
+    // top part of the tree's crown, and compute light penetrating to the 
+    // lower part of the crown (Io):
+    fabs_top = 1 - exp(-k * LAI->top);
+    APAR_top = Io * fabs_top * LA->top / LAI->top;
+    Ioint = Io * (1 - fabs_top);
+    
+    // Now, compute the amount of light absorbed by the bottom part of the 
+    // tree's crown that is competing with the forest canopy for light.
+    
+    // Compute the LAI of the forest canopy to the bottom of the tree's crown:
+    LogitLAIc = ForParms->intF + ForParms->slopeF * (eta * H / Hc);
+    // Rescale distribution of forest canopy LAI:
+    pLAIc = exp(LogitLAIc) / (1 + exp(LogitLAIc));
+    pLAIc = (pLAIc-pLAImin) / (pLAImax - pLAImin);
+    LAIc = FLAI * pLAIc;
+    // Total LAI (forest + tree's canopies) within a cylinder containing the 
+    // target tree's bottom crown portion
+    LAIboth = LAIc + LAI->bot;
+    // Combined light ext coeff of forest and tree's canopies:
+    Kboth = (ForParms->kF * LAIc + k * LAIboth);
+    // Fraction of light absorbed by both canopies:
+    fabs_both = 1 - exp(-Kboth * LAIboth);
+    // Fraction of light that would have been absorbed by the forest's canopy 
+    // if not competing with the tree's canopy:
+    fabs_tree = 1 - exp(-k * LAIboth);
+    // Fraction of light that would have been absorbed by the forest's canopy 
+    // if not competing with the tree's canopy:
+    fabs_can = 1 - exp(-ForParms->kF * LAIc);
+    // Fraction of light absorbed by the tree's canopy, and total amount of light absorbed by the tree:
+    fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    APAR_bot = Ioint * fabs * LA->bot / LAI->bot;
+    APAR = APAR_top + APAR_bot;
+  }
+  else{
+    printf("APAR not determined for gap sim.");
+    exit(1);
+  }
+  // change to APAR once done NOTE NOTE NOTE
+  return APAR;
+}
 
 ///
 /// Initializes species parameters (p) for growthoop for red maple (species 2)

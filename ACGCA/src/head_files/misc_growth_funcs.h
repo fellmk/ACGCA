@@ -107,6 +107,16 @@ typedef struct{
 } Larea;
 
 
+/// structure for forest parameters added by MKF
+/// for use in APARcalc
+typedef struct{
+  double kF;   /// Light extinction coefficient of Forest canopy
+  double intF; /// intercept in the equation for logit (relative LAI) vs 
+               /// relative height.
+  double slopeF;   /// Slope in the eqn. for logit (relative LAI) vs 
+               /// parms = parameter structure
+} Forestparms;
+
 
 /// \brief Height structure for LAIcalc()
 /// don't need
@@ -232,6 +242,10 @@ extern void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st)
 extern void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0, 
 		    double H, double rBH, sparms *p, gparms *gp, double Hc,
 		    tstates *st);
+
+extern double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
+                       double Hc, double FLAI, double Io, 
+                       Forestparms *ForParms);
 
 extern void acruparms(sparms *p);
 

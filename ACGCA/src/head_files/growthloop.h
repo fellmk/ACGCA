@@ -9,6 +9,7 @@
 
 
 extern void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
+  double *Hc, double *LAIF, Forestparms *ForParms, double *APARout,
 	double h2[],
 	double hh2[],
 	double hC2[],

@@ -54,12 +54,14 @@ test.s <- list()
 for(i in 1:length(light.levels)){
   acru <- as.matrix(acru)
   # This uses the smallest radius I can get
-  test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=light.levels[i]*2060, fulloutput=TRUE)
+  test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+                             gapvars=list(gt=2, ct=5,
+                                          tbg=20), fulloutput=TRUE, gapsim=TRUE)
   test.s[[i]] <- test
   if(i == 1){
-    plot(1:801, test$r, type="l")
+    plot((1:801)/16, test$r, type="l")
   }else{
-    lines(1:801, test$r, type="l")
+    lines((1:801)/16, test$r, type="l")
   }
 }
 

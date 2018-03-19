@@ -53,6 +53,7 @@
 /// TODO: need numerical checks here
 ///
 void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
+  double *Hc, double *LAIF, Forestparms *ForParms, double APARout[],
 	double h[],
 	double hh2[],
 	double hC2[],
@@ -115,7 +116,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     puton pton;
 
     // Below are local variables for growthloop().
-    double rm,bsstar,pg,rhow,deltaw,f_abs;
+    double rm,bsstar,pg,rhow,deltaw; //f_abs; Removed 3/16/18
 
     // growthflag is used to select which function call is used. growthflag=1 when
     // tree is currently on target allometry (so excessgrowingon() is called below)
@@ -144,11 +145,16 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   //	h[(*lenvars * *iout) + *iout]=h[(*lenvars * *iout) + *iout + 1]=st.h;
   //	rBH[(*lenvars * *iout) + *iout]=rBH[(*lenvars * *iout) + *iout + 1]=st.rBH;
 	//}
-
+    
     //Compute the LAI of the tree canopy (initially)
-    LAIcalc(&LAI,&LA, st.la,  st.r, st.h, st.rBH, p, gp, 0, &st);  //0 is Hc=0
-
-
+    LAIcalc(&LAI, &LA, st.la,  st.r, st.h, st.rBH, p, gp, 0, &st);  //0 is Hc=0
+    // add new function APARcalc()
+    // APARcalc(eta, H, Hc, &LAI, &LA, &ForParms) // write function
+    //APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H, 
+             //double Hc, double FLAI, double Io, Forestparms *ForParms)
+    st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[0], LAIF[0], Io[0], ForParms);
+    
+    printf("Light value at iteration 0 is: %f.\n", st.light);
   /****************** Start growthloop *****************************************/
 
   // gp->T number of years, gp->deltat is increment (=1/16)
@@ -190,10 +196,10 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     // APAR). Compute total PAR absorbed by canopy as incident PAR above
     // canopy (Io) * fraction of PAR absorbed (f_abs) * Canopy area
 
-    f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
+    // mkf 3/16/2018 f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
 
     // update light value
-    st.light = Io[i]*f_abs*(st.la/LAI.tot); // 138b in appendix for Scn. A
+    // mkf 3/16/2018 st.light = Io[i]*f_abs*(st.la/LAI.tot); // 138b in appendix for Scn. A
 
     // Determine labile carbon needed to bring all tissues in-line with target allometry (ea),
     // and labile carbon needed to rebuild all senescesed tissues (erb):
@@ -295,7 +301,30 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     rBH[i]=st.rBH;
     //deltar[i]=st.dr;
     /* Recalculate st.light */
-    LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, 0, &st);
+    LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
+    st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
+    if(i == 647 || i ==648){
+      printf("M value at iteration %i is: %f.\n", i, p->M);
+      printf("alpha value at iteration %i is: %f.\n", i, p->alpha);
+      printf("Hc value at iteration %i is: %f.\n", i, Hc[i]);
+      printf("LAIF value at iteration %i is: %f.\n", i, LAIF[i]);
+      printf("LAI.tot value at iteration %i is: %f.\n", i, LAI.tot);
+      printf("LAI.bot value at iteration %i is: %f.\n", i, LAI.bot);
+      printf("LAI.top value at iteration %i is: %f.\n", i, LAI.top);
+      printf("LA.tot value at iteration %i is: %f.\n", i, LA.tot);
+      printf("LA.bot value at iteration %i is: %f.\n", i, LA.bot);
+      printf("LA.top value at iteration %i is: %f.\n", i, LA.top);
+      printf("eta value at iteration %i is: %f.\n", i, p->eta);
+      printf("K value at iteration %i is: %f.\n", i, p->K);
+      printf("st.h value at iteration %i is: %f.\n", i, st.h);
+      printf("ForParms.kF value at iteration %i is: %f.\n", i, ForParms->kF);
+      printf("ForParms.intF value at iteration %i is: %f.\n", i, ForParms->intF);
+      printf("slopeF value at iteration %i is: %f.\n", i, ForParms->slopeF);
+      printf("st.light value at iteration %i is: %f.\n", i, st.light);
+      printf("\n");
+      printf("\n");
+    }
+    
     if (isnan(st.ex) !=0){
       //printf("st.r=%g, st.bos=%g, st.bts=%g \n", st.r,st.bos,st.bts);
       //printf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));

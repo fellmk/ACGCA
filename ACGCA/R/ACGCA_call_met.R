@@ -173,13 +173,20 @@
 
 ## This code creates the function that runs the growth loop once it is loaded
 growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
-                        steps=16, breast.height=1.37, tolerance=0.00001,
+                        steps=16, breast.height=1.37, Forparms=list(kF=0.6, 
+                        HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), gapvars=list(gt=50, ct=10,
+                        tbg=200), tolerance=0.00001, gapsim=FALSE,
                         fulloutput=FALSE){
 
   ##### Add extra variables to sparms 3/2/2018
   if(length(sparms) > 32){
     stop("The input for sparms should be a vector with 32 elements. see the 
          help page for a description of each.")
+  }
+  
+  if(gapsim==TRUE & length(parmax)>1){
+    stop("For gap simulations the value of parmax should be scalar equal to 
+         PARmax") 
   }
   # Add values to sparms after checking its initial size
   sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32], 
@@ -217,6 +224,19 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
          2060.")
   }
   
+  ##### Calculate Hc and LAIF if gapsim==TRUE #####
+  # The function returns Hc and LAIF 
+  #################################################
+  if(gapsim == TRUE){
+    HcLAIFcalc(Forparms, gapvars, years, steps)
+    # Add a zero which will be at index 0 in the C code.
+    Hc <- c(0,Hc)
+    LAIF <- c(0, LAIF)
+  }else{
+     Hc <- 0
+     LAIF <- 0
+  }
+  
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
   gparms <- matrix(data = c(1/steps, years, tolerance, breast.height), ncol=1)
@@ -229,9 +249,14 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
                   cs=numeric(0), clr=numeric(0),
                   growth_st=as.integer(numeric(0)))
 
+  #Forparms=list(kF=0.6, 
+   #             HFmax=40, LAIFmax=6.0)
     # Call the growthloop function using R's C interface.
     output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
                  Io=as.double(parmax), r0=as.double(r0), t=integer(1),
+                 Hc=as.double(Hc), LAIF=as.double(LAIF), 
+                 kF=as.double(Forparms$kF), intF=as.double(Forparms$intF),
+                 slopeF=as.double(Forparms$slopeF), APARout=as.double(lenvars),
       h=double(lenvars),
       hh=double(lenvars),
       hC=double(lenvars),
@@ -310,4 +335,35 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
            FALSE.")
     }
 } #end of growthloop function
+
+## This code calculates Hc and LAIF for each iteration of the growthloop
+# Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0), 
+# gapvars=list(gt=50, ct=10, tbg=200), 
+HcLAIFcalc <- function(Forparms, gapvars, years, steps){
+  # get the number of iterations and steps per year
+  gap.phase <- years*steps
+  del.t <- steps
+
+  closed <- gapvars$tbg-(gapvars$gt+gapvars$ct)
+  if(closed < 0){
+    stop("The colosed period is negative")
+  }
+  
+  phase <- rep(c(rep(1, gapvars$gt*del.t), rep(2, gapvars$ct*del.t), rep(3,closed*del.t)), ceiling(years/gapvars$tbg))
+  phase <- phase[1:(years*del.t)]
+  
+  # Create Hc and LAIF vectors without a loop
+  # The superassignment operator <<- causes the scope of this to be in the
+  # calling frame.
+  Hc <<- rep(c(rep(0, gapvars$gt*del.t), 
+                 seq(from=Forparms$HFmax/(steps*gapvars$ct+1), 
+                     to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)], 
+                 rep(Forparms$HFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
+  LAIF <<- rep(c(rep(0, gapvars$gt*del.t), 
+                seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1), 
+                    to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)], 
+                rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
+  
+} # End of HcLAIFcalc function
+
 

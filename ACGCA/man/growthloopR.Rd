@@ -5,7 +5,9 @@
 \title{ACGCA model function}
 \usage{
 growthloopR(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
-  breast.height = 1.37, tolerance = 1e-05, fulloutput = FALSE)
+  breast.height = 1.37, Forparms = list(kF = 0.6, HFmax = 40, LAIFmax = 6,
+  intF = 3.4, slopeF = -5.5), gapvars = list(gt = 50, ct = 10, tbg = 200),
+  tolerance = 1e-05, gapsim = FALSE, fulloutput = FALSE)
 }
 \arguments{
 \item{sparms}{A vector containing the parameters for the simulation.

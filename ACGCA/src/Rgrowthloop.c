@@ -2,7 +2,7 @@
 #include "head_files/growthloop.h"
 
 // I think I can remove this part of the code
-#ifdef DATA
+/*#ifdef DATA
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_vector.h>
@@ -14,6 +14,7 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_cdf.h>
 #endif
+*/
 
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
@@ -22,8 +23,10 @@
 // pointers so I need to send the variables to the loop indirectly.  The goal
 // of the below function is to do this.  MKF 03/26/2013
 //////////////////////////////////////////////////////////////////////////////////
-
+// changes added Hc, LAIf, 
 void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
+                  double *Hc, double *LAIF, double *kF, double *intF, 
+                  double *slopeF, double *APARout,
 	double *h,
 	double *hh,
 	double *hC,
@@ -177,6 +180,12 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 			gp.BH=gp2[3]; // gparm[4] <- 1.37 # gp.BH
 			//gp.Io=gp2[4];  // annual par APAR
 
+			// Define a structure of forest parameters.
+			Forestparms ForParms;
+			ForParms.kF = *kF;
+			ForParms.intF = *intF;
+			ForParms.slopeF = *slopeF;
+			
 			/*
 			printf("Rgrowthloop \n");
 			printf("gp out \n");
@@ -199,8 +208,10 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 			address of something carrying an address.  At least that is how I think
 			this is working (MKF 7/21/2014).
 			*/
-
+      // Hc and LAIF were added on 3/16/2018 by MKF to allow gap dynamics
+      // simulations.
 		 	growthloop(&p,&gp, Io, r0, t,
+        Hc, LAIF, &ForParms, APARout,
 				h,
 				hh,
 				hC,
