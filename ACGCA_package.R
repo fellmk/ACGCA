@@ -41,7 +41,15 @@ load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
 
 theta.j <- theta.j[-c(8,12,35,36)]
-#test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
+test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
+                                                                                                 tbg=10), gapsim=TRUE)
+plot(test2$h, type="l")
+
+theta.j[1] <- 30
+test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
+plot(test2$h, type="l")
+
+
 
 source("acruparms.R")
 acru <- acru[-c(8,12,35,36)]
@@ -50,6 +58,13 @@ light.levels <- seq(1,.1,-.1)
 # This tests the package code at multiple light levels
 test <- list()
 test.s <- list()
+
+test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+                           fulloutput=FALSE, gapsim=FALSE)
+
+test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+                           gapvars=list(gt=2, ct=5,
+                                        tbg=20), fulloutput=TRUE, gapsim=TRUE)
 
 for(i in 1:length(light.levels)){
   acru <- as.matrix(acru)

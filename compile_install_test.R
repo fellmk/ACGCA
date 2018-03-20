@@ -4,10 +4,10 @@ library("roxygen2")
 
 setwd("./ACGCA")
 document()
-#devtools::build(vignettes = TRUE)
+devtools::build(vignettes = TRUE)
 
 setwd("..")
-install("ACGCA", build_vignettes = FALSE)
+install("ACGCA", build_vignettes = TRUE)
 
 library(ACGCA)
 #help(package="ACGCA")
