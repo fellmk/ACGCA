@@ -38,7 +38,7 @@
 /// \date 11-23-2010
 ///
 
-void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, double r[], int *errorind2){
+void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, double r[], int *errorind2, int *growth_st){
 
 
 
@@ -63,32 +63,39 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   double error = fabs(st->ex*gp->tolerance)+10;         // initialize error w/ high value
 
 
-  while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
-
-    if (j>998){
+  while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<100000) && (st->status!=0)){
+    
+    // Origional commented out by MKF
+    // j in while loop was j<1000
+    //if (j>998){
+      //st->status=0;
+    //}
+    if (j>99998){
       st->status=0;
+      *growth_st = 20;
     }
     eflag=0; // eflag=1 when dr=0
 
     if (j==1){  // j=1 is the first iteration in while loop
 
       if ((i<2) || (growthflag==0) || (r[i-1]==r[i-2])){// error check, if the tree is currenlty off allometry:
-	odr=p->drinit;  // initial default radius increment
-	dr=odr;         // new dr updated as old dr (odr)
+      	odr=p->drinit;  // initial default radius increment
+      	dr=odr;         // new dr updated as old dr (odr)
       }
       else{
-	odemand=st->egrow;        // egrow is excess labile carbon available for growth
-	odr = r[i-1]-r[i-2];      // old dr.  should not =0 based on first if statement
-	if ((odr > 0) && (odemand != 0)){
-	  slope=odemand/odr;
-	  dr=st->ex/slope;
-	}
-	else{
-	  //printf("problem in excessgrowingon, line 87 \n");
-	  *errorind2 = *errorind2 | 4;
-	  st->status=0;
-	  break;
-	}  // end else
+      	odemand=st->egrow;        // egrow is excess labile carbon available for growth
+      	odr = r[i-1]-r[i-2];      // old dr.  should not =0 based on first if statement
+      	if ((odr > 0) && (odemand != 0)){
+      	  slope=odemand/odr;
+      	  dr=st->ex/slope;
+      	}
+      	else{
+      	  //printf("problem in excessgrowingon, line 87 \n");
+      	  *errorind2 = *errorind2 | 4;
+      	  st->status=0;
+      	  *growth_st = 21;
+      	  break;
+      	}  // end else
       } // end outer else
     } //end if j==1
 
@@ -96,26 +103,28 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       odemand=demand;   // demand saved to old demand
       odr = dr;         // dr saved to old dr
       if ((odr > 0) && (odemand != 0)){
-	slope=odemand/odr;
-	dr=st->ex/slope;
+      	slope=odemand/odr;
+      	dr=st->ex/slope;
       }
       else{
-	//printf("problem in excessgrowingon, line 102 \n");
-	*errorind2 = *errorind2 | 8;
-	st->status=0;
-	break;
+      	//printf("problem in excessgrowingon, line 102 \n");
+      	*errorind2 = *errorind2 | 8;
+      	st->status=0;
+      	*growth_st = 22;
+      	break;
       }  // end else
     } // end else if
 
 
     else {  // else if none of those conditions are met
       if (dr != odr){
-	slope=(demand-odemand)/(dr-odr);
+      	slope=(demand-odemand)/(dr-odr);
       }
       else{
 	//printf("problem in excessgrowingon, line 111 \n");
 	//getchar();
 	st->status=0;
+  *growth_st = 23;
 	break;
       }
       intercept=demand-slope*dr;
@@ -129,6 +138,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	*errorind2 = *errorind2 | 16;
 	//getchar();  // keep
 	st->status=0;
+	*growth_st = 24;
 	break;
       }
       // TODO: ASK ABOUT THIS.  THIS IS ALWAYS TRUE
@@ -143,6 +153,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	}
 	else{
 	  st->status=0;
+	  *growth_st = 25;
 	  dr=0;
 	}
       }
@@ -171,6 +182,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	r_new=st->r;
 	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
 	st->status=0;
+	*growth_st = 26;
 	//getchar();
 	break;
       }
@@ -214,6 +226,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	//printf("problem in excessgrowingon, line 195 \n");
 	*errorind2 = *errorind2 | 64;
 	st->status=0;
+	*growth_st = 27;
       }
 
       if (dr<(p->drcrit*gp->deltat)){
@@ -233,6 +246,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       else{
 	//printf("problem in excessgrowingon, line 214 \n");
 	st->status=0;
+  *growth_st = 28;
 	*errorind2 = *errorind2 | 128;
 
       }
@@ -251,6 +265,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       else{
 	//printf("problem in excessgrowingon, line 232 \n");
 	st->status=0;
+  *growth_st = 29;
 	*errorind2 = *errorind2 | 256;
       }
       if ((1+st->deltas) != 0){
@@ -263,6 +278,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       else{
 	//printf("problem in excessgrowingon, line244 \n");
 	st->status=0;
+  *growth_st = 30;
 	*errorind2 = *errorind2 | 512;
       }
       // update demand
@@ -302,6 +318,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   else{
     //printf("problem with allocation fractions in excessgrowingon or putonallometry \n");
     st->status=0;
+    *growth_st = 31;
     *errorind2 = *errorind2 | 1024;
   }
 
@@ -314,6 +331,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   else{
     //printf("problem in excessgrowingon, line 302 \n");
     st->status=0;
+    *growth_st = 32;
     *errorind2 = *errorind2 | 2048;
   }
 
@@ -333,6 +351,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   else {
     //printf("problem in excessgrowingoff or on, translocation \n");
     st->status=0;
+    *growth_st = 33;
     *errorind2 = *errorind2 | 4096;
   }
 
@@ -344,20 +363,16 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 
   if ((isnan(st->cs) !=0) || (isnan(st->deltas) !=0) ||
       (isnan(st->bos) !=0) || (isnan(st->bl) !=0)  || (isnan(st->ex) !=0)){
-    printf("inside excess growing on \n");
+    //printf("inside excess growing on \n");
+    //printf("st.r=%g, st.bos=%g, st.bts=%g \n", st->r,st->bos,st->bts);
+    //printf("f2=%g, st.sa=%g, st.bl=%g, p->sla=%g \n",log(p->f2), st->sa, st->bl, p->sla);
+    //printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st->br, st->bl, p->sl, p->sr);
+    //printf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
+	  //st->bts,st->boh,p->lamdah,st->bth,st->bos);
 
-    printf("st.r=%g, st.bos=%g, st.bts=%g \n", st->r,st->bos,st->bts);
-    printf("f2=%g, st.sa=%g, st.bl=%g, p->sla=%g \n",log(p->f2), st->sa, st->bl, p->sla);
-    printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st->br, st->bl, p->sl, p->sr);
-
-    printf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
-	   st->bts,st->boh,p->lamdah,st->bth,st->bos);
-
-    printf("dr=%g, slope=%g, odr=%g \n",dr,slope,odr);
-
-
-    printf("st->cs=%g, gp->deltat=%g, excess=%g, st->deltas=%g, p->so=%g, st->bos=%g \n",
-	   st->cs, gp->deltat, st->ex, st->deltas, p->so, st->bos);
+    //printf("dr=%g, slope=%g, odr=%g \n",dr,slope,odr);
+    //printf("st->cs=%g, gp->deltat=%g, excess=%g, st->deltas=%g, p->so=%g, st->bos=%g \n",
+	  //st->cs, gp->deltat, st->ex, st->deltas, p->so, st->bos);
 
     *errorind2 = *errorind2 | 8192;
 
@@ -405,7 +420,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 /// \date 12-07-2010
 ///
 
-void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, int *errorind2){
+void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, int *errorind2, int *growth_st){
 
   //temp local variables for intermediate calculations
   double nuo=0,bos_new=0;
@@ -427,6 +442,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("problem in excessgrowingoff, line 419 \n");
     st->status=0;
+    *growth_st = 34;
     *errorind2 = *errorind2 | 16384;
   }
   // first bos is new, second occurance is old
@@ -438,6 +454,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("problem in excessgrowingoff, line 429 \n");
     st->status=0;
+    *growth_st = 35;
     *errorind2 = *errorind2 | 32768;
   }
 
@@ -456,6 +473,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
     else {
       //printf("problem in excessgrowingoff, line 448 \n");
       st->status=0;
+      *growth_st = 36;
     }
     nuo=0.0;
   }
@@ -475,6 +493,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("problem in excessgrowingoff, line 467 \n");
     st->status=0;
+    *growth_st = 37;
     *errorind2 = *errorind2 | 65536;
   }
   st->fo=1.0-st->fl-st->fr;
@@ -493,6 +512,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("problem in excessgrowingoff or on, translocation \n");
     st->status=0;
+    *growth_st = 38;
     *errorind2 = *errorind2 | 131072;
   }
 
@@ -503,6 +523,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("error in excessgrowingoff, line 495 \n");
     st->status=0;
+    *growth_st = 39;
     *errorind2 = *errorind2 | 262144;
   }
   st->ra=p->f1*st->la;
@@ -515,6 +536,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("problem in excessgrowingoff, line 490 \n");
     st->status=0;
+    *growth_st = 40;
   }
 
   st->bos=bos_new;
@@ -524,6 +546,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw, 
   else {
     //printf("error in excessgrowingoff, line 516 \n");
     st->status=0;
+    *growth_st = 41;
     *errorind2 = *errorind2 | 524288;
   }
 

@@ -41,8 +41,14 @@ load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
 
 theta.j <- theta.j[-c(8,12,35,36)]
+
+# Run the growthloop over 1000 times to check for bugs.
+system.time(for(i in 1:1000){
 test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
-                                                                                                 tbg=10), gapsim=TRUE)
+                                                                                                 tbg=20), gapsim=TRUE)
+}
+)
+
 plot(test2$h, type="l")
 
 theta.j[1] <- 30

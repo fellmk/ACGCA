@@ -5,3 +5,4 @@ R_Package
 *.o
 *.so
 *.dll
+PackageParmTest

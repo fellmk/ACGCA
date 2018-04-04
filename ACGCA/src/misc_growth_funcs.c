@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 //#include <gsl/gsl_math.h>
 //#include <gsl/gsl_blas.h>
 //#include <gsl/gsl_matrix.h>
@@ -601,10 +602,13 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
   if(H < Hc){
     // Calculate forest canopy LAI from top of forest canopy (height H meters)
     // to top of target tree (height H):
+    assert(Hc > 0); // Make sure Hc > 0 or print an error and stop execution
     logitLAIc1 = ForParms->intF + ForParms->slopeF * (H/Hc);
     pLAIc1 = exp(logitLAIc1) / (1 + exp(logitLAIc1));
     // Rescale distribution of forest canopy LAI so that LAI = 0 at top of
     // canopy and LAI maximum LAI at ground level:
+    assert((pLAImax - pLAImin) > 0); // Prevent divide by 0 this should be 
+                                     // positive.
     pLAIc1 = (pLAIc1 - pLAImin) / (pLAImax - pLAImin);
     LAIc1 = FLAI * pLAIc1;
     // Io is light level incedent at top of target tree's canopy, after having
@@ -627,6 +631,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     // target tree's canopy:
     LAIboth = LAIc + LAI->tot;
     // Combined light ext coef of forest and tree's canopies:
+    assert(LAIboth > 0);
     Kboth = (ForParms->kF * LAIc + k * LAI->tot) / LAIboth;
     // Fraction of light absorbed by both canopies:
     fabs_both = 1 - exp(-Kboth * LAIboth);
@@ -638,6 +643,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     fabs_can = 1 - exp(-ForParms->kF * LAIc);
     // "Correction" fraction of light absorbed by the tree's canopy, and total
     // amount of light absorbed by the tree:
+    assert((fabs_tree + fabs_can) > 0);
     fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
     APAR = Ioint * fabs * LA->tot / LAI->tot;
   }
@@ -645,6 +651,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     // Fraction and total amount of light absorbed by the target tree's canopy
     // when not competing for light with the forest canopy.
     fabs = 1 - exp(-k * LAI->tot);
+    assert(LAI->tot > 0);
     APAR = Io * fabs * LA->tot / LAI->tot;
   }
   else if((eta * H) < Hc){
@@ -653,6 +660,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     // top part of the tree's crown, and compute light penetrating to the
     // lower part of the crown (Io):
     fabs_top = 1 - exp(-k * LAI->top);
+    assert(LAI->top > 0);
     APAR_top = Io * fabs_top * LA->top / LAI->top;
     Ioint = Io * (1 - fabs_top);
 
@@ -680,6 +688,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     fabs_can = 1 - exp(-ForParms->kF * LAIc);
     // Fraction of light absorbed by the tree's canopy, and total amount of light absorbed by the tree:
     fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    assert(LAI->bot > 0);
     APAR_bot = Ioint * fabs * LA->bot / LAI->bot;
     APAR = APAR_top + APAR_bot;
   }

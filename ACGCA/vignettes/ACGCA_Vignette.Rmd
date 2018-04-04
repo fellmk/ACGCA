@@ -51,7 +51,7 @@ Once the data are loaded they can be used to call the ACGCA model. There are a f
 
 ```{r}
 # Call the ACGCA model (growthloopR)
-acgcaout <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060*0.5, years=50, fulloutput=TRUE)
+acgcaout <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060*0.5, years=50, fulloutput=FALSE)
 
 # Plot the radius and height output from the model.
 par(mar=c(4,4,1,1))

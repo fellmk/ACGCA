@@ -184,10 +184,11 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
          help page for a description of each.")
   }
   
-  if(gapsim==TRUE & length(parmax)>1){
-    stop("For gap simulations the value of parmax should be scalar equal to 
-         PARmax") 
-  }
+  #if(gapsim==TRUE & length(parmax)>1){
+  #  stop("For gap simulations the value of parmax should be scalar equal to 
+  #       PARmax") 
+  #}
+  
   # Add values to sparms after checking its initial size
   sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32], 
               0.00001, 0.0075)
@@ -217,10 +218,8 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
   ##################
   if(length(parmax)==1){
     parmax <- rep(x=parmax, times=(steps*years+1))
-  }else if(length(parmax)==steps*years){
-    parmax <- c(0, parmax)
-  }else{
-    stop("Parmax should have length 1 or length steps*years. The default is 
+  }else if(length(parmax)!=(steps*years+1)){
+    stop("Parmax should have length 1 or length steps * years + 1. The default is 
          2060.")
   }
   
@@ -233,8 +232,8 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
     Hc <- c(0,Hc)
     LAIF <- c(0, LAIF)
   }else{
-     Hc <- 0
-     LAIF <- 0
+     Hc <- rep(-99, times=(steps*years+1))
+     LAIF <- rep(0, times=(steps*years+1))
   }
   
   # I replaced this in the function call with the five variables it contains.
