@@ -76,20 +76,20 @@
 #'    \item{sr}{Senescence rate of fine roots (yr^-1)}
 #'    \item{so}{Senescence rate of coarse roots and branches (yr^-1)}
 #'    \item{rr}{Average fine root radius (m)}
-#'    \item{rhor}{Tissue density of fine roots}
-#'    \item{rml}{Maintenance respiration rate of leaves}
-#'    \item{rms}{Maintenance respiration rate of sapwood}
-#'    \item{rmr}{Maintenance respiration rate of fine roots}
+#'    \item{rhor}{Tissue density of fine roots (g dw m^-3)}
+#'    \item{rml}{Maintenance respiration rate of leaves (g gluc g dw^-1 year^-1)}
+#'    \item{rms}{Maintenance respiration rate of sapwood (g gluc g dw^-1 year^-1)}
+#'    \item{rmr}{Maintenance respiration rate of fine roots (g gluc g dw^-1 year^-1)}
 #'    \item{etaB}{Relative height at which trunk transitions from a neiloid to
 #'     paraboloid}
 #'    \item{k}{Crown light extinction coefficient}
-#'    \item{epsg}{Radiation-use-efficiency}
+#'    \item{epsg}{Radiation-use-efficiency (g gluc MJ^-1)}
 #'    \item{m}{Maximum relative crown depth}
 #'    \item{alpha}{Crown Curvature parameter}
 #'    \item{R0}{Maximum potential crown radius of a tree with diameter at
-#'     breast height of 0m (i.e., for a tree that is exactly 1.37 m tall}
+#'     breast height of 0m (i.e., for a tree that is exactly 1.37 m tall) (m)}
 #'    \item{R40}{Maximum potential crown radius of a tree with diameter at
-#'     brrest height or 0.4m (40 cm)}
+#'     brrest height or 0.4m (40 cm) (m)}
 #'  }
 #'
 #' @param r0 The starting radius. Defaults to 0.05
@@ -109,9 +109,9 @@
 #' \describe{
 #'    \item{p}{sparms, input parameters}
 #'    \item{gp}{Vector: (timestep, years, tolerance, breast.height,parmax)}
-#'    \item{r0}{The starting radius.}
+#'    \item{r0}{The starting radius (m).}
 #'    \item{h}{A time series of tree height from the simulation for each time
-#'    step. The length is steps*years+1 due to the initialization (time 0).}
+#'    step. The length is steps*years+1 due to the initialization (time 0) (m).}
 #'    \item{hh}{Height at which trunc transitions from a paraaboloid to a cone.
 #'    Also the height to the base of the crown (m).}
 #'    \item{r}{A time series of tree radius (m) from the simulation for each
@@ -147,20 +147,20 @@
 #'    \item{rfl}{Retranslocation fraction leaves}
 #'    \item{rfr}{Retranslocation fraction roots}
 #'    \item{rfs}{Retranslocation fraction stem}
-#'    \item{egrow}{Excess labile carbon available for growth}
-#'    \item{ex}{Excess labile carbon, The same as egrow}
+#'    \item{egrow}{Excess labile carbon available for growth (g gluc year^-1)}
+#'    \item{ex}{Excess labile carbon, The same as egrow (g gluc year ^-1)}
 #'    \item{rtrans}{Total retranslocation fraction}
-#'    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009).}
+#'    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009) (MJ year^-1).}
 #'    \item{nut}{...}
 #'    \item{deltas}{Actual labile C stored in sapwood, calculated in the 
-#'    growthloop.}
+#'    growthloop (g gluc).}
 #'    \item{LAI}{leaf area index (m^2/m^2}
 #'    \item{status}{The status of the tree (i.e. living=1 or dead=0) at each 
 #'    iteration. Always 0 for the first iteration (initialization).}
 #'    \item{lenvars}{The length of time series outputs steps*years+1}
 #'    \item{errorind}{Contains error codes for each iteration of the model}
 #'    \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced, 
-#'    3=recovery, 4=static, 5=shrinking, 6=dead.}
+#'    3=recovery, 4=static, 5=shrinking, 6=dead, other=Error.}
 #' }
 #'
 #' @keywords IBM
