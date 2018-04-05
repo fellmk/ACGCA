@@ -36,6 +36,12 @@ help(package="ACGCA")
 library(ACGCA)
 help("growthloopR")
 
+###############################################################################
+#
+# Beyond this point the code is for testing the function much if this may or
+# may not work after modifying the file. MKF 4/5/18.
+#
+###############################################################################
 
 load("inputs_chain1_r00.05_PAR206_parACGCA.Rdata")
 load("names_thetaj.R")
