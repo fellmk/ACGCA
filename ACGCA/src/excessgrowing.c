@@ -63,14 +63,14 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
   double error = fabs(st->ex*gp->tolerance)+10;         // initialize error w/ high value
 
 
-  while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<100000) && (st->status!=0)){
+  while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
     
     // Origional commented out by MKF
     // j in while loop was j<1000
     //if (j>998){
       //st->status=0;
     //}
-    if (j>99998){
+    if (j>998){
       st->status=0;
       *growth_st = 20;
     }
@@ -158,9 +158,9 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 	}
       }
       else {
-	demand=st->ex;
-	error=0.0;
-	//printf("set demand = excess in excessgrowingon \n");
+      	demand=st->ex;
+      	error=0.0;
+      	//printf("set demand = excess in excessgrowingon \n");
       }
     } //end else
 
@@ -174,33 +174,33 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       r_new=st->r+dr;  // new radius calc. from new dr
 
       if (r_new < 0){
-	//printf("error in excessgrowingon, line 162 \n");
-	//printf("dr=%g, slope=%g, odemand=%g, demand=%g, intercept=%g, j=%d \n",
-	//       dr, slope, odemand,demand,intercept,j);
-	//printf("sla=%g, hmax=%g, phih=%g, st->r=%g, st->ex=%g, rhomax=%g \n",p->sla,
-	//       p->hmax, p->phih, st->r, st->ex, p->rhomax);
-	r_new=st->r;
-	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
-	st->status=0;
-	*growth_st = 26;
-	//getchar();
-	break;
+      	//printf("error in excessgrowingon, line 162 \n");
+      	//printf("dr=%g, slope=%g, odemand=%g, demand=%g, intercept=%g, j=%d \n",
+      	//       dr, slope, odemand,demand,intercept,j);
+      	//printf("sla=%g, hmax=%g, phih=%g, st->r=%g, st->ex=%g, rhomax=%g \n",p->sla,
+      	//       p->hmax, p->phih, st->r, st->ex, p->rhomax);
+      	r_new=st->r;
+      	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
+      	st->status=0;
+      	*growth_st = 26;
+      	//getchar();
+      	break;
       }
       //printf("r_new=%g \n",r_new);
       if (p->hmax > 0){
-	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
+        	st->h=p->hmax*(1.0-exp(-p->phih*r_new/p->hmax));
       }
       else{
-	//printf("problem in excessgrowingon, line 161 \n");
-	*errorind2 = *errorind2 | 32;
+      	//printf("problem in excessgrowingon, line 161 \n");
+      	*errorind2 = *errorind2 | 32;
       }
       st->hh=p->eta*st->h;
 
       if (r_new < p->swmax){
-	st->sw=r_new;
+      	st->sw=r_new;
       }
       else {
-	st->sw=p->swmax;
+      	st->sw=p->swmax;
       }
 
       // maybe should eliminate the need for these temp variables (i.e. the radius
@@ -219,36 +219,35 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
 
 
       if((st->vts*gp->deltat != 0) && ((1.0+st->deltas)*st->bos != 0)){
-	st->nut=(v.vth-st->vth)/(st->vts*gp->deltat);
-	nuo=(p->so*st->boh+(1.0+st->deltas)*p->lamdah*st->nut*st->bts)/((1.0+st->deltas)*st->bos);
+      	st->nut=(v.vth-st->vth)/(st->vts*gp->deltat);
+      	nuo=(p->so*st->boh+(1.0+st->deltas)*p->lamdah*st->nut*st->bts)/((1.0+st->deltas)*st->bos);
       }
       else{
-	//printf("problem in excessgrowingon, line 195 \n");
-	*errorind2 = *errorind2 | 64;
-	st->status=0;
-	*growth_st = 27;
+      	//printf("problem in excessgrowingon, line 195 \n");
+      	*errorind2 = *errorind2 | 64;
+      	st->status=0;
+      	*growth_st = 27;
       }
 
       if (dr<(p->drcrit*gp->deltat)){
-	rhow=p->rhomax-((p->rhomax-p->rhomin)/p->drcrit)*dr/gp->deltat;
+      	rhow=p->rhomax-((p->rhomax-p->rhomin)/p->drcrit)*dr/gp->deltat;
       }
       else {
-	rhow=p->rhomin;
+      	rhow=p->rhomin;
       }
       if (rhow > ((1-p->gammax)/p->gammaw)*exp(10)/(1+exp(10))){
-	// if wood density is very close to upper limit (given by deltaw=0), set
-	// carbon storage capacity to zero to avoid rounding and computational errors.
-	deltaw=0;
+      	// if wood density is very close to upper limit (given by deltaw=0), set
+      	// carbon storage capacity to zero to avoid rounding and computational errors.
+      	deltaw=0;
       }
       else if (rhow != 0) {
-	deltaw=p->gammac*(1.0-p->gammax-p->gammaw*rhow)/rhow;
+      	deltaw=p->gammac*(1.0-p->gammax-p->gammaw*rhow)/rhow;
       }
       else{
-	//printf("problem in excessgrowingon, line 214 \n");
-	st->status=0;
-  *growth_st = 28;
-	*errorind2 = *errorind2 | 128;
-
+      	//printf("problem in excessgrowingon, line 214 \n");
+      	st->status=0;
+        *growth_st = 28;
+      	*errorind2 = *errorind2 | 128;
       }
 
       st->sa=M_PI*st->sw*(2.0*r_new-st->sw);
@@ -258,42 +257,39 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i, int growthflag, 
       ra_new=p->f1*la_new;
 
       if (p->sla != 0){
-	efl=(p->cgl+p->deltal)*(la_new-st->la+p->sl*p->sla*st->bl*gp->deltat)/(p->sla*gp->deltat);
-	efr=(p->cgr+p->deltar)*(p->rr*p->rhor*(ra_new-st->ra)+2*p->sr*st->br*gp->deltat)/(2.0*gp->deltat);
-	eft=(p->cgw+deltaw)*((v.vt-st->vt)*rhow-st->deltas*st->nut*st->bts*gp->deltat)/gp->deltat;
+      	efl=(p->cgl+p->deltal)*(la_new-st->la+p->sl*p->sla*st->bl*gp->deltat)/(p->sla*gp->deltat);
+      	efr=(p->cgr+p->deltar)*(p->rr*p->rhor*(ra_new-st->ra)+2*p->sr*st->br*gp->deltat)/(2.0*gp->deltat);
+      	eft=(p->cgw+deltaw)*((v.vt-st->vt)*rhow-st->deltas*st->nut*st->bts*gp->deltat)/gp->deltat;
       }
       else{
-	//printf("problem in excessgrowingon, line 232 \n");
-	st->status=0;
-  *growth_st = 29;
-	*errorind2 = *errorind2 | 256;
+      	//printf("problem in excessgrowingon, line 232 \n");
+      	st->status=0;
+        *growth_st = 29;
+      	*errorind2 = *errorind2 | 256;
       }
       if ((1+st->deltas) != 0){
-	efo=(p->cgw+deltaw)*(p->so*gp->deltat*st->boh+(1+st->deltas)*
-			     ((v.vt-st->vt)*p->lamdas*rhow+p->so*st->bos*gp->deltat+
-			      (p->lamdah-(1+st->deltas)*p->lamdas)*st->nut*st->bts*
-			      gp->deltat))/((1+st->deltas)*gp->deltat);
-
+        efo=(p->cgw+deltaw)*(p->so*gp->deltat*st->boh+(1+st->deltas)*
+  			((v.vt-st->vt)*p->lamdas*rhow+p->so*st->bos*gp->deltat+
+  			(p->lamdah-(1+st->deltas)*p->lamdas)*st->nut*st->bts*
+  			gp->deltat))/((1+st->deltas)*gp->deltat);
       }
       else{
-	//printf("problem in excessgrowingon, line244 \n");
-	st->status=0;
-  *growth_st = 30;
-	*errorind2 = *errorind2 | 512;
+      	//printf("problem in excessgrowingon, line244 \n");
+      	st->status=0;
+        *growth_st = 30;
+      	*errorind2 = *errorind2 | 512;
       }
       // update demand
       if (eflag==0) {
-	demand=efl+efr+eft+efo;
+	      demand=efl+efr+eft+efo;
       }
       else {
-	demand=st->ex;
-
+	      demand=st->ex;
       }
 
       error=fabs(demand-st->ex);  // update the error
 
       j=j+1;   // change this to ++j
-
 
     } //end "if (error..."
   }  //end while loop

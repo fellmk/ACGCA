@@ -92,16 +92,34 @@
 #'     brrest height or 0.4m (40 cm) (m)}
 #'  }
 #'
-#' @param r0 The starting radius. Defaults to 0.05
-#' @param parmax The maximum yearly iradiance, defaults to 2060 and can be 
-#' either a vector of length steps*years or a single value.
-#' @param years The number of years to run the simulation, defaults to 50.
+#' @param r0 The starting radius. Defaults to 0.05m.
+#' @param parmax The maximum yearly iradiance, defaults to 2060 
+#' (MJ m^-2 year^-1) and can be either a vector of length steps*years or a 
+#' single value.
+#' @param years The number of years to run the simulation, defaults to 50 
+#' years.
 #' @param steps The number of time steps per year, defaults to 16.
-#' @param breast.height The height DBH is taken at, defaults to 1.37.
+#' @param breast.height The height DBH is taken at, defaults to 1.37 m.
+#' @param Forparms A list of forest parameters: Forestparms = list(kF = 0.6, 
+#' HFmax=40, LAIFmax=6.0, infF=3.4, slopeF=-5.5). The values listed are
+#' defaults based on Ogle and Pacala (2009). kF is the forest canopy light 
+#' extinction coefficient, HFmax is the maximum forest canopy height, LAIFmax
+#' is the forest canopy maximum leaf area index, intF and slopeF are the 
+#' intercept and slope terms respectively when modeling the "unnormalized" 
+#' LAI profile (Ogle and Pacala 2009 supplement) on the logit scale.
+#' @param gapvars A list of gap simulation parameters: gapvars = list(gt = 50, 
+#' ct=10, tbg=200). The default values are arbitrary and should be updated 
+#' outside of testing. The elements of the list refer to gap time (gt, years), 
+#' closure time (ct, years), and time between gaps (tbg, years). In the default
+#' case a gap will be open for 50 years, the canopy will cose for 10 years, 
+#' followed by 140 years of closed canopy conditions after which a new gap will 
+#' form at year 201.
 #' @param tolerance The tolerance for the algorithm that balances excess labile
 #'   carbon in the difference equations describing carbon dynamics of a healthy
-#'   tree (Ogle and Pacala, 2009). The default is 0.00001 and should likely not
-#'   be changed.
+#'   tree (Ogle and Pacala, 2009). The default is 0.00001 and likely does not
+#'   need to be changed.
+#' @param gapsim If TRUE gap simulations will run if FALSE (default) gap 
+#' simulations don't run.
 #' @param fulloutput Is the full output desired if so set this to TRUE. The
 #'                   default is FALSE.
 #'

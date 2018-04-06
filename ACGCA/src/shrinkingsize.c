@@ -109,7 +109,9 @@ void shrinkingsizeA(sparms *p, tstates *st, gparms *gp, int i,
 
   //local variables
   double eo=0,el=0,er=0,sigr=0,sigl=0,sigo=0,nuoht=0,denom;
-
+  nuoht = 0 * nuoht; //This does nothing but removes an error;
+  sigo = 0 * sigo; //This does nothing but removes an error;
+  
   // Determine if able to bring all tissues up to "largest" tissue (i.e., BOSmax):
   // Initial calculation.  Only one is non true since bosmax is one of either boso, 
   // bosl or bosr.  
@@ -437,6 +439,8 @@ void shrinkingsizeB(sparms *p, tstates *st, gparms *gp, int i,
   st->bos=new_bl*p->sla*p->lamdas*st->bts/(p->f2*st->sa);  // bos that matches new_bl; bos if need to drop bos.
  
   double nuoht=0.0;
+  nuoht = 0*nuoht; //This does nothing but removes an error;
+  
   //eo=0.0;
   if(bio->bosst < st->bos){ // too little BOS, drop extra BL and BR & build BOS.
     st->bos=2*st->bts*p->sla*p->lamdas*(p->deltal*new_bl+p->deltar*new_br+(p->cgw+*deltaw)*(bio->bohst+bio->bosst))/

@@ -53,6 +53,9 @@ void initialize(sparms *p, gparms *gp, tstates *st, double *r0){
   height hin;
   radius rin;
   volume vin;
+    vin.vt = 0; // initialize values to stop compilation error
+    vin.vts = 0;
+    vin.vth = 0;
 
   // Initial radius (rinit), radial increment (drinit), and excess labile carbon
   if (*r0 > 0){
