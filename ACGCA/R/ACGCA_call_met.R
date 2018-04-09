@@ -62,14 +62,14 @@
 #'    \item{rho}{Wood density (g dw m^-3)}
 #'    \item{f2}{Leaf area-to-xylem conducting area ratio}
 #'    \item{f1}{Fine root area-to-leaf area ratio}
-#'    \item{gammac}{Maximum storage capacity of living sapwood cells 
+#'    \item{gammac}{Maximum storage capacity of living sapwood cells
 #'    (g gluc m^2)}
 #'    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
 #'    \item{cgl}{Construction costs of producing leaves (g gluc g dw^-1))}
 #'    \item{cgr}{Construction costs of producing fine roots (g gluc g dw^-1)}
 #'    \item{cgw}{Construction costs of producing sapwood (g gluc g dw^-1)}
 #'    \item{deltal}{Labile carbon storage capacity of leaves (g gluc g dw^-1)}
-#'    \item{deltar}{Labile carbon storage capacity of fine 
+#'    \item{deltar}{Labile carbon storage capacity of fine
 #'    roots(g gluc g dw^-1)}
 #'    \item{sl}{Senescence rate of leaves (yr^-1)}
 #'    \item{sla}{Specific leaf area (m^2 g dw^-1)}
@@ -93,32 +93,32 @@
 #'  }
 #'
 #' @param r0 The starting radius. Defaults to 0.05m.
-#' @param parmax The maximum yearly iradiance, defaults to 2060 
-#' (MJ m^-2 year^-1) and can be either a vector of length steps*years or a 
+#' @param parmax The maximum yearly iradiance, defaults to 2060
+#' (MJ m^-2 year^-1) and can be either a vector of length steps*years+1 or a
 #' single value.
-#' @param years The number of years to run the simulation, defaults to 50 
+#' @param years The number of years to run the simulation, defaults to 50
 #' years.
 #' @param steps The number of time steps per year, defaults to 16.
 #' @param breast.height The height DBH is taken at, defaults to 1.37 m.
-#' @param Forparms A list of forest parameters: Forestparms = list(kF = 0.6, 
+#' @param Forparms A list of forest parameters: Forestparms = list(kF = 0.6,
 #' HFmax=40, LAIFmax=6.0, infF=3.4, slopeF=-5.5). The values listed are
-#' defaults based on Ogle and Pacala (2009). kF is the forest canopy light 
+#' defaults based on Ogle and Pacala (2009). kF is the forest canopy light
 #' extinction coefficient, HFmax is the maximum forest canopy height, LAIFmax
-#' is the forest canopy maximum leaf area index, intF and slopeF are the 
-#' intercept and slope terms respectively when modeling the "unnormalized" 
+#' is the forest canopy maximum leaf area index, intF and slopeF are the
+#' intercept and slope terms respectively when modeling the "unnormalized"
 #' LAI profile (Ogle and Pacala 2009 supplement) on the logit scale.
-#' @param gapvars A list of gap simulation parameters: gapvars = list(gt = 50, 
-#' ct=10, tbg=200). The default values are arbitrary and should be updated 
-#' outside of testing. The elements of the list refer to gap time (gt, years), 
+#' @param gapvars A list of gap simulation parameters: gapvars = list(gt = 50,
+#' ct=10, tbg=200). The default values are arbitrary and should be updated
+#' outside of testing. The elements of the list refer to gap time (gt, years),
 #' closure time (ct, years), and time between gaps (tbg, years). In the default
-#' case a gap will be open for 50 years, the canopy will cose for 10 years, 
-#' followed by 140 years of closed canopy conditions after which a new gap will 
+#' case a gap will be open for 50 years, the canopy will cose for 10 years,
+#' followed by 140 years of closed canopy conditions after which a new gap will
 #' form at year 201.
 #' @param tolerance The tolerance for the algorithm that balances excess labile
 #'   carbon in the difference equations describing carbon dynamics of a healthy
 #'   tree (Ogle and Pacala, 2009). The default is 0.00001 and likely does not
 #'   need to be changed.
-#' @param gapsim If TRUE gap simulations will run if FALSE (default) gap 
+#' @param gapsim If TRUE gap simulations will run if FALSE (default) gap
 #' simulations don't run.
 #' @param fulloutput Is the full output desired if so set this to TRUE. The
 #'                   default is FALSE.
@@ -151,7 +151,7 @@
 #'    \item{bt}{Biomass of trunk (g dw)}
 #'    \item{bts}{Biomass of trunk sapwood (g dw)}
 #'    \item{bth}{Biomass of trunk heartwood (g dw)}
-#'    \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood 
+#'    \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood
 #'    (g dw)}
 #'    \item{bos}{Biomass of other sapwood (g dw)}
 #'    \item{bo}{Biomass of other wood (coarse roots, branches)}
@@ -170,14 +170,14 @@
 #'    \item{rtrans}{Total retranslocation fraction}
 #'    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009) (MJ year^-1).}
 #'    \item{nut}{...}
-#'    \item{deltas}{Actual labile C stored in sapwood, calculated in the 
+#'    \item{deltas}{Actual labile C stored in sapwood, calculated in the
 #'    growthloop (g gluc).}
 #'    \item{LAI}{leaf area index (m^2/m^2}
-#'    \item{status}{The status of the tree (i.e. living=1 or dead=0) at each 
+#'    \item{status}{The status of the tree (i.e. living=1 or dead=0) at each
 #'    iteration. Always 0 for the first iteration (initialization).}
 #'    \item{lenvars}{The length of time series outputs steps*years+1}
 #'    \item{errorind}{Contains error codes for each iteration of the model}
-#'    \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced, 
+#'    \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced,
 #'    3=recovery, 4=static, 5=shrinking, 6=dead, other=Error.}
 #' }
 #'
@@ -190,46 +190,49 @@
 ###############################################################################
 
 ## This code creates the function that runs the growth loop once it is loaded
-growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
-                        steps=16, breast.height=1.37, Forparms=list(kF=0.6, 
+runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
+                        steps=16, breast.height=1.37, Forparms=list(kF=0.6,
                         HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), gapvars=list(gt=50, ct=10,
                         tbg=200), tolerance=0.00001, gapsim=FALSE,
                         fulloutput=FALSE){
 
   ##### Add extra variables to sparms 3/2/2018
   if(length(sparms) > 32){
-    stop("The input for sparms should be a vector with 32 elements. see the 
+    stop("The input for sparms should be a vector with 32 elements. see the
+         help page for a description of each.")
+  }else if(length(sparms) < 32){
+    stop("The input for sparms should be a vector with 32 elements. see the
          help page for a description of each.")
   }
-  
+
   #if(gapsim==TRUE & length(parmax)>1){
-  #  stop("For gap simulations the value of parmax should be scalar equal to 
-  #       PARmax") 
+  #  stop("For gap simulations the value of parmax should be scalar equal to
+  #       PARmax")
   #}
-  
+
   # Add values to sparms after checking its initial size
-  sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32], 
+  sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32],
               0.00001, 0.0075)
-  
+
   ##### Checks added to ensure proper use 2/27/2018 #####
   if(!is.matrix(sparms)){
     sparms <- as.matrix(sparms)
   }
-  
+
   if(r0 < 0.0054){
-    stop("The radius must be greater than 0.0054 or the function will fail.") 
+    stop("The radius must be greater than 0.0054 or the function will fail.")
   }
-  
+
   if(!(is.numeric(r0)*is.numeric(parmax)*is.numeric(years)*is.numeric(steps)
        *is.numeric(breast.height)*is.numeric(tolerance))){
-    stop("r0, parmax, years, steps, breast.height, and tolerance should be 
+    stop("r0, parmax, years, steps, breast.height, and tolerance should be
          numeric.")
   }
-  
+
   if(!(is.logical(fulloutput))){
-    stop("fulloutput must be logical (TRUE or FALSE)") 
+    stop("fulloutput must be logical (TRUE or FALSE)")
   }
-  
+
   ##### PARMAX #####
   # This can come in as a single value or as a vector. The vector should be of
   # length steps*years+1 but the user enters steps*years.
@@ -237,23 +240,23 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
   if(length(parmax)==1){
     parmax <- rep(x=parmax, times=(steps*years+1))
   }else if(length(parmax)!=(steps*years+1)){
-    stop("Parmax should have length 1 or length steps * years + 1. The default is 
+    stop("Parmax should have length 1 or length steps * years + 1. The default is
          2060.")
   }
-  
+
   ##### Calculate Hc and LAIF if gapsim==TRUE #####
-  # The function returns Hc and LAIF 
+  # The function returns Hc and LAIF
   #################################################
   if(gapsim == TRUE){
-    HcLAIFcalc(Forparms, gapvars, years, steps)
+    out <- HcLAIFcalc(Forparms, gapvars, years, steps)
     # Add a zero which will be at index 0 in the C code.
-    Hc <- c(0,Hc)
-    LAIF <- c(0, LAIF)
+    Hc <- c(0,out$Hc)
+    LAIF <- c(0, out$LAIF)
   }else{
      Hc <- rep(-99, times=(steps*years+1))
      LAIF <- rep(0, times=(steps*years+1))
   }
-  
+
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
   gparms <- matrix(data = c(1/steps, years, tolerance, breast.height), ncol=1)
@@ -266,14 +269,14 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
                   cs=numeric(0), clr=numeric(0),
                   growth_st=as.integer(numeric(0)))
 
-  #Forparms=list(kF=0.6, 
+  #Forparms=list(kF=0.6,
    #             HFmax=40, LAIFmax=6.0)
     # Call the growthloop function using R's C interface.
     output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
                  Io=as.double(parmax), r0=as.double(r0), t=integer(1),
-                 Hc=as.double(Hc), LAIF=as.double(LAIF), 
+                 Hc=as.double(Hc), LAIF=as.double(LAIF),
                  kF=as.double(Forparms$kF), intF=as.double(Forparms$intF),
-                 slopeF=as.double(Forparms$slopeF), APARout=as.double(lenvars),
+                 slopeF=as.double(Forparms$slopeF),
       h=double(lenvars),
       hh=double(lenvars),
       hC=double(lenvars),
@@ -327,6 +330,25 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
       growth_st=integer(lenvars)
     )# End growthloop call
 
+    # Add a warning in case there was an error
+    if(sum(output1$errorind) > 0){
+      # Check the growth state (growth_st) to see if an error occured in the
+      # root finding routine
+      if (sum(output1$growth_st > 7) > 0){
+        warning("An error occured and is likely related ot the root finding
+                routine used in 'excessgrowing.c'. This error can occure with
+                certain combinations of parameters and PARmax leading to an
+                inability to balance carbon in thealgorithm.")
+      }else if(sum(output1$growth_st <= 7) > 0){
+        warning("An error occured withing runacgca likely due to the set of
+                parameters chosen or gap/light levels they are being used
+                with.")
+      }else{
+        warning("An unknown error has occured within the C code that implements
+                the ACGCA model.")
+      }
+    } # End of warning if statement.
+
     if(fulloutput == FALSE){
       # Output to be saved this can be added to as desired
       output2$h <- c(output2$h, output1$h)
@@ -345,7 +367,7 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
       output1[[6]] <- NULL # remove hC left over from development
       output1[[6]] <- NULL # remove hB left over from development
       output1[[6]] <- NULL # remove hBH left over from development
-      
+
       return(output1)
     }else{
       stop("The fulloutput input to this function must be either TRUE or
@@ -354,8 +376,8 @@ growthloopR <- function(sparms, r0=0.05, parmax=2060, years=50,
 } #end of growthloop function
 
 ## This code calculates Hc and LAIF for each iteration of the growthloop
-# Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0), 
-# gapvars=list(gt=50, ct=10, tbg=200), 
+# Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0),
+# gapvars=list(gt=50, ct=10, tbg=200),
 HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   # get the number of iterations and steps per year
   gap.phase <- years*steps
@@ -365,22 +387,23 @@ HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   if(closed < 0){
     stop("The colosed period is negative")
   }
-  
+
   phase <- rep(c(rep(1, gapvars$gt*del.t), rep(2, gapvars$ct*del.t), rep(3,closed*del.t)), ceiling(years/gapvars$tbg))
   phase <- phase[1:(years*del.t)]
-  
+
   # Create Hc and LAIF vectors without a loop
   # The superassignment operator <<- causes the scope of this to be in the
   # calling frame.
-  Hc <<- rep(c(rep(0, gapvars$gt*del.t), 
-                 seq(from=Forparms$HFmax/(steps*gapvars$ct+1), 
-                     to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)], 
+  Hc <- rep(c(rep(0, gapvars$gt*del.t),
+                 seq(from=Forparms$HFmax/(steps*gapvars$ct+1),
+                     to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
                  rep(Forparms$HFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-  LAIF <<- rep(c(rep(0, gapvars$gt*del.t), 
-                seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1), 
-                    to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)], 
+  LAIF <- rep(c(rep(0, gapvars$gt*del.t),
+                seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1),
+                    to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
                 rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-  
+
+  return(list(Hc, LAIF))
 } # End of HcLAIFcalc function
 
 

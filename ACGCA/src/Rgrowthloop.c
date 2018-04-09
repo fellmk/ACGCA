@@ -23,10 +23,10 @@
 // pointers so I need to send the variables to the loop indirectly.  The goal
 // of the below function is to do this.  MKF 03/26/2013
 //////////////////////////////////////////////////////////////////////////////////
-// changes added Hc, LAIf, 
+// changes added Hc, LAIf,
 void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
-                  double *Hc, double *LAIF, double *kF, double *intF, 
-                  double *slopeF, double *APARout,
+                  double *Hc, double *LAIF, double *kF, double *intF,
+                  double *slopeF,
 	double *h,
 	double *hh,
 	double *hC,
@@ -185,7 +185,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 			ForParms.kF = *kF;
 			ForParms.intF = *intF;
 			ForParms.slopeF = *slopeF;
-			
+
 			/*
 			printf("Rgrowthloop \n");
 			printf("gp out \n");
@@ -211,7 +211,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
       // Hc and LAIF were added on 3/16/2018 by MKF to allow gap dynamics
       // simulations.
 		 	growthloop(&p,&gp, Io, r0, t,
-        Hc, LAIF, &ForParms, APARout,
+        Hc, LAIF, &ForParms,
 				h,
 				hh,
 				hC,

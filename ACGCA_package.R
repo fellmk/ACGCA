@@ -34,7 +34,7 @@ setwd("..")
 install("ACGCA")
 help(package="ACGCA")
 library(ACGCA)
-help("growthloopR")
+help("runactca")
 
 ###############################################################################
 #
@@ -50,7 +50,7 @@ theta.j <- theta.j[-c(8,12,35,36)]
 
 # Run the growthloop over 1000 times to check for bugs.
 system.time(for(i in 1:1000){
-test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
+test2 <- ACGCA::runactca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
                                                                                                  tbg=20), gapsim=TRUE)
 }
 )
@@ -58,7 +58,7 @@ test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=206
 plot(test2$h, type="l")
 
 theta.j[1] <- 30
-test2 <- ACGCA::growthloopR(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
+test2 <- ACGCA::runactca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
 plot(test2$h, type="l")
 
 
@@ -71,17 +71,17 @@ light.levels <- seq(1,.1,-.1)
 test <- list()
 test.s <- list()
 
-test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=2060, 
                            fulloutput=FALSE, gapsim=FALSE)
 
-test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=2060, 
                            gapvars=list(gt=2, ct=5,
                                         tbg=20), fulloutput=TRUE, gapsim=TRUE)
 
 for(i in 1:length(light.levels)){
   acru <- as.matrix(acru)
   # This uses the smallest radius I can get
-  test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, 
+  test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=2060, 
                              gapvars=list(gt=2, ct=5,
                                           tbg=20), fulloutput=TRUE, gapsim=TRUE)
   test.s[[i]] <- test
@@ -94,17 +94,17 @@ for(i in 1:length(light.levels)){
 
 acru <- as.matrix(acru)
 # This uses the smallest radius I can get
-test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=2060, fulloutput=TRUE, years=100)
+test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=2060, fulloutput=TRUE, years=100)
 test.s[[i]] <- test
 plot(1:1601, test$r, type="l")
 
 partest <- seq(from=2060, by=-1, length.out=1600)
-test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=partest, fulloutput=TRUE, years=100)
+test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=partest, fulloutput=TRUE, years=100)
 test.s[[i]] <- test
 lines(1:1601, test$r, type="l")
 
 partest <- seq(from=2060, by=-2, length.out=1600)
-test <- ACGCA::growthloopR(sparms=acru, r0=0.0054, parmax=partest, fulloutput=TRUE, years=100)
+test <- ACGCA::runactca(sparms=acru, r0=0.0054, parmax=partest, fulloutput=TRUE, years=100)
 test.s[[i]] <- test
 lines(1:1601, test$r, type="l")
 
