@@ -1,9 +1,9 @@
 ///
 /// \file   misc_growth_funcs.h
-/// \brief Contains misc. functions for the tree growth model 
-///        and all the structure variable definitions.    
-/// 
-/// 
+/// \brief Contains misc. functions for the tree growth model
+///        and all the structure variable definitions.
+///
+///
 ///
 ///
 /// \author Darren Gemoets
@@ -22,7 +22,7 @@
 
 /// \brief Species level parameters for the tree growth model
 ///
-/// These parameters vary by species. 
+/// These parameters vary by species.
 /// Need to add comments to all variables.  Just a few are noted for
 /// now.
 ///
@@ -66,7 +66,7 @@ typedef struct{
   double R40; ///< ???
   /* NOTE: f2 = gammax*NEWf2, where NEWf2 is actually the value reported for
    * f2 in the tree growth manuscript (Ogle and Pacala 2009). */
-} sparms;  
+} sparms;
 
 
 /// \brief Tree specific parameters
@@ -111,9 +111,9 @@ typedef struct{
 /// for use in APARcalc
 typedef struct{
   double kF;   /// Light extinction coefficient of Forest canopy
-  double intF; /// intercept in the equation for logit (relative LAI) vs 
+  double intF; /// intercept in the equation for logit (relative LAI) vs
                /// relative height.
-  double slopeF;   /// Slope in the eqn. for logit (relative LAI) vs 
+  double slopeF;   /// Slope in the eqn. for logit (relative LAI) vs
                /// parms = parameter structure
 } Forestparms;
 
@@ -155,7 +155,7 @@ typedef struct{
   double hh; ///< height to base of crown, m
   double hC; ///< same as hh
   double hB; ///<??
-  double hBH; ///< 
+  double hBH; ///<
   double r; ///< basal trunk radius, m
   double rB; ///< trunk radius at neiloid to paraboloid transition, m
   double rC; ///< trunk radius at paraboloid to cone transition, m
@@ -177,7 +177,7 @@ typedef struct{
   double boh; ///< heartwood biomass of c. roots & branches, g dw
   double bos; ///< sapwood biomass of coarse roots & branches, g dw
   double bo; ///< total biomass of c. roots & branches, g dw
-  double bs; ///< total sapwood biomass, bos+bts, g dw  
+  double bs; ///< total sapwood biomass, bos+bts, g dw
 
   double cs; ///< labile carbon in sapwood, g glucose
   double clr; ///< labile carbin in leaves & fineroots, g gluc
@@ -188,7 +188,7 @@ typedef struct{
   double rfl; ///< relative retranslocation from leaves
   double rfr; ///< relative retranslocation from fineroots
   double rfs; ///< relative retranslocation from sapwood
- 
+
   //%           st.LAtop = LA of target tree above the forest canopy (m2);
   //%           st.LAbot = LA of target tree below the forest canopy (m2);
   //%           st.LAI = total LAI of target tree (m2/m2);
@@ -201,13 +201,13 @@ typedef struct{
   double light; ///< annual absorbed PAR, mol m2 year1) (UNITS CHANGE?)
   //double t; ///< time, fraction of year?
   double nut; ///< sapwood-to-heartwood conversion in trunk
-  double deltas; ///< 
-  //double cstar; ///< 
-  double LAI; ///< 
+  double deltas; ///<
+  //double cstar; ///<
+  double LAI; ///<
   int status; ///< dead or alive
   //int Jstatus;
   //int yr; ///< time, year
-   
+
   // Note: status/Jstatus = 1 if living, 0 if dead.
 } tstates;
 
@@ -239,13 +239,13 @@ extern void trunkradii(double r0, height *h, radius *r, tstates *st);
 extern void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st);
 
 
-extern void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0, 
+extern void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
 		    double H, double rBH, sparms *p, gparms *gp, double Hc,
 		    tstates *st);
 
 extern double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
-                       double Hc, double FLAI, double Io, 
-                       Forestparms *ForParms);
+                       double Hc, double FLAI, double Io,
+                       Forestparms *ForParms, double *APARout, int index);
 
 extern void acruparms(sparms *p);
 

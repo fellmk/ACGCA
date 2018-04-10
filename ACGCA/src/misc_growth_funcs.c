@@ -565,10 +565,11 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
 
  // Hc and FLAI can just pass the double values with minimal issue
 double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
-                double Hc, double FLAI, double Io, Forestparms *ForParms){
+                double Hc, double FLAI, double Io, Forestparms *ForParms,
+                double *APARout, int index){
   // Define internal variables
   double APAR;
-  double Ioint; //Io internal to this function
+  double Ioint = 0; //Io internal to this function
   // First block
   double logitLAImin;
   double pLAImin;
@@ -610,7 +611,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     pLAIc1 = exp(logitLAIc1) / (1 + exp(logitLAIc1));
     // Rescale distribution of forest canopy LAI so that LAI = 0 at top of
     // canopy and LAI maximum LAI at ground level:
-    assert((pLAImax - pLAImin) > 0); // Prevent divide by 0 this should be 
+    assert((pLAImax - pLAImin) > 0); // Prevent divide by 0 this should be
                                      // positive.
     pLAIc1 = (pLAIc1 - pLAImin) / (pLAImax - pLAImin);
     LAIc1 = FLAI * pLAIc1;
@@ -700,6 +701,7 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     exit(1);
   }
   // change to APAR once done NOTE NOTE NOTE
+  APARout[index] = Ioint;
   return APAR;
 }
 

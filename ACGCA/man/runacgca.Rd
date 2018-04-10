@@ -22,14 +22,14 @@ runacgca(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
    \item{rho}{Wood density (g dw m^-3)}
    \item{f2}{Leaf area-to-xylem conducting area ratio}
    \item{f1}{Fine root area-to-leaf area ratio}
-   \item{gammac}{Maximum storage capacity of living sapwood cells 
+   \item{gammac}{Maximum storage capacity of living sapwood cells
    (g gluc m^2)}
    \item{gammax}{Xylem conducting area-to-sapwood area ratio}
    \item{cgl}{Construction costs of producing leaves (g gluc g dw^-1))}
    \item{cgr}{Construction costs of producing fine roots (g gluc g dw^-1)}
    \item{cgw}{Construction costs of producing sapwood (g gluc g dw^-1)}
    \item{deltal}{Labile carbon storage capacity of leaves (g gluc g dw^-1)}
-   \item{deltar}{Labile carbon storage capacity of fine 
+   \item{deltar}{Labile carbon storage capacity of fine
    roots(g gluc g dw^-1)}
    \item{sl}{Senescence rate of leaves (yr^-1)}
    \item{sla}{Specific leaf area (m^2 g dw^-1)}
@@ -54,31 +54,31 @@ runacgca(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
 
 \item{r0}{The starting radius. Defaults to 0.05m.}
 
-\item{parmax}{The maximum yearly iradiance, defaults to 2060 
-(MJ m^-2 year^-1) and can be either a vector of length steps*years or a 
+\item{parmax}{The maximum yearly iradiance, defaults to 2060
+(MJ m^-2 year^-1) and can be either a vector of length steps*years+1 or a
 single value.}
 
-\item{years}{The number of years to run the simulation, defaults to 50 
+\item{years}{The number of years to run the simulation, defaults to 50
 years.}
 
 \item{steps}{The number of time steps per year, defaults to 16.}
 
 \item{breast.height}{The height DBH is taken at, defaults to 1.37 m.}
 
-\item{Forparms}{A list of forest parameters: Forestparms = list(kF = 0.6, 
+\item{Forparms}{A list of forest parameters: Forestparms = list(kF = 0.6,
 HFmax=40, LAIFmax=6.0, infF=3.4, slopeF=-5.5). The values listed are
-defaults based on Ogle and Pacala (2009). kF is the forest canopy light 
+defaults based on Ogle and Pacala (2009). kF is the forest canopy light
 extinction coefficient, HFmax is the maximum forest canopy height, LAIFmax
-is the forest canopy maximum leaf area index, intF and slopeF are the 
-intercept and slope terms respectively when modeling the "unnormalized" 
+is the forest canopy maximum leaf area index, intF and slopeF are the
+intercept and slope terms respectively when modeling the "unnormalized"
 LAI profile (Ogle and Pacala 2009 supplement) on the logit scale.}
 
-\item{gapvars}{A list of gap simulation parameters: gapvars = list(gt = 50, 
-ct=10, tbg=200). The default values are arbitrary and should be updated 
-outside of testing. The elements of the list refer to gap time (gt, years), 
+\item{gapvars}{A list of gap simulation parameters: gapvars = list(gt = 50,
+ct=10, tbg=200). The default values are arbitrary and should be updated
+outside of testing. The elements of the list refer to gap time (gt, years),
 closure time (ct, years), and time between gaps (tbg, years). In the default
-case a gap will be open for 50 years, the canopy will cose for 10 years, 
-followed by 140 years of closed canopy conditions after which a new gap will 
+case a gap will be open for 50 years, the canopy will cose for 10 years,
+followed by 140 years of closed canopy conditions after which a new gap will
 form at year 201.}
 
 \item{tolerance}{The tolerance for the algorithm that balances excess labile
@@ -86,7 +86,7 @@ carbon in the difference equations describing carbon dynamics of a healthy
 tree (Ogle and Pacala, 2009). The default is 0.00001 and likely does not
 need to be changed.}
 
-\item{gapsim}{If TRUE gap simulations will run if FALSE (default) gap 
+\item{gapsim}{If TRUE gap simulations will run if FALSE (default) gap
 simulations don't run.}
 
 \item{fulloutput}{Is the full output desired if so set this to TRUE. The
@@ -121,7 +121,7 @@ Function output:
    \item{bt}{Biomass of trunk (g dw)}
    \item{bts}{Biomass of trunk sapwood (g dw)}
    \item{bth}{Biomass of trunk heartwood (g dw)}
-   \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood 
+   \item{boh}{Biomass of other (e.g., coarse roots branches) heartwood
    (g dw)}
    \item{bos}{Biomass of other sapwood (g dw)}
    \item{bo}{Biomass of other wood (coarse roots, branches)}
@@ -140,14 +140,14 @@ Function output:
    \item{rtrans}{Total retranslocation fraction}
    \item{light}{APAR from eqn 27 in Ogle and Pacala (2009) (MJ year^-1).}
    \item{nut}{...}
-   \item{deltas}{Actual labile C stored in sapwood, calculated in the 
+   \item{deltas}{Actual labile C stored in sapwood, calculated in the
    growthloop (g gluc).}
    \item{LAI}{leaf area index (m^2/m^2}
-   \item{status}{The status of the tree (i.e. living=1 or dead=0) at each 
+   \item{status}{The status of the tree (i.e. living=1 or dead=0) at each
    iteration. Always 0 for the first iteration (initialization).}
    \item{lenvars}{The length of time series outputs steps*years+1}
    \item{errorind}{Contains error codes for each iteration of the model}
-   \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced, 
+   \item{growth_st}{Growth status of the tree: 1=healthy, 2=reduced,
    3=recovery, 4=static, 5=shrinking, 6=dead, other=Error.}
 }
 }

@@ -89,14 +89,15 @@ Gap simulations similar to those described in Ogle and Pacala (2009) and Fell et
 ```{r}
 # run the ACGCA model
 gapvariables <- list(gt=2, ct=3, tbg=20)
-acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 50, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 100, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
 
 # make a plot of the radius over time and the growth state over time.
 par(mar=c(4,4,1,1))
-plot(x= 1:801/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
-plot(x= 1:800/16, y=acgcaout$growth_st[1:800], xlab="years", ylab="growth state", type="l")
-plot(x= 1:800/16, y=acgcaout$growth_clr[1:800], xlab="years", ylab="labile carbon in leaves and fine roots (g gluc)", type="l")
-plot(x= 1:800/16, y=acgcaout$growth_cs[1:800], xlab="years", ylab="labile carbon in sapwood (g gluc)", type="l")
+plot(x= 1:1601/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
+plot(x= 1:1600/16, y=acgcaout$growth_st[1:1600], xlab="years", ylab="growth state", type="l")
+plot(x= 1:1600/16, y=acgcaout$growth_clr[1:1600], xlab="years", ylab="labile carbon in leaves and fine roots (g gluc)", type="l")
+plot(x= 1:1600/16, y=acgcaout$growth_cs[1:1600], xlab="years", ylab="labile carbon in sapwood (g gluc)", type="l")
+plot(x= 1:1600/16, y=acgcaout$APARout[1:1600], xlab="years", ylab="light", type="l")
 ```
 
 ## References:

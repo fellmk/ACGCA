@@ -127,12 +127,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   // Leaf area index and leaf area.  Only used in LAIcalc().
   LAindex LAI;
   Larea LA;
-  
+
   //printf(" Initialize start=%d \n",i);
   //Initialze the state variables.  Returns the state structure st.
   initialize(p,gp,&st,r0);
   //printf(" Initialize complete=%d \n",i);
-  
+
   //Initialize the radius and height arrays to be returned (needed in the MCMC)
 	r[0]=r[1]=st.r;  //same as initial radius
   h[0]=h[1]=st.h;
@@ -143,7 +143,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   //	h[(*lenvars * *iout) + *iout]=h[(*lenvars * *iout) + *iout + 1]=st.h;
   //	rBH[(*lenvars * *iout) + *iout]=rBH[(*lenvars * *iout) + *iout + 1]=st.rBH;
   //}
-  
+
   //Compute the LAI of the tree canopy (initially)
   LAIcalc(&LAI, &LA, st.la,  st.r, st.h, st.rBH, p, gp, -99, &st);  //0 is Hc=0
   // add new function APARcalc()
@@ -153,7 +153,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
   //st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[0], LAIF[0], Io[0], ForParms);
 
-  
+
   hh2[0]=st.hh; //double
   hC2[0]=st.hC; //double
   hB2[0]=st.hB; //double
@@ -178,7 +178,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   bos2[0]=st.bos; //double
   bo2[0]=st.bo; //double
   bs2[0]=st.bs; //double
-  
+
   cs2[0]=st.cs; //double
   clr2[0]=st.clr; //double
   fl2[0]=st.fl; //double
@@ -188,7 +188,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   rfl2[0]=st.rfl; //double
   rfr2[0]=st.rfr; //double
   rfs2[0]=st.rfs;  //double
-  
+
   egrow2[0]=st.egrow;  //double
   ex2[0]=st.ex;  //double
   rtrans2[0]=st.rtrans; //double
@@ -197,10 +197,10 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
   deltas2[0]=st.deltas; //double
   //LAI2[i]=st.LAI; //double
   LAI2[0]=LAI.tot;
-  status2[0]=st.status; //int 
+  status2[0]=st.status; //int
   growth_st[0]=0;
+  APARout[0]=0;
 
-    
   //printf("Light value at iteration 0 is: %f.\n", st.light);
   /****************** Start growthloop *****************************************/
 
@@ -218,7 +218,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
             //getchar(); // REMOVE
             break;
         }
-       
+
        // If r = 0 then exit program the tree is dead
 
        // Check for possible division by zero, negative areas, etc.
@@ -248,10 +248,10 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
     // mkf 3/16/2018 f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
     f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
-       
+
     // update light value
     if(Hc[i] != -99){
-      st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
+      st.light = APARcalc(&LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms, APARout, i);
     }else{
       st.light = Io[i]*f_abs*(st.la/LAI.tot);
     }
@@ -389,7 +389,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
     rBH[i]=st.rBH;
     //deltar[i]=st.dr;
     /* Recalculate st.light */
-    
+
     // Added if statement on 4/2/18 MKF
     LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
     //if(st.status==1){
@@ -486,12 +486,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	//LAI2[i]=st.LAI; //double
 	LAI2[i]=LAI.tot;
   status2[i]=st.status; //int
-  
+
   //Break the loop right away if status is 0
   if(st.status == 0){
     break;
   }
-  
+
 	//printf("index number in loop: %d \n", (i+(*lenvars * *iout)+ *iout));
     //} // end of skip if
   } //end the for loop
@@ -499,7 +499,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	//printf("This is lenvars * iout %d \nlenvars %d \niout %d\n\n", *lenvars * *iout, *lenvars, *iout);
 
   //*t=(i-1);  // return iteration
-  
+
   // Make sure the final status is recorded
   status2[i]=st.status; // Added my MKF on 4/3/18
 
