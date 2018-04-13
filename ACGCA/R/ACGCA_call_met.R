@@ -91,7 +91,6 @@
 #'    \item{R40}{Maximum potential crown radius of a tree with diameter at
 #'     brrest height or 0.4m (40 cm) (m)}
 #'  }
-#'
 #' @param r0 The starting radius. Defaults to 0.05m.
 #' @param parmax The maximum yearly iradiance, defaults to 2060
 #' (MJ m^-2 year^-1) and can be either a vector of length steps*years+1 or a
@@ -100,26 +99,10 @@
 #' years.
 #' @param steps The number of time steps per year, defaults to 16.
 #' @param breast.height The height DBH is taken at, defaults to 1.37 m.
-#' @param Forparms A list of forest parameters: Forestparms = list(kF = 0.6,
-#' HFmax=40, LAIFmax=6.0, infF=3.4, slopeF=-5.5). The values listed are
-#' defaults based on Ogle and Pacala (2009). kF is the forest canopy light
-#' extinction coefficient, HFmax is the maximum forest canopy height, LAIFmax
-#' is the forest canopy maximum leaf area index, intF and slopeF are the
-#' intercept and slope terms respectively when modeling the "unnormalized"
-#' LAI profile (Ogle and Pacala 2009 supplement) on the logit scale.
-#' @param gapvars A list of gap simulation parameters: gapvars = list(gt = 50,
-#' ct=10, tbg=200). The default values are arbitrary and should be updated
-#' outside of testing. The elements of the list refer to gap time (gt, years),
-#' closure time (ct, years), and time between gaps (tbg, years). In the default
-#' case a gap will be open for 50 years, the canopy will cose for 10 years,
-#' followed by 140 years of closed canopy conditions after which a new gap will
-#' form at year 201.
 #' @param tolerance The tolerance for the algorithm that balances excess labile
 #'   carbon in the difference equations describing carbon dynamics of a healthy
 #'   tree (Ogle and Pacala, 2009). The default is 0.00001 and likely does not
 #'   need to be changed.
-#' @param gapsim If TRUE gap simulations will run if FALSE (default) gap
-#' simulations don't run.
 #' @param fulloutput Is the full output desired if so set this to TRUE. The
 #'                   default is FALSE.
 #'
@@ -190,12 +173,19 @@
 ###############################################################################
 
 ## This code creates the function that runs the growth loop once it is loaded
-runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
-                        steps=16, breast.height=1.37, Forparms=list(kF=0.6,
-                        HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), gapvars=list(gt=50, ct=10,
-                        tbg=200), tolerance=0.00001, gapsim=FALSE,
-                        fulloutput=FALSE){
+runacgca <- function(sparms, r0=0.05, parmax=2060, years=50, steps=16, 
+                     breast.height=1.37, tolerance=0.00001, fulloutput=FALSE){
 
+  # This code is related to gap simulation development and is not implemented
+  # in this version of the code. There are still programing issues to be 
+  # resolved that can lead to Rstudio and R crashes and generally unexpected
+  # program behavior. Ongoing work is happening on the gaptesting branch.
+  # MKF 4/13/18
+  gapvars=list(gt=50, ct=10, tbg=200)
+  gapsim=FALSE
+  Forparms=list(kF=0.6,
+                HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5)
+  
   ##### Add extra variables to sparms 3/2/2018
   if(length(sparms) > 32){
     stop("The input for sparms should be a vector with 32 elements. see the

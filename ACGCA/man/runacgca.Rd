@@ -5,9 +5,7 @@
 \title{ACGCA model function}
 \usage{
 runacgca(sparms, r0 = 0.05, parmax = 2060, years = 50, steps = 16,
-  breast.height = 1.37, Forparms = list(kF = 0.6, HFmax = 40, LAIFmax = 6,
-  intF = 3.4, slopeF = -5.5), gapvars = list(gt = 50, ct = 10, tbg = 200),
-  tolerance = 1e-05, gapsim = FALSE, fulloutput = FALSE)
+  breast.height = 1.37, tolerance = 1e-05, fulloutput = FALSE)
 }
 \arguments{
 \item{sparms}{A vector containing the parameters for the simulation.
@@ -65,29 +63,10 @@ years.}
 
 \item{breast.height}{The height DBH is taken at, defaults to 1.37 m.}
 
-\item{Forparms}{A list of forest parameters: Forestparms = list(kF = 0.6,
-HFmax=40, LAIFmax=6.0, infF=3.4, slopeF=-5.5). The values listed are
-defaults based on Ogle and Pacala (2009). kF is the forest canopy light
-extinction coefficient, HFmax is the maximum forest canopy height, LAIFmax
-is the forest canopy maximum leaf area index, intF and slopeF are the
-intercept and slope terms respectively when modeling the "unnormalized"
-LAI profile (Ogle and Pacala 2009 supplement) on the logit scale.}
-
-\item{gapvars}{A list of gap simulation parameters: gapvars = list(gt = 50,
-ct=10, tbg=200). The default values are arbitrary and should be updated
-outside of testing. The elements of the list refer to gap time (gt, years),
-closure time (ct, years), and time between gaps (tbg, years). In the default
-case a gap will be open for 50 years, the canopy will cose for 10 years,
-followed by 140 years of closed canopy conditions after which a new gap will
-form at year 201.}
-
 \item{tolerance}{The tolerance for the algorithm that balances excess labile
 carbon in the difference equations describing carbon dynamics of a healthy
 tree (Ogle and Pacala, 2009). The default is 0.00001 and likely does not
 need to be changed.}
-
-\item{gapsim}{If TRUE gap simulations will run if FALSE (default) gap
-simulations don't run.}
 
 \item{fulloutput}{Is the full output desired if so set this to TRUE. The
 default is FALSE.}
