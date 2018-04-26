@@ -256,6 +256,9 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
      Hc <- rep(-99, times=(steps*years+1))
      LAIF <- rep(0, times=(steps*years+1))
   }
+  
+  print(Hc)
+  print(LAIF)
 
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
@@ -364,10 +367,10 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       return(output2)
     }else if(fulloutput==TRUE){
       # remove a few variables
-      output1[[4]] <- NULL # remove t left over from testing
-      output1[[6]] <- NULL # remove hC left over from development
-      output1[[6]] <- NULL # remove hB left over from development
-      output1[[6]] <- NULL # remove hBH left over from development
+      #output1[[4]] <- NULL # remove t left over from testing
+      #output1[[6]] <- NULL # remove hC left over from development
+      #output1[[6]] <- NULL # remove hB left over from development
+      #output1[[6]] <- NULL # remove hBH left over from development
 
       return(output1)
     }else{
@@ -404,7 +407,7 @@ HcLAIFcalc <- function(Forparms, gapvars, years, steps){
                     to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
                 rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
 
-  return(list(Hc, LAIF))
+  return(list(Hc=Hc, LAIF=LAIF))
 } # End of HcLAIFcalc function
 
 

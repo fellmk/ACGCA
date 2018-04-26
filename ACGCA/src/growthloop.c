@@ -198,7 +198,9 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	// gp->T number of years, gp->deltat is increment (=1/16)
 	for (i = 1; i < (ceil(gp->T/gp->deltat)+1); i++){  //DG: added in plus one
 
-		double APAR[2] = {-1, -1};
+		double APAR[2];
+		APAR[0] = -1;
+		APAR[1] = -1;
 	
 		   // If tree died last iteration, then exit program.
 		   if (st.status==0){
@@ -240,7 +242,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		  // APAR should be a vector of length 2
 		  APARcalc(&APAR[0], &LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
 		  st.light = APAR[0];
-		  APARout[i] = APAR[1];
+		  //APARout[i] = APAR[1]; Moved to bottom
 		}else{
 		  st.light = Io[i]*f_abs*(st.la/LAI.tot);
 		}
@@ -435,6 +437,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		//LAI2[i]=st.LAI; //double
 		LAI2[i]=LAI.tot;
 		status2[i]=st.status; //int
+		APARout[i]=APAR[1];
 
 		//Break the loop right away if status is 0
 		if(st.status == 0){
