@@ -271,8 +271,6 @@ void trunkradii(double r0, height *h, radius *r, tstates *st){
 
 } // end trunkradii()
 
-
-
 /// Computes total trunk volume (v.vt), volume of trunk heartwood (v.vth),
 /// and volume of trunk sapwood (v.vts). The inputs are trunk radius (r) and
 /// heights (h) at the base of the tree (r.r0), at the transition from
@@ -564,9 +562,9 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
  //tstates *st)
 
  // Hc and FLAI can just pass the double values with minimal issue
-double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
-                double Hc, double FLAI, double Io, Forestparms *ForParms,
-                double *APARout, int index){
+void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, double H,
+                double Hc, double FLAI, double Io, Forestparms *ForParms)
+{
   // Define internal variables
   double APAR;
   double Ioint = 0; //Io internal to this function
@@ -595,6 +593,8 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
   double fabs_top;
   double APAR_top;
   double APAR_bot;
+  // My vars
+  //double APARout[2] = {-2, -2};
 
   // Predicted, unscaled forest canopy LAI at top of canopy:
   logitLAImin = ForParms->intF + ForParms->slopeF;
@@ -700,9 +700,10 @@ double APARcalc(LAindex *LAI, Larea *LA, double eta, double k, double H,
     printf("APAR not determined for gap sim.");
     exit(1);
   }
-  // change to APAR once done NOTE NOTE NOTE
-  APARout[index] = Ioint;
-  return APAR;
+  // APAR out and save value Ioint to APARout
+  APARout[0] = APAR;
+  APARout[1] = Ioint;
+  //return APARout;
 }
 
 ///
