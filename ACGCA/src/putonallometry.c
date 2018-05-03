@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <gsl/gsl_math.h>
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/putonallometry.h"
 
@@ -66,7 +65,7 @@ void putonallometry(tstates *st, sparms *p, gparms *gp, puton *pton, int i, doub
   st->cs=st->cs+gp->deltat*(pton->eo*deltaw/(p->cgw+deltaw)-
 			    st->deltas*(pton->nuoa+p->so)*st->bos); // use old bos
   //st->bos=p->lamdas*st->bts;
-  double deltasa=GSL_MAX(0,st->cs/st->bs);
+  double deltasa=fmaxmacro(0,st->cs/st->bs);
 
   double excess=st->ex-pton->ea; // excess labile C available after bringing tissues in-line with target allometry.
   double error = 2*abs(excess*gp->tolerance)+1;	 // initialize error w/ high value
@@ -75,7 +74,7 @@ void putonallometry(tstates *st, sparms *p, gparms *gp, puton *pton, int i, doub
   //printf("pton->eo=%g,pton->nuoa=%g \n", pton->eo,pton->nuoa);
   // Determine new value of r such that "demand" and "excess" are approx. equal.
   check=0;
-  while ((error>GSL_MAX(abs(excess*gp->tolerance), 1e-5)) && (j<1000) && (st->status!=0)){
+  while ((error>fmaxmacro(abs(excess*gp->tolerance), 1e-5)) && (j<1000) && (st->status!=0)){
     
     if (j==1){
       odr=p->drinit;
@@ -103,7 +102,7 @@ void putonallometry(tstates *st, sparms *p, gparms *gp, puton *pton, int i, doub
       intercept=demand-slope*dr;
       odemand=demand;
       odr=dr;      
-      if ((slope>0.0000000001) || (error>GSL_MAX(abs(excess*gp->tolerance),1e-5))){
+      if ((slope>0.0000000001) || (error>fmaxmacro(abs(excess*gp->tolerance),1e-5))){
 	dr=(excess-intercept)/slope;
 	if (dr<0.0){
 	  dr=0.0;
@@ -228,10 +227,10 @@ void putonallometry(tstates *st, sparms *p, gparms *gp, puton *pton, int i, doub
   // nuo(i)=(nuoa*bos(i-1)+nuo*bos(i))/(bos(i)+bos(i-1));
 
   // allocation fractions
-  st->fl=GSL_MAX(0,(pton->el + efl)/(pton->ea+excess));
-  st->fr=GSL_MAX(0,(pton->er + efr)/(pton->ea+excess));
-  st->fo=GSL_MAX(0,(pton->eo + efo)/(pton->ea+excess));
-  st->ft=GSL_MAX(0,eft/(pton->ea+excess));
+  st->fl=fmaxmacro(0,(pton->el + efl)/(pton->ea+excess));
+  st->fr=fmaxmacro(0,(pton->er + efr)/(pton->ea+excess));
+  st->fo=fmaxmacro(0,(pton->eo + efo)/(pton->ea+excess));
+  st->ft=fmaxmacro(0,eft/(pton->ea+excess));
   denom=st->fl+st->fr+st->ft+st->fo;  // use error here as temp variable
   st->fl=st->fl/denom;
   st->fr=st->fr/denom;

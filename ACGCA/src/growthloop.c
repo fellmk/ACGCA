@@ -24,7 +24,6 @@
 #include <math.h>
 
 #include "head_files/misc_growth_funcs.h"
-#include "head_files/misc_func.h"
 #include "head_files/excessgrowing.h"
 #include "head_files/rebuildstaticstate.h"
 #include "head_files/putonallometry.h"
@@ -234,8 +233,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		// APAR). Compute total PAR absorbed by canopy as incident PAR above
 		// canopy (Io) * fraction of PAR absorbed (f_abs) * Canopy area
 
-		// mkf 3/16/2018 f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
-		f_abs = GSL_MIN(1,GSL_MAX(0,(1-exp(-p->K*LAI.tot))));
+		// mkf 3/16/2018 f_abs = fmin(1,fmax(0,(1-exp(-p->K*LAI.tot))));
+		f_abs = fminmacro(1,fmaxmacro(0,(1-exp(-p->K*LAI.tot))));
 
 		// update light value
 		if(Hc[i] != -99){
@@ -250,7 +249,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		// Determine labile carbon needed to bring all tissues in-line with target allometry (ea),
 		// and labile carbon needed to rebuild all senescesed tissues (erb):
-		st.deltas=GSL_MAX(0,st.cs/st.bs);
+		st.deltas=fmaxmacro(0,st.cs/st.bs);
 
 		// BELOW: revised version, accounts for relative amounts or woody vs. "living" tissue.
 		// First, respiring sapwood due to base-line "structural" biomass of living cells:

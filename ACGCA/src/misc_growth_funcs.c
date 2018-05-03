@@ -14,15 +14,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-//#include <gsl/gsl_math.h>
-//#include <gsl/gsl_blas.h>
-//#include <gsl/gsl_matrix.h>
-//#include <gsl/gsl_sf_gamma.h>
-//#include <gsl/gsl_linalg.h>
-//#include <gsl/gsl_sf.h>
-//#include <gsl/gsl_cdf.h>
 #include "head_files/misc_growth_funcs.h"
-#include "head_files/misc_func.h"
 
 // Only define M_PI if it is not defined already
 // Added by MKF for compilers that don't define this
@@ -360,7 +352,7 @@ void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st){
       // heartwood terminates in top cone section.
       // Height if heartwood reaches cone
       double temp;
-      temp=GSL_MIN((h->H-sw),(h->H*rC+h->hC*sw)/r->rC);
+      temp=fminmacro((h->H-sw),(h->H*rC+h->hC*sw)/r->rC);
       if((temp != 0) && (temp != h->hB)){
 	neiloidV = (M_PI/4)*pow(r0,2)*(pow(temp,4) -
 				       pow((temp-h->hB),4))/(pow(temp,3));
@@ -648,7 +640,7 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     // "Correction" fraction of light absorbed by the tree's canopy, and total
     // amount of light absorbed by the tree:
     assert((fabs_tree + fabs_can) > 0);
-    fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    fabs = fminmacro(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
     APAR = Ioint * fabs * LA->tot / LAI->tot;
   }
   else if((eta * H) > Hc){
@@ -691,7 +683,7 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     // if not competing with the tree's canopy:
     fabs_can = 1 - exp(-ForParms->kF * LAIc);
     // Fraction of light absorbed by the tree's canopy, and total amount of light absorbed by the tree:
-    fabs = fmin(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    fabs = fminmacro(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
     assert(LAI->bot > 0);
     APAR_bot = Ioint * fabs * LA->bot / LAI->bot;
     APAR = APAR_top + APAR_bot;

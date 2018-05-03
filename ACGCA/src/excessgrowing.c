@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <gsl/gsl_math.h>
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/excessgrowing.h"
 
@@ -63,7 +62,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	double error = fabs(st->ex*gp->tolerance)+10;         // initialize error w/ high value
 
 	// Determine new value of r such that "demand" and excess are approx. equal.
-	while ((error > GSL_MAX(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
+	while ((error > fmaxmacro(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
 		
 		if (j>998){
 			st->status=0;
@@ -291,10 +290,10 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 	// allocation fractions
 	denom=efl+efr+eft+efo;
-	st->fl=GSL_MAX(0,efl/denom);
-	st->fr=GSL_MAX(0,efr/denom);
-	st->ft=GSL_MAX(0,eft/denom);
-	st->fo=GSL_MAX(0,efo/denom);
+	st->fl=fmaxmacro(0,efl/denom);
+	st->fr=fmaxmacro(0,efr/denom);
+	st->ft=fmaxmacro(0,eft/denom);
+	st->fo=fmaxmacro(0,efo/denom);
 
 	denom=st->fl+st->fr+st->ft+st->fo;
 

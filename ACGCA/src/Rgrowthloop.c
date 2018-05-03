@@ -1,21 +1,6 @@
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/growthloop.h"
 
-// I think I can remove this part of the code
-/*#ifdef DATA
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_statistics.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_sf.h>
-#include <gsl/gsl_cdf.h>
-#endif
-*/
-
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
 // I am hoping to avoid the structure that is causing problems.

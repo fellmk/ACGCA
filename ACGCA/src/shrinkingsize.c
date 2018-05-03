@@ -8,6 +8,8 @@
  */
 
 #include "head_files/shrinkingsize.h"
+#include "head_files/misc_growth_funcs.h"
+#include <math.h>
 
 /*! 
  * shrinkingsize is used to drop extra tissues (other, leaves, fine roots) from the
@@ -16,7 +18,7 @@
  * of if-else statements that determine if shrinkingsizeA() or shrinkingsizeB() should
  * be called, or if the tree dies.  
  *
- * \todo Use a sort algorithm from the GSl to find bosmax,bosmid,bosmin.
+ * \todo Use a sort algorithm to find bosmax,bosmid,bosmin.
  * \todo Make biomass struct global to avoid creating/destroying that memory
  *
  * \param p[in]            Species parameters (sparms)
@@ -37,7 +39,7 @@ void shrinkingsize(sparms *p, gparms *gp, tstates *st, int i, double *deltaw, do
     bioms bio;
     
     // Before dropping extra tissues have:
-    double nuost=GSL_MAX(0,(p->so*gp->deltat-1.0)*(p->lamdas*st->bts*st->boh-p->lamdah*st->bth*st->bos)/ 
+    double nuost=fmaxmacro(0,(p->so*gp->deltat-1.0)*(p->lamdas*st->bts*st->boh-p->lamdah*st->bth*st->bos)/ 
                   (st->bos*(p->lamdah*st->bth+p->lamdas*(1.0+st->deltas)*st->bts)*gp->deltat)); 
     bio.blst =st->bl-p->sl*st->bl*gp->deltat;
     bio.brst =st->br-p->sr*st->br*gp->deltat;
@@ -52,9 +54,9 @@ void shrinkingsize(sparms *p, gparms *gp, tstates *st, int i, double *deltaw, do
       
   // Now determine if tree is in a non-deficit (4A) or deficit (4B) condition:
   if (csst>0.0){
-      // COULD DO THIS USING GSL_RANK FUNCTIONS
-      bio.bosmax=GSL_MAX(GSL_MAX(bio.bosl,bio.bosr),bio.boso);  
-      bio.bosmin=GSL_MIN(GSL_MIN(bio.bosl,bio.bosr),bio.boso); 
+      // COULD DO THIS USING A RANK FUNCTIONS
+      bio.bosmax=fmaxmacro(fmaxmacro(bio.bosl,bio.bosr),bio.boso);  
+      bio.bosmin=fminmacro(fminmacro(bio.bosl,bio.bosr),bio.boso); 
       
       if ((bio.bosmin < bio.boso) && (bio.bosmax > bio.boso)){
         bio.bosmid=bio.boso;
@@ -332,7 +334,7 @@ void shrinkingsizeA(sparms *p, tstates *st, gparms *gp, int i,
     
 
   
-  st->rfs = GSL_MIN(st->cs,denom*gp->deltat - st->rfl - st->rfr - *pnet*gp->deltat);
+  st->rfs = fminmacro(st->cs,denom*gp->deltat - st->rfl - st->rfr - *pnet*gp->deltat);
  
   st->bl=p->f2*st->sa*st->bos/(p->sla*p->lamdas*st->bts);
   st->br=p->f1*p->f2*p->rhor*p->rr*st->sa*st->bos/(p->lamdas*2.0*st->bts);
@@ -498,7 +500,7 @@ void shrinkingsizeB(sparms *p, tstates *st, gparms *gp, int i,
   // rfs(i)=max(0,csst)+st->deltas*p->so*bos(i-1)*deltat;
   // revised: rfs = total demand - retranslocation from leaves and fine roots
   // - net photsynthetic input (Pg - Rm):
-  st->rfs = GSL_MIN(st->cs,denom*gp->deltat - st->rfl - st->rfr - (*pnet)*gp->deltat);
+  st->rfs = fminmacro(st->cs,denom*gp->deltat - st->rfl - st->rfr - (*pnet)*gp->deltat);
   if (st->cs < (denom*gp->deltat - st->rfl - st->rfr - (*pnet)*gp->deltat)){
     //printf("retranslocation does not balance \n");
   }

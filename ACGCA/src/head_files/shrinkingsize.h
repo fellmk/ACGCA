@@ -2,7 +2,6 @@
 #define SHRINKINGSIZE_H
 
 #include "misc_growth_funcs.h"
-#include "misc_func.h"
 
 extern void shrinkingsize(sparms *p, gparms *gp, tstates *st, int i, double *deltaw, double *pnet);
 

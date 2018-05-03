@@ -18,7 +18,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-//#include "growthfunctions.h"
+#define fminmacro(X, Y) ((X) < (Y) ? (X) : (Y))
+#define fmaxmacro(X, Y) ((X) > (Y) ? (X) : (Y))
 
 /// \brief Species level parameters for the tree growth model
 ///
