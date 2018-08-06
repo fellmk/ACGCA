@@ -210,8 +210,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		   // If r = 0 then exit program the tree is dead
 		   // Check for possible division by zero, negative areas, etc.
 		   if ((st.vts <= 0) || (st.bts == 0) || (p->gammax == 1) || (p->gammaw == 0) ||
-			   (LAI.tot == 0) || ((1.0+st.deltas)*st.bos*gp->deltat == 0) || ((p->f2*st.sa) <= 0) ||
-			   (p->sla <= 0) || (st.bs == 0)){
+				(LAI.tot == 0) || ((1.0+st.deltas)*st.bos*gp->deltat == 0) || ((p->f2*st.sa) <= 0) ||
+				(p->sla <= 0) || (st.bs == 0)){
 				st.status=0;
 				growth_st[i]=6;
 				break;
@@ -220,12 +220,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		   // leaf area and equivalent bos), tree dies. Use this for "established" trees
 		   // with r > 0.1 m.
 		   if ((st.r>=0.1) && (st.bos<(p->lamdas*st.bts/(1000000*p->f2*st.sa))) &&
-			   (st.bl<(1/(p->sla*1000000))) && (st.cs<=0)){
-			 st.status=0;
-			 growth_st[i]=6;
-			 //printf("exit loop due to miniscule amount of labile, iter=%d \n",i);
-			 //printf("TreeDies \n");
-			 break;
+				(st.bl<(1/(p->sla*1000000))) && (st.cs<=0)){
+				st.status=0;
+				growth_st[i]=6;
+				//printf("exit loop due to miniscule amount of labile, iter=%d \n",i);
+				//printf("TreeDies \n");
+				break;
 			}
 
 		//if(skip == 0){
@@ -238,12 +238,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		// update light value
 		if(Hc[i] != -99){
-		  // APAR should be a vector of length 2
-		  APARcalc(&APAR[0], &LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
-		  st.light = APAR[0];
-		  //APARout[i] = APAR[1]; Moved to bottom
+			// APAR should be a vector of length 2
+			APARcalc(&APAR[0], &LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
+			st.light = APAR[0];
+			//APARout[i] = APAR[1]; Moved to bottom
 		}else{
-		  st.light = Io[i]*f_abs*(st.la/LAI.tot);
+			st.light = Io[i]*f_abs*(st.la/LAI.tot);
 		}
 		// mkf 3/16/2018 st.light = Io[i]*f_abs*(st.la/LAI.tot); // 138b in appendix for Scn. A
 
@@ -256,8 +256,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		bsstar = (1-p->gammaw*st.bts/((1-p->gammax)*st.vts))*st.bs;
 		if ((p->gammac > 0) && (st.cs > 0)){
-		  // respiring sapwood also due to cells with labile carbon:
-		  bsstar = bsstar + (1-p->gammaw*st.bts/((1-p->gammax)*st.vts))*((st.cs/p->gammac)*(st.bts/st.vts));
+			// respiring sapwood also due to cells with labile carbon:
+			bsstar = bsstar + (1-p->gammaw*st.bts/((1-p->gammax)*st.vts))*((st.cs/p->gammac)*(st.bts/st.vts));
 		}
 
 		rm=p->rml*st.bl+p->rmr*st.br+p->rms*bsstar;
@@ -369,10 +369,9 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		// Added if statement on 4/2/18 MKF
 		LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
-		if(st.status==1){
-		}else{
-		  st.light = 0;
-		}
+		//if(st.status!=1){
+		//  st.light = 0;
+		//}
 
 
 		if (isnan(st.ex) !=0){

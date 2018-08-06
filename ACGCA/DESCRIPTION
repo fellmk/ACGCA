@@ -1,6 +1,6 @@
 Package: ACGCA
 Title: Simulates Tree Growth and Mortality
-Version: 0.36
+Version: 0.4
 Authors@R: c(person("Michael", "Fell", email = "michael.fell@nau.edu", role = "cre"),
              person("Darren", "Gemoets", role = "aut"),
              person("Kiona", "Ogle", email = "kiona.ogle@nau.edu", role = "aut"))
@@ -13,7 +13,7 @@ VignetteBuilder: knitr
 License: We need to pick one (if we keep gsl then GPLv3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 SystemRequirements: GNU make
 LinkingTo: Rcpp
 Imports: Rcpp

@@ -34,7 +34,7 @@ setwd("..")
 install("ACGCA")
 help(package="ACGCA")
 library(ACGCA)
-help("runactca")
+help("runacgca")
 
 ###############################################################################
 #
@@ -48,9 +48,9 @@ load("names_thetaj.R")
 
 theta.j <- theta.j[-c(8,12,35,36)]
 
-# Run the growthloop over 1000 times to check for bugs.
+# Run the growthloop 1000 times to check for bugs.
 system.time(for(i in 1:1000){
-test2 <- ACGCA::runactca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
+test2 <- ACGCA::runacgca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060,  gapvars=list(gt=5, ct=5,
                                                                                                  tbg=20), gapsim=TRUE)
 }
 )
@@ -58,9 +58,11 @@ test2 <- ACGCA::runactca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060, 
 plot(test2$h, type="l")
 
 theta.j[1] <- 30
-test2 <- ACGCA::runactca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
+test2 <- ACGCA::runacgca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=2060)
 plot(test2$h, type="l")
 
+test2 <- ACGCA::runacgca(sparms=theta.j, r0=0.05, fulloutput=TRUE, parmax=seq(2060, 200, length.out = 801))
+plot(test2$h, type="l")
 
 
 source("acruparms.R")
