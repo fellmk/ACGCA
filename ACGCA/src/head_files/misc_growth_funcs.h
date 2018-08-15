@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define fminmacro(X, Y) ((X) < (Y) ? (X) : (Y))
 #define fmaxmacro(X, Y) ((X) > (Y) ? (X) : (Y))
 
@@ -32,12 +36,13 @@ typedef struct{
   double hmax; ///< Max. tree height
   double phih; ///< Slope at H vs. r curve at r=0
   double eta; ///< Relative crown height
-  double etaB; ///< ???
+  double etaB; ///< Relative height at which trunc transitions from a 
+			   ///neiloid to parabolid
   double swmax; ///< Maximum sapwood width
-  double lamdas; ///< ???
-  double lamdah; ///< ???
-  double rhomax; ///< ???
-  double rhomin; ///< ???
+  double lamdas; ///< Proportionality between BT and BO for sapwood
+  double lamdah; ///< Proportionality between BT and BO for heart
+  double rhomax; ///< Wood density
+  double rhomin; ///< Wood density
   double f2; ///< Leaf area to xylem conducting area ratio
   double f1; ///< Fine root area to leaf area ratio
   double gammac; ///< Max. storage capacity of sapwood cellsx
@@ -52,19 +57,19 @@ typedef struct{
   double sla; ///< Specific leaf area
   double sr; ///< Senescence rate of fine roots
   double so; ///< Senescence rate of course roots and branches
-  double rr; ///< ???
+  double rr; ///< Average fine root radius
   double rhor; ///< Tissue density of fine roots
   double rml; ///< Maintenance respiration rate of leaves
   double rms; ///< Maintenance respiration rate of sapwood
   double rmr; ///< Maintenance respiration rate of fine roots
-  double drcrit; ///< ??? may vary by tree
+  double drcrit; ///< ???
   double drinit; ///< radial increment (may vary by tree??)
-  double K; ///< ???
-  double epsg; ///< ???
-  double M; ///< ???
-  double alpha; ///< ???
-  double R0; ///< ???
-  double R40; ///< ???
+  double K; ///< Crown light extinction coefficient
+  double epsg; ///< Radiation-use-efficiency 
+  double M; ///< Maximum relative crown depth
+  double alpha; ///< Crown Curvature parameter
+  double R0; ///< Maximum potential crown radius of a tree with diameter at breast height of 0 m.
+  double R40; ///< Maximum potential crown radius of a tree with diameter at breast height of 0.4 m.
   /* NOTE: f2 = gammax*NEWf2, where NEWf2 is actually the value reported for
    * f2 in the tree growth manuscript (Ogle and Pacala 2009). */
 } sparms;
