@@ -49,10 +49,19 @@ options(scipen = 0)
 
 Once the data are loaded they can be used to call the ACGCA model. There are a few other parameters that can be set. The value of parmax (2060 MJ m^-2^ year^-1^) is taken from Ogle and Pacala (2009) and is full sunlight for a site in North Carolina. There are 801 data points in the time series for radius because the time step defaults to 16 steps per year. The extra point is for initilization. **NOTE: If the radius is set too low (any lower than it is set here) the tree will not grow**.
 
-```{r}
+```{r include=FALSE}
 # Call the ACGCA model (runacgca)
 acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, years = 50, fulloutput = FALSE)
-
+```
+```{r eval=FALSE}
+# Call the ACGCA model (runacgca)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, years = 50, fulloutput = FALSE)
+# Plot the radius and height output from the model.
+par(mar=c(4,4,1,1))
+plot(x=0:800/16, y = acgcaout$r, type="l", xlab = "time (years)", ylab = "radius (m)")
+plot(x=0:800/16, y = acgcaout$h, type="l", xlab = "time (years)", ylab = "height (m)")
+```
+```{r echo=FALSE}
 # Plot the radius and height output from the model.
 par(mar=c(4,4,1,1))
 plot(x=0:800/16, y = acgcaout$r, type="l", xlab = "time (years)", ylab = "radius (m)")
@@ -64,7 +73,7 @@ Other parameters can be set as outlined in the function documentation for "runac
 ## Light Environment
 Along with running the ACGCA model under a fixed annual light value it is possible to have changing light conditions over the course of the simulation. If the desired effect is to have light change each year a vector can be supplied for the "parmax" input parameter. The first value in the vector is the initilization value with the following values corresponding to the simulation post initilization. If the desire is to have values for each year and a 1/16 of a year time step is used (steps = 16), then elements 2 through 17 in the vector should be set to the value for year 1. 
 
-```{r}
+```{r include=FALSE}
 # Set up a light vector for a 50 year simulation where light decreases 10% per decade
 decrease <- seq(from = 1, to = 0.2, by = -0.2)
 decrease <- rep(x = decrease, each = 10*16) # repeat each value years * steps times
@@ -74,7 +83,23 @@ parmax <- c(0, rep(2060, 50*16)*decrease)
 
 # run the ACGCA model
 acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = parmax, years = 50, steps = 16, fulloutput = FALSE)
+```
+```{r eval=FALSE}
+# Set up a light vector for a 50 year simulation where light decreases 10% per decade
+decrease <- seq(from = 1, to = 0.2, by = -0.2)
+decrease <- rep(x = decrease, each = 10*16) # repeat each value years * steps times
 
+# create a light vector with length years * steps + 1
+parmax <- c(0, rep(2060, 50*16)*decrease)
+
+# run the ACGCA model
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = parmax, years = 50, steps = 16, fulloutput = FALSE)
+# make a plot of the radius over time and the growth state over time.
+par(mar=c(4,4,1,1))
+plot(x= 1:801/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
+plot(x= 1:801/16, y=acgcaout$growth_st, xlab="years", ylab="growth state", type="l")
+```
+```{r echo=FALSE}
 # make a plot of the radius over time and the growth state over time.
 par(mar=c(4,4,1,1))
 plot(x= 1:801/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
@@ -102,6 +127,8 @@ Gap simulations similar to those described in Ogle and Pacala (2009) and Fell et
 
 ## References:
 Fell, M., J. Barber, J. W. Lichstein, and K. Ogle. 2018. Multidimensional trait space informed by a mechanistic model of tree growth and carbon allocation. Ecosphere 9. DOI:10.1002/ecs2.2060
+
+Fell, M, Ogle, K. 2018. Refinement of a theoretical trait space for North American trees via environmental filtering. Ecological Monographs 88:372-384
 
 Gemoets, D., J. Barber, and K. Ogle. 2013. Reversible jump MCMC for inference in a deterministic individual-based model of tree growth for studying forest dynamics. Environmetrics 24:433–448.
 
