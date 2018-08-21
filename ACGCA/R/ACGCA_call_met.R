@@ -191,10 +191,17 @@
 
 ## This code creates the function that runs the growth loop once it is loaded
 runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
-                        steps=16, breast.height=1.37, Forparms=list(kF=0.6,
-                        HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), gapvars=list(gt=50, ct=10,
-                        tbg=200), tolerance=0.00001, gapsim=FALSE,
+                        steps=16, breast.height=1.37, tolerance=0.00001,
                         fulloutput=FALSE){
+
+  ##### Remove some parameters for Beta 0.5 version #####
+  Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5)
+  gapvars=list(gt=50, ct=10, tbg=200)
+  gapsim=FALSE
+
+  if(length(parmax) > 1){
+    stop("parmax should be a scalar value not a vector.")
+  }
 
   ##### Add extra variables to sparms 3/2/2018
   if(length(sparms) > 32){
@@ -256,9 +263,9 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
      Hc <- rep(-99, times=(steps*years+1))
      LAIF <- rep(0, times=(steps*years+1))
   }
-  
-  print(Hc)
-  print(LAIF)
+
+  #print(Hc)
+  #print(LAIF)
 
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
@@ -279,7 +286,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
                  Io=as.double(parmax), r0=as.double(r0), t=integer(1),
                  Hc=as.double(Hc), LAIF=as.double(LAIF),
                  kF=as.double(Forparms$kF), intF=as.double(Forparms$intF),
-                 slopeF=as.double(Forparms$slopeF), 
+                 slopeF=as.double(Forparms$slopeF),
 	  APARout=double(lenvars),
       h=double(lenvars),
       hh=double(lenvars),

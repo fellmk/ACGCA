@@ -1,5 +1,5 @@
 ---
-title: "ACGCA"
+title: "Draft ACGCA Beta"
 author: "Michael Fell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -49,9 +49,15 @@ options(scipen = 0)
 
 Once the data are loaded they can be used to call the ACGCA model. There are a few other parameters that can be set. The value of parmax (2060 MJ m^-2^ year^-1^) is taken from Ogle and Pacala (2009) and is full sunlight for a site in North Carolina. There are 801 data points in the time series for radius because the time step defaults to 16 steps per year. The extra point is for initilization. **NOTE: If the radius is set too low (any lower than it is set here) the tree will not grow**.
 
-```{r}
+```{r, eval=FALSE}
 # Call the ACGCA model (runacgca)
 acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, years = 50, fulloutput = FALSE)
+```
+```{r, echo=FALSE, eval=TRUE, include=FALSE}
+# Call the ACGCA model (runacgca)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, years = 50, fulloutput = FALSE)
+```
+```{r}
 
 # Plot the radius and height output from the model.
 par(mar=c(4,4,1,1))
@@ -60,49 +66,3 @@ plot(x=0:800/16, y = acgcaout$h, type="l", xlab = "time (years)", ylab = "height
 ```
 
 Other parameters can be set as outlined in the function documentation for "runacgca."
-
-## Light Environment
-Along with running the ACGCA model under a fixed annual light value it is possible to have changing light conditions over the course of the simulation. If the desired effect is to have light change each year a vector can be supplied for the "parmax" input parameter. The first value in the vector is the initilization value with the following values corresponding to the simulation post initilization. If the desire is to have values for each year and a 1/16 of a year time step is used (steps = 16), then elements 2 through 17 in the vector should be set to the value for year 1. 
-
-```{r}
-# Set up a light vector for a 50 year simulation where light decreases 10% per decade
-decrease <- seq(from = 1, to = 0.2, by = -0.2)
-decrease <- rep(x = decrease, each = 10*16) # repeat each value years * steps times
-
-# create a light vector with length years * steps + 1
-parmax <- c(0, rep(2060, 50*16)*decrease)
-
-# run the ACGCA model
-acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = parmax, years = 50, steps = 16, fulloutput = FALSE)
-
-# make a plot of the radius over time and the growth state over time.
-par(mar=c(4,4,1,1))
-plot(x= 1:801/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
-plot(x= 1:801/16, y=acgcaout$growth_st, xlab="years", ylab="growth state", type="l")
-```
-
-In the second graph the growth states correspond to 1 (healthy), 4 (static), and 5 (shrinking) states. Thus, the tree was healthy for the first 30 years and then stoped growing and then transitioned to a shrinking state. It is possible if this simulation continued the tree would run out of carbon and die.
-
-## Gap Simulations
-Gap simulations similar to those described in Ogle and Pacala (2009) and Fell et al. (2018) can be easily implemented. To use gap simulations "gapsim" should be set to TRUE and gapvars needs to be assigned a list defining how gap dynamics will progress. The list should have three elements "list=(gt, ct, tbg)." The first variable gap time (gt) gives the length of time in years the gap is open. The second variable defines the closure time (ct) or the number of years it takes for the forest canopy to transition from open to closed. The final value is the time between gaps (tbg) which corresponds to the total time from when a gap forms to when it opens again. For example, if gt=50, ct=10, and tbg=200 (the arbitrary default), then the canopy would be open for 50 years, close over 10 years and be closed for the remaining 140 years.
-
-```{r}
-# run the ACGCA model
-#gapvariables <- list(gt=2, ct=3, tbg=20)
-#acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 100, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
-
-# make a plot of the radius over time and the growth state over time.
-#par(mar=c(4,4,1,1))
-#plot(x= 1:1601/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_st[1:1600], xlab="years", ylab="growth state", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_clr[1:1600], xlab="years", ylab="labile carbon in leaves and fine roots (g gluc)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_cs[1:1600], xlab="years", ylab="labile carbon in sapwood (g gluc)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$APARout[1:1600], xlab="years", ylab="light", type="l")
-```
-
-## References:
-Fell, M., J. Barber, J. W. Lichstein, and K. Ogle. 2018. Multidimensional trait space informed by a mechanistic model of tree growth and carbon allocation. Ecosphere 9. DOI:10.1002/ecs2.2060
-
-Gemoets, D., J. Barber, and K. Ogle. 2013. Reversible jump MCMC for inference in a deterministic individual-based model of tree growth for studying forest dynamics. Environmetrics 24:433–448.
-
-Ogle, K., and S. W. Pacala. 2009. A modeling framework for inferring tree growth and allocation from physiological, morphological and allometric traits. Tree Physiology 29:587–605.

@@ -4,7 +4,7 @@ library("roxygen2")
 
 setwd("./ACGCA")
 document()
-devtools::build(vignettes = FALSE)
+devtools::build(vignettes = TRUE)
 
 setwd("..")
 install("ACGCA", build_vignettes = FALSE)
