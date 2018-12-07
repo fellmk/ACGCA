@@ -66,7 +66,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 {
 
 	///////////////////////////////////////////////////////////////////////////
-	// Declare two structs and use then to store the simulation parameters
+	// Declare two structs and use them to store the simulation parameters
 	// and the simulation control variables.
 	///////////////////////////////////////////////////////////////////////////
 	sparms p;
