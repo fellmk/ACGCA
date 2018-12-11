@@ -38,7 +38,8 @@
 ///
 
 void excessgrowingon(sparms *p, gparms *gp, tstates *st, 
-	int i, int growthflag, double r[], int *errorind2, int *growth_st){
+	int i, int growthflag, double r[], int *errorind2, int *growth_st,
+	double *tolout, double *errorout){
 
 	height hin; radius rin; volume v;
 
@@ -63,8 +64,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 	// Determine new value of r such that "demand" and excess are approx. equal.
 	while ((error > fmaxmacro(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
-		
-		if (j>998){
+		if (j>999){ // Was 998 not sure why
 			st->status=0;
 			*growth_st = 20;
 		}
@@ -280,7 +280,14 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			}
 
 			error=fabs(demand-st->ex);  // update the error
-
+      
+      tolout[(i-1)*1000+j] = fmaxmacro(fabs(st->ex*gp->tolerance),1e-5);
+      errorout[(i-1)*1000+j] = error;
+      printf("tolout, iter=%d, tolout=%f \n",i,tolout[(i-1)*1000+j]);
+      printf("errorout, iter=%d, errorout=%f \n",i,errorout[(i-1)*1000+j]);
+      printf("error, iter=%d, error=%f \n",i,error);
+      
+      
 			j=j+1;   // change this to ++j
 
 		} //end "if (error..."

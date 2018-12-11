@@ -11,6 +11,7 @@
 #
 ###############################################################################
 
+dyn.load("../ACGCA/src/ACGCA.dll")
 #dyn.load("Rgrowthloop.so") ## see help (dyn.load)
 #dyn.load("excessgrowing.so")
 #dyn.load("growthloop.so")
@@ -257,8 +258,8 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
      LAIF <- rep(0, times=(steps*years+1))
   }
   
-  print(Hc)
-  print(LAIF)
+  #print(Hc)
+  #print(LAIF)
 
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
@@ -331,7 +332,9 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       lenvars=as.integer(lenvars),
 
       errorind=integer(lenvars),
-      growth_st=integer(lenvars)
+      growth_st=integer(lenvars),
+	    tolout=double(lenvars*1000),
+	    errorout=double(lenvars*1000)
     )# End growthloop call
 
     # Add a warning in case there was an error
