@@ -334,7 +334,11 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       errorind=integer(lenvars),
       growth_st=integer(lenvars),
 	    tolout=double(lenvars*1000),
-	    errorout=double(lenvars*1000)
+	    errorout=double(lenvars*1000),
+	    drout=double(lenvars*1000),
+	    demandout=double(lenvars*1000),
+	    odemandout=double(lenvars*1000),
+	    odrout=double(lenvars*1000)
     )# End growthloop call
 
     # Add a warning in case there was an error

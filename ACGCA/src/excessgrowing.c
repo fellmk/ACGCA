@@ -36,10 +36,11 @@
 ///
 /// \date 11-23-2010
 ///
-
+ 
 void excessgrowingon(sparms *p, gparms *gp, tstates *st, 
 	int i, int growthflag, double r[], int *errorind2, int *growth_st,
-	double *tolout, double *errorout){
+	double *tolout, double *errorout, double *drout, double *demandout,
+	double *odemandout, double *odrout){
 
 	height hin; radius rin; volume v;
 
@@ -93,7 +94,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			} // end outer else
 		} //end if j==1
 
-		else if ((j==2) && ((i<2) || (growthflag==0) || (r[i-1]==r[i-2]))){
+		else if ((j==2) && ((i<3) || (growthflag==0) || (r[i-1]==r[i-2]))){
 			odemand=demand;   // demand saved to old demand
 			odr = dr;         // dr saved to old dr
 			if ((odr > 0) && (odemand != 0)){
@@ -123,6 +124,9 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			intercept=demand-slope*dr;
 			odemand=demand;
 			odr=dr;
+			if (slope == 0){
+			  slope = 0.1;
+			}
 			if (slope != 0){
 				dr=st->ex/slope;
 			}
@@ -283,6 +287,10 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
       
       tolout[(i-1)*1000+j] = fmaxmacro(fabs(st->ex*gp->tolerance),1e-5);
       errorout[(i-1)*1000+j] = error;
+      odrout[(i-1)*1000+j]=odr;
+      drout[(i-1)*1000+j]=dr;
+      odemandout[(i-1)*1000+j]=odemand;
+      demandout[(i-1)*1000+j]=demand;
       printf("tolout, iter=%d, tolout=%f \n",i,tolout[(i-1)*1000+j]);
       printf("errorout, iter=%d, errorout=%f \n",i,errorout[(i-1)*1000+j]);
       printf("error, iter=%d, error=%f \n",i,error);

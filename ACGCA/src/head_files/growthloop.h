@@ -59,7 +59,11 @@ extern void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	int errorind[],
 	int growth_st[],
   double *tolout,
-  double *errorout
+  double *errorout,
+  double *drout,
+  double *demandout,
+  double *odemandout,
+  double *odrout    
 );
 
 //extern void growthloop_MCMC(double *initr, double r[], double h[], 

@@ -17,6 +17,8 @@ extern void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i,double de
 
 extern void excessgrowingon(sparms *p, gparms *gp, tstates *st, int i,
                             int growthflag, double r[], int *errorind2,
-                            int *growth_st, double *tolout, double *errorout);
+                            int *growth_st, double *tolout, double *errorout,
+                            double *drout, double *demandout,
+                            double *odemandout, double *odrout);
 
 #endif

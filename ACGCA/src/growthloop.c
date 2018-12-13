@@ -102,7 +102,11 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	int errorind[],
 	int growth_st[],
   double *tolout,
-  double *errorout
+  double *errorout,
+  double *drout,
+  double *demandout,
+  double *odemandout,
+  double *odrout                  
 ){
 
 	//, double la[],double LAI[], double egrow[], double ex[], int status[]
@@ -314,7 +318,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		  else{ // not enough labile C to grow tree on target allometry.
 			//printf("ExcessGrowingOn \n");
 			//MKF 04/20/2013 I added errorind to excessgrowing on to catch errors
-			excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i], tolout, errorout);
+			excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i],
+                      tolout, errorout, drout, demandout, odemandout, odrout);
 			growthflag=1;
 			if(growth_st[i]==0){growth_st[i]=1;}
 			if (st.nut > 1){ // This is legacy code but I left it MKF 
