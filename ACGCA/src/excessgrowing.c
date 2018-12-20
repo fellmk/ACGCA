@@ -285,15 +285,15 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 			error=fabs(demand-st->ex);  // update the error
       
-      tolout[(i-1)*1000+j] = fmaxmacro(fabs(st->ex*gp->tolerance),1e-5);
-      errorout[(i-1)*1000+j] = error;
-      odrout[(i-1)*1000+j]=odr;
-      drout[(i-1)*1000+j]=dr;
-      odemandout[(i-1)*1000+j]=odemand;
-      demandout[(i-1)*1000+j]=demand;
-      printf("tolout, iter=%d, tolout=%f \n",i,tolout[(i-1)*1000+j]);
-      printf("errorout, iter=%d, errorout=%f \n",i,errorout[(i-1)*1000+j]);
-      printf("error, iter=%d, error=%f \n",i,error);
+      //tolout[(i-1)*1000+j] = fmaxmacro(fabs(st->ex*gp->tolerance),1e-5);
+      //errorout[(i-1)*1000+j] = error;
+      //odrout[(i-1)*1000+j]=odr;
+      //drout[(i-1)*1000+j]=dr;
+      //odemandout[(i-1)*1000+j]=odemand;
+      //demandout[(i-1)*1000+j]=demand;
+      //printf("tolout, iter=%d, tolout=%f \n",i,tolout[(i-1)*1000+j]);
+      //printf("errorout, iter=%d, errorout=%f \n",i,errorout[(i-1)*1000+j]);
+      //printf("error, iter=%d, error=%f \n",i,error);
       
       
 			j=j+1;   // change this to ++j
