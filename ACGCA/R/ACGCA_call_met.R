@@ -289,7 +289,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       hBH=double(lenvars),
       r=double(lenvars),
       rB=double(lenvars),
-      rC=double(lenvars),
+      rC=double(lenvars), #20
       rBH=double(lenvars),
       sw=double(lenvars),
       vts=double(lenvars),
@@ -299,7 +299,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       la=double(lenvars),
       ra=double(lenvars),
       dr=double(lenvars),
-      xa=double(lenvars),
+      xa=double(lenvars), #30
       bl=double(lenvars),
       br=double(lenvars),
       bt=double(lenvars),
@@ -310,7 +310,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       bo=double(lenvars),
       bs=double(lenvars),
 
-      cs=double(lenvars),
+      cs=double(lenvars), #40
       clr=double(lenvars),
       fl=double(lenvars),
       fr=double(lenvars),
@@ -332,13 +332,13 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       lenvars=as.integer(lenvars),
 
       errorind=integer(lenvars),
-      growth_st=integer(lenvars),
-	    tolout=double(lenvars*1000),
-	    errorout=double(lenvars*1000),
-	    drout=double(lenvars*1000),
-	    demandout=double(lenvars*1000),
-	    odemandout=double(lenvars*1000),
-	    odrout=double(lenvars*1000)
+      growth_st=integer(lenvars)
+	    #tolout=double(lenvars*1000),
+	    #errorout=double(lenvars*1000),
+	    #drout=double(lenvars*1000),
+	    #demandout=double(lenvars*1000),
+	    #odemandout=double(lenvars*1000),
+	    #odrout=double(lenvars*1000)
     )# End growthloop call
 
     # Add a warning in case there was an error

@@ -100,13 +100,13 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	double LAI2[],
 	int status2[],
 	int errorind[],
-	int growth_st[],
-  double *tolout,
-  double *errorout,
-  double *drout,
-  double *demandout,
-  double *odemandout,
-  double *odrout                  
+	int growth_st[]
+  //double *tolout,
+  //double *errorout,
+  //double *drout,
+  //double *demandout,
+  //double *odemandout,
+  //double *odrout                  
 ){
 
 	//, double la[],double LAI[], double egrow[], double ex[], int status[]
@@ -203,15 +203,17 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	// gp->T number of years, gp->deltat is increment (=1/16)
 	for (i = 1; i < (ceil(gp->T/gp->deltat)+1); i++){  //DG: added in plus one
 
-		double APAR[2];
-		APAR[0] = -1;
-		APAR[1] = -1;
-	
-		   // If tree died last iteration, then exit program.
-		   if (st.status==0){
-				growth_st[i]=6;
-				break;
-			}
+  		double APAR[2];
+  		APAR[0] = -1;
+  		APAR[1] = -1;
+	    
+	    // MKF moved this to the top of the loop to prevent LAI->bot == 0
+	    LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
+		  // If tree died last iteration, then exit program.
+		  //if (st.status==0){
+			//    growth_st[i]=6;
+			//    break;
+			//}
 
 		   // If r = 0 then exit program the tree is dead
 		   // Check for possible division by zero, negative areas, etc.
@@ -246,6 +248,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		if(Hc[i] != -99){
 			// APAR should be a vector of length 2
 			APARcalc(&APAR[0], &LAI, &LA, p->eta, p->K, st.h, Hc[i], LAIF[i], Io[i], ForParms);
+		  //printf("APAR[0]=%g, APAR[1]=%g \n", APAR[0], APAR[1]);
 			st.light = APAR[0];
 			//APARout[i] = APAR[1]; Moved to bottom
 		}else{
@@ -318,10 +321,12 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		  else{ // not enough labile C to grow tree on target allometry.
 			//printf("ExcessGrowingOn \n");
 			//MKF 04/20/2013 I added errorind to excessgrowing on to catch errors
-			excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i],
-                      tolout, errorout, drout, demandout, odemandout, odrout);
+			//excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i],
+      //                tolout, errorout, drout, demandout, odemandout, odrout);
+		  excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i]);
 			growthflag=1;
-			if(growth_st[i]==0){growth_st[i]=1;}
+			//if(growth_st[i]==0){growth_st[i]=1;}
+			growth_st[i]=1;
 			if (st.nut > 1){ // This is legacy code but I left it MKF 
 			  //printf("Sapwood conversion rate > 1 flag disabled. \n");
 			  //st.status=0;
@@ -335,9 +340,9 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		  // to be done. MKF
 		  growthflag=0;
 		  if (rebld.erb<st.ex){     // enough labile C to growth tree along reduced allometry.
-			//printf("ExcessGrowingOff \n");
-			excessgrowingoff(p,gp,&st,i,deltaw,&errorind[i], &growth_st[i]);
-			if(growth_st[i]==0){growth_st[i]=2;}
+    			//printf("ExcessGrowingOff \n");
+    			excessgrowingoff(p,gp,&st,i,deltaw,&errorind[i], &growth_st[i]);
+    			if(growth_st[i]==0){growth_st[i]=2;}
 		  }
 		  else{
 			if ((rebld.erb-st.ex) < (st.cs/gp->deltat - st.deltas*(rebld.nuoerb+p->so)*st.bos)){    // enough labile C to rebuild non-trunk tissues.
@@ -375,7 +380,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		/* Recalculate st.light */
 
 		// Added if statement on 4/2/18 MKF
-		LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
+		//LAIcalc(&LAI,&LA, st.la, st.r, st.h, st.rBH, p, gp, Hc[i], &st);
 		//if(st.status!=1){
 		//  st.light = 0;
 		//}
@@ -442,7 +447,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		//LAI2[i]=st.LAI; //double
 		LAI2[i]=LAI.tot;
 		status2[i]=st.status; //int
-		APARout[i]=APAR[1];
+    //APARout[i]=APAR[0];
+    APARout[i]=st.light;
 
 		//Break the loop right away if status is 0
 		if(st.status == 0){

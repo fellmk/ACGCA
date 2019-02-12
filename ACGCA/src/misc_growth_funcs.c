@@ -15,6 +15,7 @@
 #include <math.h>
 #include <assert.h>
 #include "head_files/misc_growth_funcs.h"
+#include <R.h>
 
 // Only define M_PI if it is not defined already
 // Added by MKF for compilers that don't define this
@@ -514,6 +515,8 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       	//LAI->top = LAtop/CAz;
       	LAI->top = LA->top/CAtot;
       	LAI->bot = LA->bot/CAtot;
+      	
+      	Rprintf("LAIcalc H > Hc LAI->top=%g \n", CAtot);
       }
       // Below, if forest canopy is below tree's crown:
       else{
@@ -521,6 +524,7 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       	LA->bot = 0;
       	LAI->top = LAItot;
       	LAI->bot = 0;
+      	Rprintf("Inner else in LAIcalc \n");
       }
     }
     // Below, if forest canopy it taller than tree:
@@ -529,6 +533,7 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       LAI->bot = LAItot;
       LA->top = 0;
       LA->bot = LAtot;
+      Rprintf("Outer ouse in LAIcalc \n");
     }
   } // End of else above
   LA->tot=LAtot;
@@ -537,6 +542,9 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
   if (isnan(LAItot)!=0){
     //printf("error in LAI_calc: LAItot is nan \n");
   }
+  Rprintf("LAIcalc LAI->top=%g \n", LAI->top);
+  Rprintf("LAIcalc LAI->bot=%g \n", LAI->bot);
+  Rprintf("LAIcalc LAI->tot=%g \n", LAI->tot);
 } // end LAIcalc()
 
 
@@ -544,7 +552,9 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
 ///
 /// Function APARcalc()
 ///
+/// author Kiona Ogle (translated into C by Michael Fell)
 ///
+/// date early 2018
 ///
 ///
 ///
@@ -594,6 +604,10 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
   // Predicted, unscaled forest canopy LAI at ground level:
   logitLAImax = ForParms->intF;
   pLAImax = exp(logitLAImax) / (1 + exp(logitLAImax));
+  
+  Rprintf("APAR_top=%g \n", LAI->top);
+  Rprintf("APAR_bot=%g \n", LAI->bot);
+  Rprintf("APAR_tot=%g \n", LAI->tot);
 
   if(H < Hc){
     // Calculate forest canopy LAI from top of forest canopy (height H meters)
@@ -660,6 +674,7 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     APAR_top = Io * fabs_top * LA->top / LAI->top;
     Ioint = Io * (1 - fabs_top);
 
+    Rprintf("LAI->top=%g, APAR_top=%g, Ioint=%g \n", LAI->top, APAR_top, Ioint);
     // Now, compute the amount of light absorbed by the bottom part of the
     // tree's crown that is competing with the forest canopy for light.
 
@@ -669,24 +684,35 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     pLAIc = exp(LogitLAIc) / (1 + exp(LogitLAIc));
     pLAIc = (pLAIc-pLAImin) / (pLAImax - pLAImin);
     LAIc = FLAI * pLAIc;
+    
+    Rprintf("LogitLAIc=%g, pLAIc=%g, LAIc=%g \n", LogitLAIc, pLAIc, LAIc);
     // Total LAI (forest + tree's canopies) within a cylinder containing the
     // target tree's bottom crown portion
     LAIboth = LAIc + LAI->bot;
+    Rprintf("LAIboth=%g \n", LAIboth);
     // Combined light ext coeff of forest and tree's canopies:
     Kboth = (ForParms->kF * LAIc + k * LAIboth);
+    Rprintf("Kboth=%g \n", Kboth);
     // Fraction of light absorbed by both canopies:
     fabs_both = 1 - exp(-Kboth * LAIboth);
+    Rprintf("fabs_both=%g \n", fabs_both);
     // Fraction of light that would have been absorbed by the forest's canopy
     // if not competing with the tree's canopy:
     fabs_tree = 1 - exp(-k * LAIboth);
+    Rprintf("fabs_tree=%g \n", fabs_tree);
     // Fraction of light that would have been absorbed by the forest's canopy
     // if not competing with the tree's canopy:
     fabs_can = 1 - exp(-ForParms->kF * LAIc);
+    Rprintf("fabs_can=%g \n", fabs_can);
     // Fraction of light absorbed by the tree's canopy, and total amount of light absorbed by the tree:
     fabs = fminmacro(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
+    Rprintf("fabs=%g \n", fabs);
+    Rprintf("LAI->bot=%g \n", LAI->bot);
     assert(LAI->bot > 0);
     APAR_bot = Ioint * fabs * LA->bot / LAI->bot;
+    Rprintf("APAR_bot=%g \n", APAR_bot);
     APAR = APAR_top + APAR_bot;
+    Rprintf("APAR=%g \n", APAR);
   }
   else{
     printf("APAR not determined for gap sim.");
@@ -695,6 +721,7 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
   // APAR out and save value Ioint to APARout
   APARout[0] = APAR;
   APARout[1] = Ioint;
+  Rprintf("Ioint=%g \n", Ioint);
   //return APARout;
 }
 

@@ -1,6 +1,6 @@
 Package: ACGCA
 Title: Simulates Tree Growth and Mortality
-Version: 0.37
+Version: 0.37.0.0.3
 Authors@R: c(person("Michael", "Fell", email = "michael.fell@nau.edu", role = "cre"),
              person("Darren", "Gemoets", role = "aut"),
              person("Kiona", "Ogle", email = "kiona.ogle@nau.edu", role = "aut"))

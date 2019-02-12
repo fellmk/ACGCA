@@ -38,9 +38,9 @@
 ///
  
 void excessgrowingon(sparms *p, gparms *gp, tstates *st, 
-	int i, int growthflag, double r[], int *errorind2, int *growth_st,
-	double *tolout, double *errorout, double *drout, double *demandout,
-	double *odemandout, double *odrout){
+	int i, int growthflag, double r[], int *errorind2, int *growth_st){
+	//, double *tolout, double *errorout, double *drout, double *demandout,
+	//double *odemandout, double *odrout){
 
 	height hin; radius rin; volume v;
 

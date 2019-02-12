@@ -62,13 +62,13 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	//int *dim,
 	int *lenvars,
 	int *errorind,
-  int *growth_st,
-  double *tolout,
-  double *errorout,
-  double *drout,
-  double *demandout,
-  double *odemandout,
-  double *odrout)
+  int *growth_st)
+  //double *tolout,
+  //double *errorout,
+  //double *drout,
+  //double *demandout,
+  //double *odemandout,
+  //double *odrout)
 {
 
 	///////////////////////////////////////////////////////////////////////////
@@ -198,13 +198,13 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 		//i,
 		//lenvars,
 		errorind,
-		growth_st,
-		tolout,
-		errorout,
-    drout,
-    demandout,
-    odemandout,
-    odrout
+		growth_st
+		//tolout,
+		//errorout,
+    //drout,
+    //demandout,
+    //odemandout,
+    //odrout
 	);
 } // End of Rgrowthloop
 
