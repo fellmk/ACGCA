@@ -54,8 +54,10 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	double nuo=0, rhow=0,la_new=0,ra_new=0;
 
 	double r_new=0;  // new radius
+	double oslope=0; // old slope (at t - 1) MKF 2/13/19 slope problem
 
 	int j=1;
+	int numerrors=0;
 
 	double deltaw=0; // Is this a local (temp) variable? need to check on this.
 
@@ -126,14 +128,36 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			intercept=demand-slope*dr;
 			odemand=demand;
 			odr=dr;
-			//if (slope == 0){
-			//  slope = 0.1;
-			//}
+			if (slope == 0){
+			  if(numerrors <=10){
+			    slope = oslope;
+			    error = fabs(st->ex*gp->tolerance)+(10*numerrors);
+			    odr=p->drinit;  // initial default radius increment
+			    dr=odr;         // new dr updated as old dr (odr)
+
+		      odemand=st->egrow;        // egrow is excess labile carbon available for growth
+		      odr = r[i-1]-r[i-2];      // old dr.  should not =0 based on first if statement
+		      if ((odr > 0) && (odemand != 0)){
+		        slope=odemand/odr;
+		        dr=st->ex/slope;
+		      }
+		      else{
+		        //printf("problem in excessgrowingon, line 87 \n");
+		        *errorind2 = *errorind2 | 4;
+		        st->status=0;
+		        *growth_st = 200;
+		        break;
+		      }  // end else
+
+			    Rprintf("SLOPE = 0 error RESTART NOW! \n");
+			  }
+			  numerrors++;
+			}
 			if (slope != 0){
 				dr=st->ex/slope;
 			}
 			else{
-			  Rprintf("Slope 0 slope=%g, error=%g, j=%i \n", slope, error, j);
+        //Rprintf("Slope 0 slope=%g, error=%g, j=%i \n", slope, error, j);
 				//printf("problem in excessgrowingon, line 120 \n");
 				*errorind2 = *errorind2 | 16;
 				//getchar();  // keep
@@ -300,6 +324,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
       
       
 			j=j+1;   // change this to ++j
+			oslope = slope;
 
 		} //end "if (error..."
 	} //end while loop
@@ -362,9 +387,9 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 	st->bth=st->bth+(1.0+st->deltas)*st->nut*st->bts*gp->deltat;
 	
-	Rprintf("prior to calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
+	//Rprintf("prior to calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
 	st->bts=st->bts+rhow*(v.vt-st->vt)-st->nut*st->bts*gp->deltat;
-	Rprintf("st->bts=%g, i=%i \n", st->bts, i);
+	//Rprintf("st->bts=%g, i=%i \n", st->bts, i);
 
 	if ((isnan(st->cs) !=0) || (isnan(st->deltas) !=0) ||
 		(isnan(st->bos) !=0) || (isnan(st->bl) !=0)  || (isnan(st->ex) !=0)){
@@ -547,7 +572,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw,
 		st->boh=p->lamdah*st->bth*st->bos/(p->lamdas*st->bts);
 	}
 	else {
-	  Rprintf("p->lamdas=%g, st->bts=%g, i=%i \n", p->lamdas, st->bts, i);
+	  //Rprintf("p->lamdas=%g, st->bts=%g, i=%i \n", p->lamdas, st->bts, i);
 		//printf("error in excessgrowingoff, line 516 \n");
 		st->status=0;
 		*growth_st = 41;

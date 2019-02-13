@@ -50,7 +50,6 @@ errorcode <- function(binerror, nsets){
 		"Error in excessgrowingoff line 495", #262144, 18
 		"Error in excessgrowingoff line 516" #524288, 19
 	)
-
 	x <- as.numeric(intToBits(errors))
 	# Create an error matrix
 	errormatrix <- matrix(x, ncol=length(errors), nrow=(length(intToBits(errors))/length(errors)))
