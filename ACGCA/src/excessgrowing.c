@@ -14,6 +14,7 @@
 #include <math.h>
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/excessgrowing.h"
+#include <R.h>
 
 /// excessgrowingon is used to grow a tree (that is currently on the target allometry)
 /// along the target allometry.
@@ -41,7 +42,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	int i, int growthflag, double r[], int *errorind2, int *growth_st){
 	//, double *tolout, double *errorout, double *drout, double *demandout,
 	//double *odemandout, double *odrout){
-
+  Rprintf("The growthloop iteration is: %i \n", i);
 	height hin; radius rin; volume v;
 
 	//local temp variables.	
@@ -65,6 +66,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 	// Determine new value of r such that "demand" and excess are approx. equal.
 	while ((error > fmaxmacro(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
+	  Rprintf("slope=%g, error=%g, j=%i \n", slope, error, j);
 		if (j>999){ // Was 998 not sure why
 			st->status=0;
 			*growth_st = 20;
@@ -124,13 +126,14 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			intercept=demand-slope*dr;
 			odemand=demand;
 			odr=dr;
-			if (slope == 0){
-			  slope = 0.1;
-			}
+			//if (slope == 0){
+			//  slope = 0.1;
+			//}
 			if (slope != 0){
 				dr=st->ex/slope;
 			}
 			else{
+			  Rprintf("Slope 0 slope=%g, error=%g, j=%i \n", slope, error, j);
 				//printf("problem in excessgrowingon, line 120 \n");
 				*errorind2 = *errorind2 | 16;
 				//getchar();  // keep
@@ -358,7 +361,10 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	// update state variables that have been modified
 
 	st->bth=st->bth+(1.0+st->deltas)*st->nut*st->bts*gp->deltat;
+	
+	Rprintf("prior to calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
 	st->bts=st->bts+rhow*(v.vt-st->vt)-st->nut*st->bts*gp->deltat;
+	Rprintf("st->bts=%g, i=%i \n", st->bts, i);
 
 	if ((isnan(st->cs) !=0) || (isnan(st->deltas) !=0) ||
 		(isnan(st->bos) !=0) || (isnan(st->bl) !=0)  || (isnan(st->ex) !=0)){
@@ -541,6 +547,7 @@ void excessgrowingoff(sparms *p, gparms *gp, tstates *st, int i, double deltaw,
 		st->boh=p->lamdah*st->bth*st->bos/(p->lamdas*st->bts);
 	}
 	else {
+	  Rprintf("p->lamdas=%g, st->bts=%g, i=%i \n", p->lamdas, st->bts, i);
 		//printf("error in excessgrowingoff, line 516 \n");
 		st->status=0;
 		*growth_st = 41;
