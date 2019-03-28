@@ -276,7 +276,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		pg=p->epsg*st.light;   //pg is intermediate variable
 		// update excess carbon (st.ex).
 		st.ex=pg-rm+p->deltal*p->sl*st.bl+p->deltar*p->sr*st.br+st.deltas*p->so*st.bos;
-		Rprintf("The growthloop iteration is: %i, st.ex: %g \n", i, st.ex);
+		//Rprintf("The growthloop iteration is: %i, st.ex: %g \n", i, st.ex);
 		
 		rhow=st.bts/st.vts;   //intermediate variable
 			  if (rhow > ((1-p->gammax)/p->gammaw)*exp(10)/(1+exp(10))){
@@ -307,7 +307,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		rebld.eoerb=(p->cgw+deltaw)*(p->so+rebld.nuoerb)*st.bos;
 		rebld.erb=rebld.elerb+rebld.ererb+rebld.eoerb;
 
-		Rprintf("growthloop 310 puton.ea: %g, st.ex %g, growthflag %i \n", pton.ea, st.ex, growthflag);
+		//Rprintf("growthloop 310 puton.ea: %g, st.ex %g, growthflag %i \n", pton.ea, st.ex, growthflag);
 		if ((pton.ea<st.ex) && (pton.ea>0.0)){      // enough labile C to grow tree along target allometry.
 		  if (growthflag==0){       // tree currently off target allometry.
   			//printf("PutOnAllometry \n");
@@ -327,7 +327,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 			//excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i],
       //                tolout, errorout, drout, demandout, odemandout, odrout);
 		  excessgrowingon(p,gp,&st,i,growthflag,r, &errorind[i], &growth_st[i]);
-		  Rprintf("after excessgrowing st.bts: %g \n", i, st.bts);
+		  //Rprintf("after excessgrowing st.bts: %g \n", i, st.bts);
 			growthflag=1;
 			//if(growth_st[i]==0){growth_st[i]=1;}
 			growth_st[i]=1;

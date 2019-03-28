@@ -13,7 +13,7 @@ VignetteBuilder: knitr
 License: We need to pick one (if we keep gsl then GPLv3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0.9000
+RoxygenNote: 6.1.1
 SystemRequirements: GNU make
 LinkingTo: Rcpp
 Imports: Rcpp

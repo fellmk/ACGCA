@@ -42,7 +42,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	int i, int growthflag, double r[], int *errorind2, int *growth_st){
 	//, double *tolout, double *errorout, double *drout, double *demandout,
 	//double *odemandout, double *odrout){
-  Rprintf("The growthloop iteration is: %i \n", i);
+  //Rprintf("The growthloop iteration is: %i \n", i);
 	height hin; radius rin; volume v;
 
 	//local temp variables.	
@@ -70,7 +70,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 	// Determine new value of r such that "demand" and excess are approx. equal.
 	obts = st->bts;
 	while ((error > fmaxmacro(fabs(st->ex*gp->tolerance),1e-5)) && (j<1000) && (st->status!=0)){
-	  Rprintf("slope=%g, error=%g, j=%i \n", slope, error, j);
+	  //Rprintf("slope=%g, error=%g, j=%i \n", slope, error, j);
 		if (j>999){ // Was 998 not sure why
 			st->status=0;
 			*growth_st = 20;
@@ -132,7 +132,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			odr=dr;
 			if (slope == 0){ 
 			  if(numerrors <=10){
-			    Rprintf("Restarting ROOT FINDING algorithm.");
+			    //Rprintf("Restarting ROOT FINDING algorithm.");
 			    slope = oslope;
 			    error = fabs(st->ex*gp->tolerance)+(10*numerrors);
 			    odr=p->drinit;  // initial default radius increment
@@ -246,7 +246,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 			if((st->vts*gp->deltat != 0) && ((1.0+st->deltas)*st->bos != 0)){
 				st->nut=(v.vth-st->vth)/(st->vts*gp->deltat);
-			  Rprintf("v.vth=%g, st->vth=%g, st->vts=%g \n", v.vth, st->vth, st->vts);
+			  //Rprintf("v.vth=%g, st->vth=%g, st->vts=%g \n", v.vth, st->vth, st->vts);
 				nuo=(p->so*st->boh+(1.0+st->deltas)*p->lamdah*st->nut*st->bts)/((1.0+st->deltas)*st->bos);
 			}
 			else{
@@ -331,7 +331,7 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 			oslope = slope;
 
 		} //end "if (error..."
-		Rprintf("While loop calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
+		//Rprintf("While loop calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
 	} //end while loop
 
 
@@ -392,15 +392,15 @@ void excessgrowingon(sparms *p, gparms *gp, tstates *st,
 
 	st->bth=st->bth+(1.0+st->deltas)*st->nut*st->bts*gp->deltat;
 	
-	Rprintf("prior to calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
+	//Rprintf("prior to calc, st->bts=%g, rhow=%g, v.vt=%g, st->vt=%g, st->nut=%g, gp->deltat=%g, i=%i \n", st->bts, rhow, v.vt, st->vt, st->nut, gp->deltat, i);
 	st->bts=st->bts+rhow*(v.vt-st->vt)-st->nut*st->bts*gp->deltat;
 	if(st->bts < 0){ // Added 3/6/19
-	  Rprintf("BTS BTS BTS Restarting ROOT FINDING algorithm dut to ST->BTS.");
+	  //Rprintf("BTS BTS BTS Restarting ROOT FINDING algorithm dut to ST->BTS.");
 	  st->bts = obts;
 	  slope = 0; // Force algorithem reset. 
 	  error = fmaxmacro(fabs(st->ex*gp->tolerance),1e-5) + 1; // Make sure while continues 3/6/2019
 	}
-	Rprintf("st->bts=%g, i=%i \n", st->bts, i);
+	//Rprintf("st->bts=%g, i=%i \n", st->bts, i);
 
 	if ((isnan(st->cs) !=0) || (isnan(st->deltas) !=0) ||
 		(isnan(st->bos) !=0) || (isnan(st->bl) !=0)  || (isnan(st->ex) !=0)){

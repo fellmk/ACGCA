@@ -11,7 +11,7 @@
 #
 ###############################################################################
 
-dyn.load("../ACGCA/src/ACGCA.dll")
+#dyn.load("../ACGCA/src/ACGCA.dll")
 #dyn.load("Rgrowthloop.so") ## see help (dyn.load)
 #dyn.load("excessgrowing.so")
 #dyn.load("growthloop.so")
