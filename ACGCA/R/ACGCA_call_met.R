@@ -220,9 +220,9 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
     sparms <- as.matrix(sparms)
   }
 
-  if(r0 < 0.0054){
-    stop("The radius must be greater than 0.0054 or the function will fail.")
-  }
+  #if(r0 < 0.0054){
+  #  stop("The radius must be greater than 0.0054 or the function will fail.")
+  #}
 
   if(!(is.numeric(r0)*is.numeric(parmax)*is.numeric(years)*is.numeric(steps)
        *is.numeric(breast.height)*is.numeric(tolerance))){
