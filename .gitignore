@@ -6,3 +6,4 @@ R_Package
 *.so
 *.dll
 PackageParmTest
+*.tar.gz
