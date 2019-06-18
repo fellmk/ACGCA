@@ -486,7 +486,7 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
     LAItot = LAtot/1e-200;
     //printf("CAtot=%g, LAItot=%g \n",CAtot,LAtot);
   }
-  //hack for now.  Need to make LAIcalc work on variable lenght arguements
+  //hack for now.  Need to make LAIcalc work on variable length arguements
   if (Hc == -99){
     // Forest canopy hght not given, so just return tree's LAI and LA:
     LAI->tot = LAItot;
