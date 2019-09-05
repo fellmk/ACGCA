@@ -84,20 +84,20 @@ plot(x= 1:801/16, y=acgcaout$growth_st, xlab="years", ylab="growth state", type=
 In the second graph the growth states correspond to 1 (healthy), 4 (static), and 5 (shrinking) states. Thus, the tree was healthy for the first 30 years and then stoped growing and then transitioned to a shrinking state. It is possible if this simulation continued the tree would run out of carbon and die.
 
 ## Gap Simulations
+NOTE: GAP SIMULATIONS ARE CURRENTLY EXPERIMENTAL AND THERE ARE SOME KNOWN ISSUES. THIS SHOULD NOT BE USED FOR RESEARCH PURPOSES AT THIS TIME.
+
 Gap simulations similar to those described in Ogle and Pacala (2009) and Fell et al. (2018) can be easily implemented. To use gap simulations "gapsim" should be set to TRUE and gapvars needs to be assigned a list defining how gap dynamics will progress. The list should have three elements "list=(gt, ct, tbg)." The first variable gap time (gt) gives the length of time in years the gap is open. The second variable defines the closure time (ct) or the number of years it takes for the forest canopy to transition from open to closed. The final value is the time between gaps (tbg) which corresponds to the total time from when a gap forms to when it opens again. For example, if gt=50, ct=10, and tbg=200 (the arbitrary default), then the canopy would be open for 50 years, close over 10 years and be closed for the remaining 140 years.
 
 ```{r}
 # run the ACGCA model
-#gapvariables <- list(gt=2, ct=3, tbg=20)
-#acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 100, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
+gapvariables <- list(gt=2, ct=3, tbg=20)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 100, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
 
 # make a plot of the radius over time and the growth state over time.
-#par(mar=c(4,4,1,1))
-#plot(x= 1:1601/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_st[1:1600], xlab="years", ylab="growth state", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_clr[1:1600], xlab="years", ylab="labile carbon in leaves and fine roots (g gluc)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$growth_cs[1:1600], xlab="years", ylab="labile carbon in sapwood (g gluc)", type="l")
-#plot(x= 1:1600/16, y=acgcaout$APARout[1:1600], xlab="years", ylab="light", type="l")
+par(mar=c(4,4,1,1))
+plot(x= 1:1601/16, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
+plot(x= 1:1600/16, y=acgcaout$growth_st[1:1600], xlab="years", ylab="growth state", type="l")
+plot(x= 1:1600/16, y=acgcaout$APARout[1:1600], xlab="years", ylab="light", type="l")
 ```
 
 ## References:

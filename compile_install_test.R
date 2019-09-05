@@ -7,7 +7,7 @@ document()
 devtools::build(vignettes = FALSE)
 
 setwd("..")
-install("ACGCA", build_vignettes = FALSE)
+install("ACGCA", build_vignettes = TRUE)
 
 library(ACGCA)
 help(package="ACGCA")
