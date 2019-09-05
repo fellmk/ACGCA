@@ -251,11 +251,13 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
   if(gapsim == TRUE){
     out <- HcLAIFcalc(Forparms, gapvars, years, steps)
     # Add a zero which will be at index 0 in the C code.
-    Hc <- c(0,out$Hc)
-    LAIF <- c(0, out$LAIF)
+    #Hc <- c(0,out$Hc)
+    #LAIF <- c(0, out$LAIF)
+    Hc <- out$Hc
+    LAIF <- out$LAIF
   }else{
-     Hc <- rep(-99, times=(steps*years+1))
-     LAIF <- rep(0, times=(steps*years+1))
+     Hc <- rep(-99, times=(steps*years))
+     LAIF <- rep(0, times=(steps*years))
   }
   
   #print(Hc)
@@ -267,7 +269,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
 
   # Set up the variables needed for lengths of output
   #lenvars2 <- (gparms2[2,1]/gparms2[1,1])*dim[1]+dim[1]
-  lenvars <- (gparms[2,1]/gparms[1,1])+1
+  lenvars <- (gparms[2,1]/gparms[1,1]) #+1
   output2 <- list(h=numeric(0), r=numeric(0), rBH=numeric(0),
                   status=numeric(0), errorind=as.integer(numeric(0)),
                   cs=numeric(0), clr=numeric(0),
@@ -391,7 +393,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
 # gapvars=list(gt=50, ct=10, tbg=200),
 HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   # get the number of iterations and steps per year
-  gap.phase <- years*steps
+  gap.phase <- (years*steps)
   del.t <- steps
 
   closed <- gapvars$tbg-(gapvars$gt+gapvars$ct)
