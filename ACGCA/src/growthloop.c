@@ -202,7 +202,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	/****************** Start growthloop *****************************************/
 
 	// gp->T number of years, gp->deltat is increment (=1/16)
-	for (i = 1; i < (ceil(gp->T/gp->deltat)+1); i++){  //DG: added in plus one
+	for (i = 1; i < (ceil(gp->T/gp->deltat) + 1); i++){  //DG: added in plus one
 
   		double APAR[2];
   		APAR[0] = -1;
