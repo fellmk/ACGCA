@@ -393,7 +393,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
 # gapvars=list(gt=50, ct=10, tbg=200),
 HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   # get the number of iterations and steps per year
-  gap.phase <- years*steps
+  gap.phase <- (years*steps)
   del.t <- steps
 
   closed <- gapvars$tbg-(gapvars$gt+gapvars$ct)
