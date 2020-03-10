@@ -391,13 +391,13 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 
 		if (isnan(st.ex) !=0){
-		  printf("st.r=%g, st.bos=%g, st.bts=%g \n", st.r,st.bos,st.bts);
-		  printf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));
-		  printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st.br, st.bl, p->sl, p->sr);
-		  printf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
-				 st.bts,st.boh,p->lamdah,st.bth,st.bos);
-		  printf("st->cs=%g, gp->deltat=%g, st.deltas=%g, p->so=%g, st->bos=%g \n",
-				 st.cs, gp->deltat, st.deltas, p->so, st.bos);
+		  //printf("st.r=%g, st.bos=%g, st.bts=%g \n", st.r,st.bos,st.bts);
+		  //printf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));
+		  //printf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st.br, st.bl, p->sl, p->sr);
+		  //printf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
+		  //		 st.bts,st.boh,p->lamdah,st.bth,st.bos);
+		  //printf("st->cs=%g, gp->deltat=%g, st.deltas=%g, p->so=%g, st->bos=%g \n",
+		  //		 st.cs, gp->deltat, st.deltas, p->so, st.bos);
 		  errorind[i] = errorind[i] | 1;
 		  //getchar(); // keep
 		}
