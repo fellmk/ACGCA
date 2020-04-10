@@ -154,7 +154,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	// Store the initial variable states at index 0 (index 1 in R)
 	hh2[0]=st.hh; //double
 	hC2[0]=st.hh; //double
-	hB2[0]=st.hB; //double
+	//hB2[0]=st.hB; //double
 	hB2[0]=st.h * p->etaB;
 	//hBH2[0]=st.hBH; //double
 	hBH2[0]=gp->BH; //double 
@@ -411,7 +411,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		hh2[i]=st.hh; //double
 		hC2[i]=st.hh; //double
-		hB2[i]=st.hB; //double
+		//hB2[i]=st.hB; //double
 		hB2[i]=st.h * p->etaB;
 		hBH2[i]=gp->BH; //double 
 		//hBH2[i]=st.hBH; //double
