@@ -10,5 +10,5 @@ setwd("..")
 install("ACGCA", build_vignettes = FALSE)
 
 library(ACGCA)
-help(package="ACGCA")
+#help(package="ACGCA")
 #browseVignettes("ACGCA")
