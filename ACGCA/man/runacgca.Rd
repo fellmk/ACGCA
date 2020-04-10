@@ -58,12 +58,12 @@ runacgca(
    \item{R0}{Maximum potential crown radius of a tree with diameter at
     breast height of 0m (i.e., for a tree that is exactly 1.37 m tall) (m)}
    \item{R40}{Maximum potential crown radius of a tree with diameter at
-    brrest height or 0.4m (40 cm) (m)}
+    breast height or 0.4m (40 cm) (m)}
  }}
 
 \item{r0}{The starting radius. Defaults to 0.05m.}
 
-\item{parmax}{The maximum yearly iradiance, defaults to 2060
+\item{parmax}{The maximum yearly irradiance, defaults to 2060
 (MJ m^-2 year^-1) and can be either a vector of length steps*years+1 or a
 single value.}
 
@@ -109,7 +109,7 @@ Function output:
    \item{r0}{The starting radius (m).}
    \item{h}{A time series of tree height from the simulation for each time
    step. The length is steps*years+1 due to the initialization (time 0) (m).}
-   \item{hh}{Height at which trunc transitions from a paraaboloid to a cone.
+   \item{hh}{Height at which trunc transitions from a paraboloid to a cone.
    Also the height to the base of the crown (m).}
    \item{r}{A time series of tree radius (m) from the simulation for each
    time step. The length is steps*years+1

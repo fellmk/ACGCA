@@ -261,6 +261,9 @@ void trunkradii(double r0, height *h, radius *r, tstates *st){
     h->H=1e-300;
      st->status=0;
   }
+  
+  st->rB = r->rB;
+  st->rC = r->rC;
 
 } // end trunkradii()
 
