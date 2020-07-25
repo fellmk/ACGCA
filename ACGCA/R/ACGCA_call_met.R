@@ -251,8 +251,10 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
   if(gapsim == TRUE){
     out <- HcLAIFcalc(Forparms, gapvars, years, steps)
     # Add a zero which will be at index 0 in the C code.
-    Hc <- c(0, out$Hc)
-    LAIF <- c(0, out$LAIF)
+    # Hc <- c(0, out$Hc)
+    # LAIF <- c(0, out$LAIF)
+    Hc <- out$Hc
+    LAIF <- out$LAIF
 	  #Hc <- out$Hc
     #LAIF <- out$LAIF
   }else{
@@ -353,9 +355,9 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
                 certain combinations of parameters and PARmax leading to an
                 inability to balance carbon in thealgorithm.")
       }else if(sum(output1$growth_st <= 7) > 0){
-        warning("An error occured withing runacgca likely due to the set of
-                parameters chosen or gap/light levels they are being used
-                with.")
+        # warning("An error occured withing runacgca likely due to the set of
+        #         parameters chosen or gap/light levels they are being used
+        #         with.")
       }else{
         warning("An unknown error has occured within the C code that implements
                 the ACGCA model.")
@@ -391,9 +393,10 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
 ## This code calculates Hc and LAIF for each iteration of the growthloop
 # Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0),
 # gapvars=list(gt=50, ct=10, tbg=200),
+# mkf58 updated this function on June 12, 2020
 HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   # get the number of iterations and steps per year
-  gap.phase <- (years*steps)
+  # gap.phase <- (years*steps)
   del.t <- steps
 
   closed <- gapvars$tbg-(gapvars$gt+gapvars$ct)
@@ -401,21 +404,40 @@ HcLAIFcalc <- function(Forparms, gapvars, years, steps){
     stop("The colosed period is negative")
   }
 
-  phase <- rep(c(rep(1, gapvars$gt*del.t), rep(2, gapvars$ct*del.t), rep(3,closed*del.t)), ceiling(years/gapvars$tbg))
-  phase <- phase[1:(years*del.t)]
+  # phase <- rep(c(rep(1, gapvars$gt*del.t), rep(2, gapvars$ct*del.t), rep(3,closed*del.t)), ceiling(years/gapvars$tbg))
+  # phase <- phase[1:(years*del.t)]
+  
+  Hc_ctphase <- seq(Forparms$HFmax/(steps*gapvars$ct),Forparms$HFmax, Forparms$HFmax/(steps*gapvars$ct))
+  Hf_ctphase <- seq(Forparms$LAIFmax/(steps*gapvars$ct),Forparms$LAIFmax, Forparms$LAIFmax/(steps*gapvars$ct))
+  closedsteps <- (gapvars$tbg*del.t - gapvars$gt*del.t - length(Hc_ctphase))
 
   # Create Hc and LAIF vectors without a loop
   # The superassignment operator <<- causes the scope of this to be in the
   # calling frame.
-  Hc <- rep(c(rep(0, gapvars$gt*del.t),
-                 seq(from=Forparms$HFmax/(steps*gapvars$ct+1),
-                     to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
-                 rep(Forparms$HFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-  LAIF <- rep(c(rep(0, gapvars$gt*del.t),
-                seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1),
-                    to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
-                rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-
+  # Hc <- rep(c(rep(0, gapvars$gt*del.t),
+  #                seq(from=Forparms$HFmax/(steps*gapvars$ct+1),
+  #                    to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
+  #                rep(Forparms$HFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
+  #
+  # LAIF <- rep(c(rep(0, gapvars$gt*del.t),
+  #               seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1),
+  #                   to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
+  #               rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
+  
+  Hc <- c(
+    rep(0,gapvars$gt*del.t),
+    Hc_ctphase,
+    rep(Forparms$HFmax, closedsteps)
+  )
+  LAIF <- c(
+    rep(0, gapvars$gt*del.t),
+    Hf_ctphase,
+    rep(Forparms$LAIFmax, closedsteps)
+  )
+  
+  Hc <- rep(x = Hc, length.out = (years * del.t + 1))
+  LAIF <- rep(x = LAIF, length.out = (years * del.t + 1))
+  
   return(list(Hc=Hc, LAIF=LAIF))
 } # End of HcLAIFcalc function
 
