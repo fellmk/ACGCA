@@ -7,3 +7,5 @@ R_Package
 *.dll
 PackageParmTest
 *.tar.gz
+*.zip
+GapCode/
