@@ -459,7 +459,7 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
   //printf("in LAIcalc: rBH=%g, p->R0=%g, p->R40=%g, r0=%g \n",rBH,p->R0,p->R40,r0);
   //printf("p->hmax=%g, p->phih=%g, gp->BH=%g \n",p->hmax,p->phih,gp->BH);
   
-  Rprintf("LAICALC: \n");
+  //Rprintf("LAICALC: \n");
   
   if (rBH > 0){
     diam = 2*rBH*100;
@@ -506,9 +506,9 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
     //If given forest canopy height, compute tree's LAI and LA above (top) and
     // below (bot) the height of the forest canopy
 
-    Rprintf("H=%g \n", H);
-    Rprintf("Hc=%g \n", H);
-    Rprintf("\n");
+    //Rprintf("H=%g \n", H);
+    //Rprintf("Hc=%g \n", H);
+    //Rprintf("\n");
     // If tree's crown is taller than forest canopy:
     if (H > Hc){ //mkf added this >= from > on June 12, 2020
       z = H-Hc;
@@ -525,8 +525,8 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
       	LAI->top = LA->top/CAtot;
       	LAI->bot = LA->bot/CAtot;
       	
-      	Rprintf("LAI->top=%g \n", LAI->top);
-      	Rprintf("\n");
+      	//Rprintf("LAI->top=%g \n", LAI->top);
+      	//Rprintf("\n");
 //      	Rprintf("LAIcalc H > Hc LAI->top=%g \n", CAtot);
       }
       // Below, if forest canopy is below tree's crown:
@@ -553,10 +553,10 @@ void LAIcalc(LAindex *LAI, Larea *LA, double LAtot, double r0,
   if (isnan(LAItot)!=0){
     //printf("error in LAI_calc: LAItot is nan \n");
   }
-  Rprintf("LAIcalc LAI->top=%g \n", LAI->top);
-  Rprintf("LAIcalc LAI->bot=%g \n", LAI->bot);
-  Rprintf("LAIcalc LAI->tot=%g \n", LAI->tot);
-  Rprintf("\n\n");
+  //Rprintf("LAIcalc LAI->top=%g \n", LAI->top);
+  //Rprintf("LAIcalc LAI->bot=%g \n", LAI->bot);
+  //Rprintf("LAIcalc LAI->tot=%g \n", LAI->tot);
+  //Rprintf("\n\n");
 } // end LAIcalc()
 
 
@@ -618,11 +618,11 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
   logitLAImax = ForParms->intF;
   pLAImax = exp(logitLAImax) / (1 + exp(logitLAImax));
   
-  Rprintf("APARCALC: \n");
-  Rprintf("APAR_top=%g \n", LAI->top);
-  Rprintf("APAR_bot=%g \n", LAI->bot);
-  Rprintf("APAR_tot=%g \n", LAI->tot);
-  Rprintf("\n");
+  //Rprintf("APARCALC: \n");
+  //Rprintf("APAR_top=%g \n", LAI->top);
+  //Rprintf("APAR_bot=%g \n", LAI->bot);
+  //Rprintf("APAR_tot=%g \n", LAI->tot);
+  //Rprintf("\n");
 
   // This was H < Hc and should go back if this does not work
   if(H <= Hc){
@@ -681,10 +681,10 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     APAR = Io * fabs * LA->tot / LAI->tot;
   }
   else if((eta * H) < Hc){
-    Rprintf("eta=%g \n", eta);
-    Rprintf("H=%g \n", H);
-    Rprintf("Hc=%g \n", Hc);
-    Rprintf("eta * H=%g \n", eta*H);
+    //Rprintf("eta=%g \n", eta);
+    //Rprintf("H=%g \n", H);
+    //Rprintf("Hc=%g \n", Hc);
+    //Rprintf("eta * H=%g \n", eta*H);
     // For the portion of the target tree's canopy that is above the forest
     // canopy, compute the fractionand total amount of light absorbed by the
     // top part of the tree's crown, and compute light penetrating to the
@@ -694,13 +694,13 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     APAR_top = Io * fabs_top * LA->top / LAI->top;
     Ioint = Io * (1 - fabs_top);
     
-    Rprintf("APAR_top = Io * fabs_top * LA->top / LAI->top \n");
-    Rprintf("APAR_top=%g \n", APAR_top);
-    Rprintf("Io=%g \n", Io);
-    Rprintf("fabs_top=%g \n", fabs_top);
-    Rprintf("LA->top=%g \n", LA->top);
-    Rprintf("LAI->top=%g \n", LAI->top);
-    Rprintf("\n");
+    //Rprintf("APAR_top = Io * fabs_top * LA->top / LAI->top \n");
+    //Rprintf("APAR_top=%g \n", APAR_top);
+    //Rprintf("Io=%g \n", Io);
+    //Rprintf("fabs_top=%g \n", fabs_top);
+    //Rprintf("LA->top=%g \n", LA->top);
+    //Rprintf("LAI->top=%g \n", LAI->top);
+    //Rprintf("\n");
 //    Rprintf("LAI->top=%g, APAR_top=%g, Ioint=%g \n", LAI->top, APAR_top, Ioint);
     // Now, compute the amount of light absorbed by the bottom part of the
     // tree's crown that is competing with the forest canopy for light.
@@ -749,10 +749,10 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
   APARout[0] = APAR;
   APARout[1] = Ioint;
   
-  Rprintf("APARout[0]: %g\n", APAR);
-  Rprintf("APARout[1]: %g\n", Ioint);
-  Rprintf("\n");
-  Rprintf("\n");
+  //Rprintf("APARout[0]: %g\n", APAR);
+  //Rprintf("APARout[1]: %g\n", Ioint);
+  //Rprintf("\n");
+  //Rprintf("\n");
 //  Rprintf("Ioint=%g \n", Ioint);
   //return APARout;
 }

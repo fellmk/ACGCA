@@ -255,26 +255,26 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 			st.light = APAR[0];
 			//APARout[i] = APAR[1]; Moved to bottom
 			
-			Rprintf("Iteration: %i\n", i);
-			Rprintf("APAR[0]: %g\n", APAR[0]);
-			Rprintf("LAI: %g\n", LAI);
-			Rprintf("LA: %g\n", LA);
-			Rprintf(">eta: %g\n", p->eta);
-			Rprintf("K: %g\n", p->K);
-			Rprintf("h: %g\n", st.h);
-			Rprintf("Hc: %g\n", Hc[i]);
-			Rprintf("LAIF: %g\n", LAIF[i]);
-			Rprintf("Io: %g\n", Io[i]);
-			Rprintf("\n");
+			//Rprintf("Iteration: %i\n", i);
+			//Rprintf("APAR[0]: %g\n", APAR[0]);
+			//Rprintf("LAI: %g\n", LAI);
+			//Rprintf("LA: %g\n", LA);
+			//Rprintf(">eta: %g\n", p->eta);
+			//Rprintf("K: %g\n", p->K);
+			//Rprintf("h: %g\n", st.h);
+			//Rprintf("Hc: %g\n", Hc[i]);
+			//Rprintf("LAIF: %g\n", LAIF[i]);
+			//Rprintf("Io: %g\n", Io[i]);
+			//Rprintf("\n");
 		}else{
 			st.light = Io[i]*f_abs*(st.la/LAI.tot);
 		  
-		  Rprintf("Iteration: %i\n", i);
-		  Rprintf("Io: %g\n", Io[i]);
-		  Rprintf("f_abs: %g\n", f_abs);
-		  Rprintf("la: %g\n", st.la);
-		  Rprintf("LAI.tot: %g\n", LAI.tot);
-		  Rprintf("\n");
+		  //Rprintf("Iteration: %i\n", i);
+		  //Rprintf("Io: %g\n", Io[i]);
+		  //Rprintf("f_abs: %g\n", f_abs);
+		  //Rprintf("la: %g\n", st.la);
+		  //Rprintf("LAI.tot: %g\n", LAI.tot);
+		  //Rprintf("\n");
 		}
 		// mkf 3/16/2018 st.light = Io[i]*f_abs*(st.la/LAI.tot); // 138b in appendix for Scn. A
 
@@ -295,29 +295,29 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 		// Revised photosynthesis model based on radiation-use efficiency model:
 		pg=p->epsg*st.light;   //pg is intermediate variable
-		Rprintf("Iteration: %i\n", i);
-		Rprintf("pg: %g\n", pg);
-		Rprintf("epsg: %g\n", p->epsg);
-		Rprintf("light: %g\n", st.light);
-		Rprintf("\n");
+		//Rprintf("Iteration: %i\n", i);
+		//Rprintf("pg: %g\n", pg);
+		//Rprintf("epsg: %g\n", p->epsg);
+		//Rprintf("light: %g\n", st.light);
+		//Rprintf("\n");
 		// update excess carbon (st.ex).
 		st.ex=pg-rm+p->deltal*p->sl*st.bl+p->deltar*p->sr*st.br+st.deltas*p->so*st.bos;
-		Rprintf("Iteration: %i\n", i);
-		Rprintf("pg: %g\n", pg);
-		Rprintf("deltal: %g\n", p->deltal);
-		Rprintf("sl: %g\n", p->sl);
-		Rprintf("bl: %g\n", st.bl);
-		Rprintf("deltar: %g\n", p->deltar);
-		Rprintf("sr: %g\n", p->sr);
-		Rprintf("br: %g\n", st.br);
-		Rprintf("deltas: %g\n", st.deltas);
-		Rprintf("so: %g\n", p->so);
-		Rprintf("bos: %g\n", st.bos);
-		Rprintf("\n");
-		Rprintf("\n");
-		Rprintf("\n");
-		Rprintf("\n");
-		Rprintf("\n");
+		//Rprintf("Iteration: %i\n", i);
+		//Rprintf("pg: %g\n", pg);
+		//Rprintf("deltal: %g\n", p->deltal);
+		//Rprintf("sl: %g\n", p->sl);
+		//Rprintf("bl: %g\n", st.bl);
+		//Rprintf("deltar: %g\n", p->deltar);
+		//Rprintf("sr: %g\n", p->sr);
+		//Rprintf("br: %g\n", st.br);
+		//Rprintf("deltas: %g\n", st.deltas);
+		//Rprintf("so: %g\n", p->so);
+		//Rprintf("bos: %g\n", st.bos);
+		//Rprintf("\n");
+		//Rprintf("\n");
+		//Rprintf("\n");
+		//Rprintf("\n");
+		//Rprintf("\n");
 		
 		//Rprintf("The growthloop iteration is: %i, st.ex: %g \n", i, st.ex);
 		
@@ -434,16 +434,16 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 
 		if (isnan(st.ex) !=0){
-		  Rprintf("st.ex=%g \n", st.ex);
-		  Rprintf("st.ex index -4 to -1: %g, %g, %g, %g \n", ex2[i-4], ex2[i-3], ex2[i-2], ex2[i-1]);
-		  Rprintf("st.r=%g, st.h=%g, st.bos=%g, st.bts=%g \n", st.r, st.h, st.bos,st.bts);
-		  Rprintf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));
-		  Rprintf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st.br, st.bl, p->sl, p->sr);
-		  Rprintf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
-		  		 st.bts,st.boh,p->lamdah,st.bth,st.bos);
-		  Rprintf("st->cs=%g, gp->deltat=%g, st.deltas=%g, p->so=%g, st->bos=%g \n",
-		  		 st.cs, gp->deltat, st.deltas, p->so, st.bos);
-		  Rprintf("iteration=%i \n", i);
+		  //Rprintf("st.ex=%g \n", st.ex);
+		  //Rprintf("st.ex index -4 to -1: %g, %g, %g, %g \n", ex2[i-4], ex2[i-3], ex2[i-2], ex2[i-1]);
+		  //Rprintf("st.r=%g, st.h=%g, st.bos=%g, st.bts=%g \n", st.r, st.h, st.bos,st.bts);
+		  //Rprintf("f2=%g, st.sa=%g, st.bl=%g, sla=%g \n",log(p->f2), st.sa, st.bl, log(p->sla));
+		  //Rprintf("st->br=%g, st->bl=%g, p->sl=%g, p->sr=%g \n", st.br, st.bl, p->sl, p->sr);
+		  //Rprintf("st->bts=%g,st->boh=%g,p->lamdah=%g,st->bth=%g, st->bos=%g \n",
+		  //		 st.bts,st.boh,p->lamdah,st.bth,st.bos);
+		  //Rprintf("st->cs=%g, gp->deltat=%g, st.deltas=%g, p->so=%g, st->bos=%g \n",
+		  //		 st.cs, gp->deltat, st.deltas, p->so, st.bos);
+		  //Rprintf("iteration=%i \n", i);
 		  errorind[i] = errorind[i] | 1;
 		  //getchar(); // keep
 		}
