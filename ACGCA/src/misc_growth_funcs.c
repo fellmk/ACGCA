@@ -673,7 +673,7 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
     fabs = fminmacro(fabs_tree, fabs_both * fabs_tree / (fabs_tree + fabs_can));
     APAR = Ioint * fabs * LA->tot / LAI->tot;
   }
-  else if((eta * H) > Hc){ // changed to >= from > on June 12, 2020 by mkf
+  else if((eta * H) >= Hc){ // changed to >= from > on June 12, 2020 by mkf
     // Fraction and total amount of light absorbed by the target tree's canopy
     // when not competing for light with the forest canopy.
     fabs = 1 - exp(-k * LAI->tot);
@@ -742,7 +742,10 @@ void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, double k, do
 //    Rprintf("APAR=%g \n", APAR);
   }
   else{
-    printf("APAR not determined for gap sim.");
+    printf("APAR not determined for gap sim. \n");
+    printf("H: %f\n", H);
+    printf("Hc: %f\n", Hc);
+    printf("eta: %f\n", eta);
     exit(1);
   }
   // APAR out and save value Ioint to APARout
