@@ -15,7 +15,8 @@ runacgca(
   gapvars = list(gt = 50, ct = 10, tbg = 200),
   tolerance = 1e-05,
   gapsim = FALSE,
-  fulloutput = FALSE
+  fulloutput = FALSE,
+  thin = TRUE
 )
 }
 \arguments{
@@ -100,6 +101,9 @@ simulations don't run.}
 
 \item{fulloutput}{Is the full output desired if so set this to TRUE. The
 default is FALSE.}
+
+\item{thin}{Thin the data so the output is of length (years + 1, includes 
+initialization), defaults to TRUE.}
 }
 \value{
 Function output:

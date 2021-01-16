@@ -123,6 +123,8 @@
 #' simulations don't run.
 #' @param fulloutput Is the full output desired if so set this to TRUE. The
 #'                   default is FALSE.
+#' @param thin Thin the data so the output is of length (years + 1, includes 
+#' initialization), defaults to TRUE.
 #'
 #' @return Function output:
 #' \describe{
@@ -195,7 +197,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
                         steps=16, breast.height=1.37, Forparms=list(kF=0.6,
                         HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), gapvars=list(gt=50, ct=10,
                         tbg=200), tolerance=0.00001, gapsim=FALSE,
-                        fulloutput=FALSE){
+                        fulloutput=FALSE, thin = TRUE){
 
   ##### Add extra variables to sparms 3/2/2018
   if(length(sparms) > 32){
@@ -375,13 +377,21 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       output2$clr <- c(output2$clr, output1$clr) # Added 7/21/2014
       output2$growth_st <-c(output2$growth_st, output1$growth_st) # Added 9/22/2014
 
+      if(thin == TRUE){
+        output2 = lapply(X = output2, FUN = thinvals, thin = steps)
+      }
+      
       return(output2)
-    }else if(fulloutput==TRUE){
+    }else if(fulloutput == TRUE){
       # remove a few variables
       #output1[[4]] <- NULL # remove t left over from testing
       #output1[[6]] <- NULL # remove hC left over from development
       #output1[[6]] <- NULL # remove hB left over from development
       #output1[[6]] <- NULL # remove hBH left over from development
+      
+      if(thin == TRUE){
+        output1 = lapply(X = output1, FUN = thinvalsfull, thin = steps, years = years)
+      }
 
       return(output1)
     }else{
@@ -389,6 +399,19 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
            FALSE.")
     }
 } #end of growthloop function
+
+# A function to thin the output of the ACGCA model
+thinvals <- function(x, thin = 16){
+  x <- x[(((0:(length(x)-1))%%16)==0)]
+  return(x)
+}
+
+thinvalsfull <- function(x, thin, years){
+  if((thin*years+1) == length(x)){
+    x = thinvals(x = x, thin = thin)
+  }
+  return(x)
+}
 
 ## This code calculates Hc and LAIF for each iteration of the growthloop
 # Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0),
