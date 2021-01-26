@@ -8,39 +8,16 @@
 # Major additions made while fixing errors 7/4/2013 by MFK.
 # I simplified the C code so only one parameter set runs at a
 # time.
+# 
+# Major modifications and error checks on the gap dynamics code were completed 
+# in 2020 by MKF.
 #
 ###############################################################################
 
-#dyn.load("../ACGCA/src/ACGCA.dll")
-#dyn.load("Rgrowthloop.so") ## see help (dyn.load)
-#dyn.load("excessgrowing.so")
-#dyn.load("growthloop.so")
-#dyn.load("misc_func.so")
-#dyn.load("misc_growth_funcs.so")
-#dyn.load("putonallometry.so")
-#dyn.load("rebuildstaticstate.so")
-#dyn.load("shrinkingsize.so")
-
-## Check dyn.load result to see that our C function symbol exists and
-## presumably is ready to use in R:
-#print(paste("growthloop loaded: ",is.loaded("Rgrowthloop"), sep=""))
-
 ###############################################################################
-# This version of the growth loop is a modification for incorporating it in a
-# metropolis type algorithm that will run the model until it generates
-# output that is similar to values used to generate a probability array.
-#
-# In this version of the code the inputs are interpreted as follows
-# gparms2 - input model parameters (dt, r0 etc.).
-# sparms2 - input initial parameters for the model to start mcmc with
-# r0 - initial radius
-# dim - ?
-# lenvars2 - gan get rid of this it was the length of the file
-#
-# VARIABLES TO ADD
-# initial sigmas
-# nits (iterations for comparison (acceptance rate)
-#
+# This version of the growth loop is a modification created for use with a 
+# metropolis type algorithm. It was further modified for general use in this
+# R package.
 #
 # This was written by MKF 4/16/2014 as a modification of the batch version of
 # the code.
@@ -263,9 +240,6 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
      Hc <- rep(-99, times=(steps*years + 1))
      LAIF <- rep(0, times=(steps*years + 1))
   }
-  
-  #print(Hc)
-  #print(LAIF)
 
   # I replaced this in the function call with the five variables it contains.
   # It still makes sense to send a combined object to C. 2/21/18
@@ -426,27 +400,11 @@ HcLAIFcalc <- function(Forparms, gapvars, years, steps){
   if(closed < 0){
     stop("The colosed period is negative")
   }
-
-  # phase <- rep(c(rep(1, gapvars$gt*del.t), rep(2, gapvars$ct*del.t), rep(3,closed*del.t)), ceiling(years/gapvars$tbg))
-  # phase <- phase[1:(years*del.t)]
   
   Hc_ctphase <- seq(Forparms$HFmax/(steps*gapvars$ct),Forparms$HFmax, Forparms$HFmax/(steps*gapvars$ct))
   Hf_ctphase <- seq(Forparms$LAIFmax/(steps*gapvars$ct),Forparms$LAIFmax, Forparms$LAIFmax/(steps*gapvars$ct))
   closedsteps <- (gapvars$tbg*del.t - gapvars$gt*del.t - length(Hc_ctphase))
 
-  # Create Hc and LAIF vectors without a loop
-  # The superassignment operator <<- causes the scope of this to be in the
-  # calling frame.
-  # Hc <- rep(c(rep(0, gapvars$gt*del.t),
-  #                seq(from=Forparms$HFmax/(steps*gapvars$ct+1),
-  #                    to=Forparms$HFmax, by=Forparms$HFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
-  #                rep(Forparms$HFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-  #
-  # LAIF <- rep(c(rep(0, gapvars$gt*del.t),
-  #               seq(from=Forparms$LAIFmax/(steps*gapvars$ct+1),
-  #                   to=Forparms$LAIFmax, by=Forparms$LAIFmax/(steps*gapvars$ct+1))[1:(steps*gapvars$ct)],
-  #               rep(Forparms$LAIFmax,closed*del.t)), ceiling(years/gapvars$tbg))[1:(years*steps)]
-  
   Hc <- c(
     rep(0,gapvars$gt*del.t),
     Hc_ctphase,
