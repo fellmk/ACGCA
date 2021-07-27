@@ -59,7 +59,22 @@ plot(x=0:50, y = acgcaout$r, type="l", xlab = "time (years)", ylab = "radius (m)
 plot(x=0:50, y = acgcaout$h, type="l", xlab = "time (years)", ylab = "height (m)")
 ```
 
-Other parameters can be set as outlined in the function documentation for "runacgca."
+All parameters that can be set in the ACGCA model are shown below. This text can be copied to run the model. Parameters in acru can be substituted with the desired parameters. 
+
+```{r, eval = FALSE}
+acgcaout <- ACGCA::runacgca(sparms = acru, 
+                            r0=0.05, 
+                            parmax=2060, 
+                            years=50,
+                            steps=16, 
+                            breast.height=1.37, 
+                            Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), 
+                            gapvars=list(gt=50, ct=10, tbg=200), 
+                            tolerance=0.00001, 
+                            gapsim=FALSE,
+                            fulloutput=FALSE, 
+                            thin = TRUE)
+```
 
 ## Light Environment
 Along with running the ACGCA model under a fixed annual light value it is possible to have changing light conditions over the course of the simulation. If the desired effect is to have light change each year a vector can be supplied for the "parmax" input parameter. The first value in the vector is the initialization value with the following values corresponding to the simulation post initialization. If the desire is to have values for each year and a 1/16 of a year time step is used (steps = 16), then elements 2 through 17 in the vector should be set to the value for year 1. 
@@ -95,7 +110,7 @@ acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 1
 par(mar=c(4,4,1,1))
 plot(x= 0:100, y=acgcaout$r, xlab="years", ylab="radius (m)", type="l")
 plot(x= 0:100, y=acgcaout$growth_st[1:101], xlab="years", ylab="growth state", type="l")
-plot(x= 0:100, y=acgcaout$APARout[1:101], xlab="years", ylab="light", type="l")
+plot(x= 0:100, y=acgcaout$APARout[1:101], xlab="years", ylab="absorbed PAR", type="l")
 ```
 
 ## References:
