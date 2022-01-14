@@ -4,6 +4,7 @@
   * [Using the ACGCA model](#using-the-acgca-model)
     * [Installing the ACGCA Package](#installation)
     * [Quick Test](#quicktest)
+* [Advanced Use](#advanced)
 * [References](#references)
 
 ## Overview
@@ -33,6 +34,7 @@ Run a quick test to make sure the ACGCA model is working
 test <- runacgca(sparms = acru, parmax = 1000, years = 50, steps = 16) # acru contains a set of parameters
 plot(x=1:800/16, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)")
 ```
+## Advanced
 
 ## References
 
