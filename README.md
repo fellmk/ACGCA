@@ -37,11 +37,14 @@ plot(x=1:800/16, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)
 ## Advanced
 While we tried to address general use cases there is always the possibility an intrepid user will want to modify the C code underlying the model. This section covers some basics to make the process a little easier for advanced users. 
 
-### Getting the necessary files
+### Getting the Necessary Files
 Rather than installing the package with `devtools` as shown above it is also possible to obtain a copy of the entire repository. This can be done in several ways. 
 * Click 'Code' button above and select 'Download ZIP'. 
 * Download using a terminal `git clone https://github.com/fellmk/ACGCA.git`.
 * Fork the repository (click 'Fork' button at the top of the page).
+
+### Modifying Carbon Inputs (Photosynthesis)
+The model of photosynthesis used in the model is extreamly simple (Ogle and Pacala 2009). It can be modified by changing the code in `photosynthesis.c` and `photosynthesis.h`. It may also be necessary to modify the inputs to this code on line 300 of `growthloop.c`. Currently the state vector and tree trait values are passed to the `photosynthesis(p, &st)` function. The struct `st` contains the state variables of the tree (most of the values are covered in the R help file as outputs) for the current timestep. The values that are output to R are stored into vectors at the end of the `growthloop()` function. The input `p` is a pointer to a struct containing the trees trait values passed from R. Other parameters for a model could be added but they would either need to be passed into the growthloop from R or read into a new function directly from a data file. 
 
 ## References
 
