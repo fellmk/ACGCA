@@ -35,6 +35,13 @@ test <- runacgca(sparms = acru, parmax = 1000, years = 50, steps = 16) # acru co
 plot(x=1:800/16, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)")
 ```
 ## Advanced
+While we tried to address general use cases there is always the possibility an intrepid user will want to modify the C code underlying the model. This section covers some basics to make the process a little easier for advanced users. 
+
+### Getting the necessary files
+Rather than installing the package with `devtools` as shown above it is also possible to obtain a copy of the entire repository. This can be done in several ways. 
+* Click 'Code' button above and select 'Download ZIP'. 
+* Download using a terminal `git clone https://github.com/fellmk/ACGCA.git`.
+* Fork the repository (click 'Fork' button at the top of the page).
 
 ## References
 
