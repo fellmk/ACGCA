@@ -30,6 +30,7 @@
 #include "head_files/putonallometry.h"
 #include "head_files/shrinkingsize.h"
 #include "head_files/growthloop.h"
+#include "head_files/photosynthesis.h"
 
 /// growthloop() calls: excessgrowingon/off() in excessgrowing.c, putonallometry()
 /// in putonallometry.c,
@@ -294,7 +295,10 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 		rm=p->rml*st.bl+p->rmr*st.br+p->rms*bsstar;
 
 		// Revised photosynthesis model based on radiation-use efficiency model:
-		pg=p->epsg*st.light;   //pg is intermediate variable
+		//pg=p->epsg*st.light;   //pg is intermediate variable
+		//Rprintf("pg: %g\n", pg);
+		pg=photosynthesis(p, &st);
+		//Rprintf("pg: %g\n", pg);
 		//Rprintf("Iteration: %i\n", i);
 		//Rprintf("pg: %g\n", pg);
 		//Rprintf("epsg: %g\n", p->epsg);

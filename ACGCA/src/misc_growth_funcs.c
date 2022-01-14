@@ -417,7 +417,7 @@ void trunkvolume(radius *r, height *h, double sw, volume *v, tstates *st){
 ///
 /// \date 01-11-2010
 ///
-/// Furthur modified by Michael Fell to address leftover comments and allow
+/// Further modified by Michael Fell to address leftover comments and allow
 /// use of the gap dynamics code.
 ///
 /// date March 14, 2018
