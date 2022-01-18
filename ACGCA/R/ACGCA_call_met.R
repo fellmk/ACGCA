@@ -191,6 +191,10 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
   #}
 
   # Add values to sparms after checking its initial size
+  # rhomin = 525500 (overwritten by rhomax in C)
+  # gammaw = 0.000000667
+  # drinit = 0.00001
+  # drcrit = 0.0075
   sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32],
               0.00001, 0.0075)
 

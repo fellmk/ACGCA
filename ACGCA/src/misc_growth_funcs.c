@@ -872,3 +872,80 @@ void acruparms(sparms *p){
 }
 */
 
+void updateSparms(
+  int index,
+  sparms *p, 
+  double *hmax,
+	double *phih,
+	double *eta,
+	double *swmax,
+	double *lamdas,
+	double *lamdah,
+	double *rhomax,
+  double *rhomin,
+	double *f2,
+	double *f1,
+	double *gammac,
+  double *gammaw,
+	double *gammax,
+	double *cgl,
+	double *cgr,
+	double *cgw,
+	double *deltal,
+	double *deltar,
+	double *sl,
+	double *sla,
+	double *sr,
+	double *so,
+	double *rr,
+	double *rhor,
+	double *rml,
+	double *rms,
+	double *rmr,
+	double *etaB,
+	double *k,
+	double *epsg,
+	double *M,
+	double *alpha,
+	double *R0,
+	double *R40
+
+
+){
+  p->hmax = hmax[index];
+  p->phih = phih[index];
+  p->eta = eta[index];
+  p->etaB = etaB[index];
+  p->swmax = swmax[index];
+  p->lamdas = lamdas[index];
+  p->lamdah = lamdah[index];
+  p->rhomax = rhomax[index];
+  p->rhomin = rhomin[index];
+  p->f2 = f2[index];
+  p->f1 = f1[index];
+  p->gammac = gammac[index];
+  p->gammaw = gammaw[index];
+  p->gammax = gammax[index];
+  p->cgl = cgl[index];
+  p->cgr = cgr[index];
+  p->cgw = cgw[index];
+  p->deltal = deltal[index];
+  p->deltar = deltar[index];
+  p->sl = sl[index];
+  p->sla = sla[index];
+  p->sr = sr[index];
+  p->so = so[index];
+  p->rr = rr[index];
+  p->rhor = rhor[index];
+  p->rml = rml[index];
+  p->rms = rms[index];
+  p->rmr = rmr[index];
+  // p->drcrit = 
+  // p->drinit = 
+  p->K = k[index];
+  p->epsg = epsg[index];
+  p->M = M[index];
+  p->alpha = alpha[index];
+  p->R0 = R0[index];
+  p->R40 = R40[index];
+}
