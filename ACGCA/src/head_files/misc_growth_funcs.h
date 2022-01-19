@@ -261,6 +261,7 @@ extern void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, doubl
 extern void updateSparms(
   int index,
   sparms *p, 
+  int *sparms_indicator,
   double *hmax,
 	double *phih,
 	double *eta,

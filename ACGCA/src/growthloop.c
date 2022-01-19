@@ -138,7 +138,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	double M[],
 	double alpha[],
 	double R0[],
-	double R40[]
+	double R40[],
+	int sparms_indicator[]
   //double *tolout,
   //double *errorout,
   //double *drout,

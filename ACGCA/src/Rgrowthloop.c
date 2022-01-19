@@ -9,7 +9,7 @@
 // of the below function is to do this.  MKF 03/26/2013
 //////////////////////////////////////////////////////////////////////////////////
 // changes added Hc, LAIf,
-void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
+void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	double *Hc, double *LAIF, double *kF, double *intF, double *slopeF, 
 	double *APARout,
 
@@ -20,7 +20,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *hBH,
 	double *r,
 	double *rB,
-	double *rC,
+	double *rC, //20
 	double *rBH,
 	double *sw,
 	double *vts,
@@ -30,7 +30,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *la,
 	double *ra,
 	double *dr,
-	double *xa,
+	double *xa, //30
 	double *bl,
 	double *br,
 	double *bt,
@@ -41,7 +41,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *bo,
 	double *bs,
 
-	double *cs,
+	double *cs, //40
 	double *clr,
 	double *fl,
 	double *fr,
@@ -52,7 +52,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *rfs,
 
 	double *egrow,
-	double *ex,
+	double *ex, //50
 	double *rtrans,
 	double *light,
 	double *nut,
@@ -64,7 +64,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	int *errorind,
   	int *growth_st,
 	  
-	double *hmax,
+	double *hmax, //60
 	double *phih,
 	double *eta,
 	double *swmax,
@@ -74,7 +74,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *rhomin,
 	double *f2,
 	double *f1,
-	double *gammac,
+	double *gammac, //70
 	double *gammaw,
 	double *gammax,
 	double *cgl,
@@ -84,7 +84,7 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *deltar,
 	double *sl,
 	double *sla,
-	double *sr,
+	double *sr, //80
 	double *so,
 	double *rr,
 	double *rhor,
@@ -94,10 +94,14 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	double *etaB,
 	double *k,
 	double *epsg,
-	double *M,
+	double *M, //90
 	double *alpha,
 	double *R0,
-	double *R40
+	double *R40, //93
+
+	int *sparms_indicator,
+	double *drinit,
+	double *drcrit
 	)
   //double *tolout,
   //double *errorout,
@@ -114,45 +118,85 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 	sparms p;
   	gparms gp;
 
+	// // NOTE: all indicies -1 because C starts at 0 while R starts at 1
+	// // Define p(plant) parameters based on R array
+	// p.hmax = p2[0];
+	// p.phih = p2[1];
+	// p.eta = p2[2];
+	// p.swmax = p2[3]; //exp(-3.054);
+	// p.lamdas = p2[4];
+	// p.lamdah = p2[5];
+	// p.rhomax = p2[6]; //exp(13.2);
+	// p.rhomin = p2[7]; //exp(13.2);
+	// p.rhomin = p.rhomax; // this could be changed if rhomin != rhomax.
+	// p.f2 = p2[8]; //exp(8.456);//   //f2=gammax*NEWf2
+	// p.f1 = p2[9];
+	// p.gammac = p2[10];
+	// p.gammaw = p2[11];
+	// p.gammax = p2[12]; //inv_logit(-0.709);//
+	// p.cgl = p2[13]; //exp(0.3229);//
+	// p.cgr = p2[14]; //exp(0.192);//
+	// p.cgw = p2[15]; //exp(0.3361);//
+	// p.deltal = p2[16];//inv_logit(-2.276);//
+	// p.deltar = p2[17]; //inv_logit(-2.832);//
+	// p.sl = p2[18]; //exp(0.8133);//
+	// p.sla = p2[19]; //exp(-4.119);//
+	// p.sr = p2[20]; //exp(0.2493);//
+	// p.so = p2[21]; //exp(0.6336); //
+	// p.rr = p2[22]; //exp(-8.103); //
+	// p.rhor = p2[23]; // new value: exp(-1.724);
+	// p.rml = p2[24]; //exp(2.544);//
+	// p.rms = p2[25]; //exp(0.5499); //
+	// p.rmr = p2[26]; //exp(3.252);//
+	// p.etaB = p2[27];
+	// p.K = p2[28];
+	// p.epsg = p2[29]; //exp(-3.304); //6.75;
+	// p.M = p2[30];
+	// p.alpha = p2[31];
+	// p.R0 = p2[32];
+	// p.R40 = p2[33];
+	// p.drinit = p2[34];
+	// p.drcrit = p2[35];
+
 	// NOTE: all indicies -1 because C starts at 0 while R starts at 1
 	// Define p(plant) parameters based on R array
-	p.hmax = p2[0];
-	p.phih = p2[1];
-	p.eta = p2[2];
-	p.swmax = p2[3]; //exp(-3.054);
-	p.lamdas = p2[4];
-	p.lamdah = p2[5];
-	p.rhomax = p2[6]; //exp(13.2);
-	p.rhomin = p2[7]; //exp(13.2);
-	p.rhomin = p.rhomax; // this could be changed if rhomin != rhomax.
-	p.f2 = p2[8]; //exp(8.456);//   //f2=gammax*NEWf2
-	p.f1 = p2[9];
-	p.gammac = p2[10];
-	p.gammaw = p2[11];
-	p.gammax = p2[12]; //inv_logit(-0.709);//
-	p.cgl = p2[13]; //exp(0.3229);//
-	p.cgr = p2[14]; //exp(0.192);//
-	p.cgw = p2[15]; //exp(0.3361);//
-	p.deltal = p2[16];//inv_logit(-2.276);//
-	p.deltar = p2[17]; //inv_logit(-2.832);//
-	p.sl = p2[18]; //exp(0.8133);//
-	p.sla = p2[19]; //exp(-4.119);//
-	p.sr = p2[20]; //exp(0.2493);//
-	p.so = p2[21]; //exp(0.6336); //
-	p.rr = p2[22]; //exp(-8.103); //
-	p.rhor = p2[23]; // new value: exp(-1.724);
-	p.rml = p2[24]; //exp(2.544);//
-	p.rms = p2[25]; //exp(0.5499); //
-	p.rmr = p2[26]; //exp(3.252);//
-	p.etaB = p2[27];
-	p.K = p2[28];
-	p.epsg = p2[29]; //exp(-3.304); //6.75;
-	p.M = p2[30];
-	p.alpha = p2[31];
-	p.R0 = p2[32];
-	p.R40 = p2[33];
-	p.drinit = p2[34];
-	p.drcrit = p2[35];
+	p.hmax = hmax[0];
+	p.phih = phih[0];
+	p.eta = eta[0];
+	p.swmax = swmax[0]; //exp(-3.054);
+	p.lamdas = lamdas[0];
+	p.lamdah = lamdah[0];
+	p.rhomax = rhomax[0]; //exp(13.2);
+	// p.rhomin = rhomin[0]; //exp(13.2);
+	p.rhomin = rhomin[0]; // this could be changed if rhomin != rhomax.
+	p.f2 = f2[0]; //exp(8.456);//   //f2=gammax*NEWf2
+	p.f1 = f1[0];
+	p.gammac = gammac[0];
+	p.gammaw = gammaw[0];
+	p.gammax = gammax[0]; //inv_logit(-0.709);//
+	p.cgl = cgl[0]; //exp(0.3229);//
+	p.cgr = cgr[0]; //exp(0.192);//
+	p.cgw = cgw[0]; //exp(0.3361);//
+	p.deltal = deltal[0];//inv_logit(-2.276);//
+	p.deltar = deltar[0]; //inv_logit(-2.832);//
+	p.sl = sl[0]; //exp(0.8133);//
+	p.sla = sla[0]; //exp(-4.119);//
+	p.sr = sr[0]; //exp(0.2493);//
+	p.so = so[0]; //exp(0.6336); //
+	p.rr = rr[0]; //exp(-8.103); //
+	p.rhor = rhor[0]; // new value: exp(-1.724);
+	p.rml = rml[0]; //exp(2.544);//
+	p.rms = rms[0]; //exp(0.5499); //
+	p.rmr = rmr[0]; //exp(3.252);//
+	p.etaB = etaB[0];
+	p.K = k[0];
+	p.epsg = epsg[0]; //exp(-3.304); //6.75;
+	p.M = M[0];
+	p.alpha = alpha[0];
+	p.R0 = R0[0];
+	p.R40 = R40[0];
+	p.drinit = drinit[0];
+	p.drcrit = drcrit[0];
 
 	// define gp values based on input from R
 	gp.deltat=gp2[0]; // gparm[1] <- 0.0625 # gp.deltat
@@ -270,7 +314,8 @@ void Rgrowthloop( double *p2, double *gp2, double *Io, double *r0, int *t,
 		M,
 		alpha,
 		R0,
-		R40
+		R40,
+		sparms_indicator
 		//tolout,
 		//errorout,
     //drout,
