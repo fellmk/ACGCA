@@ -171,78 +171,82 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 
 	// Create sparms2 variables using vectors from R, MKF January 20, 2022
 	double *hmax;
-	hmax = malloc(parameterLength[0]);
+	hmax = malloc(parameterLength[0]*sizeof(double));
 	double *phih;
-	phih = malloc(parameterLength[1]);
+	phih = malloc(parameterLength[1]*sizeof(double));
 	double *eta;
-	eta = malloc(parameterLength[2]);
+	eta = malloc(parameterLength[2]*sizeof(double));
 	double *swmax;
-	swmax = malloc(parameterLength[3]);
+	swmax = malloc(parameterLength[3]*sizeof(double));
 	double *lamdas;
-	lamdas = malloc(parameterLength[4]);
+	lamdas = malloc(parameterLength[4]*sizeof(double));
 	double *lamdah;
-	lamdah = malloc(parameterLength[5]);
+	lamdah = malloc(parameterLength[5]*sizeof(double));
 	double *rhomax;
-	rhomax = malloc(parameterLength[6]);
+	rhomax = malloc(parameterLength[6]*sizeof(double));
 	double *f2;
-	f2 = malloc(parameterLength[7]);
+	f2 = malloc(parameterLength[7]*sizeof(double));
 	double *f1;
-	f1 = malloc(parameterLength[8]);
+	f1 = malloc(parameterLength[8]*sizeof(double));
 	double *gammac;
-	gammac = malloc(parameterLength[9]);
+	gammac = malloc(parameterLength[9]*sizeof(double));
 	double *gammax;
-	gammax = malloc(parameterLength[10]);
+	gammax = malloc(parameterLength[10]*sizeof(double));
 	double *cgl;
-	cgl = malloc(parameterLength[11]);
+	cgl = malloc(parameterLength[11]*sizeof(double));
 	double *cgr;
-	cgr = malloc(parameterLength[12]);
+	cgr = malloc(parameterLength[12]*sizeof(double));
 	double *cgw;
-	cgw = malloc(parameterLength[13]);
+	cgw = malloc(parameterLength[13]*sizeof(double));
 	double *deltal;
-	deltal = malloc(parameterLength[14]);
+	deltal = malloc(parameterLength[14]*sizeof(double));
 	double *deltar;
-	deltar = malloc(parameterLength[15]);
+	deltar = malloc(parameterLength[15]*sizeof(double));
 	double *sl;
-	sl = malloc(parameterLength[16]);
-	double *sla;
-	sla = malloc(parameterLength[17]);
-	double *sr;
-	sr = malloc(parameterLength[18]);
-	double *so;
-	so = malloc(parameterLength[19]);
-	double *rr;
-	rr = malloc(parameterLength[20]);
-	double *rhor;
-	rhor = malloc(parameterLength[21]);
-	double *rml;
-	rml = malloc(parameterLength[22]);
-	double *rms;
-	rms = malloc(parameterLength[23]);
-	double *rmr;
-	rmr = malloc(parameterLength[24]);
-	double *etaB;
-	etaB = malloc(parameterLength[25]);
-	double *K;
-	K = malloc(parameterLength[26]);
-	double *epsg;
-	epsg = malloc(parameterLength[27]);
-	double *M;
-	M = malloc(parameterLength[28]);
-	double *alpha;
-	alpha = malloc(parameterLength[29]);
-	double *R0;
-	R0 = malloc(parameterLength[30]);
-	double *R40;
-	R40 = malloc(parameterLength[31]);
+	sl = malloc(parameterLength[16]*sizeof(double));
 
+	double *sla;
+	sla = malloc(parameterLength[17]*sizeof(double));
+	Rprintf("sla length: %i\n", parameterLength[17]);
+	Rprintf("sizeof double %i\n", sizeof(double));
+	Rprintf("sizeof sla %i\n", sizeof(sla));
+
+	double *sr;
+	sr = malloc(parameterLength[18]*sizeof(double));
+	double *so;
+	so = malloc(parameterLength[19]*sizeof(double));
+	double *rr;
+	rr = malloc(parameterLength[20]*sizeof(double));
+	double *rhor;
+	rhor = malloc(parameterLength[21]*sizeof(double));
+	double *rml;
+	rml = malloc(parameterLength[22]*sizeof(double));
+	double *rms;
+	rms = malloc(parameterLength[23]*sizeof(double));
+	double *rmr;
+	rmr = malloc(parameterLength[24]*sizeof(double));
+	double *etaB;
+	etaB = malloc(parameterLength[25]*sizeof(double));
+	double *K;
+	K = malloc(parameterLength[26]*sizeof(double));
+	double *epsg;
+	epsg = malloc(parameterLength[27]*sizeof(double));
+	double *M;
+	M = malloc(parameterLength[28]*sizeof(double));
+	double *alpha;
+	alpha = malloc(parameterLength[29]*sizeof(double));
+	double *R0;
+	R0 = malloc(parameterLength[30]*sizeof(double));
+	double *R40;
+	R40 = malloc(parameterLength[31]*sizeof(double));
 	double *rhomin;
-	rhomin = malloc(parameterLength[32]);
+	rhomin = malloc(parameterLength[32]*sizeof(double));
 	double *gammaw;
-	gammaw = malloc(parameterLength[33]);
+	gammaw = malloc(parameterLength[33]*sizeof(double));
 	double *drinit;
-	drinit = malloc(parameterLength[34]);
+	drinit = malloc(parameterLength[34]*sizeof(double));
 	double *drcrit;
-	drcrit = malloc(parameterLength[35]);
+	drcrit = malloc(parameterLength[35]*sizeof(double));
 
 	for(int i=0; i < 36; i++){
 		Rprintf("value of index: %i value of parameterLength: %i\n", i, parameterLength[i]);
@@ -322,7 +326,13 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	for(int i=0; i < parameterLength[17]; i++){
 		int index = startIndex[17] + i;
 		sla[i] = sparms2[index];
+		Rprintf("SLA value %i: %g\n", i, sla[i]);	
 	}
+
+	Rprintf("sla length: %i\n", parameterLength[17]);
+	Rprintf("sizeof double %i\n", sizeof(double));
+	Rprintf("sizeof sla %i\n", sizeof(sla));
+
 	for(int i=0; i < parameterLength[18]; i++){
 		int index = startIndex[18] + i;
 		sr[i] = sparms2[index];
@@ -387,14 +397,18 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 		int index = startIndex[33] + i;
 		gammaw[i] = sparms2[index];
 	}
-	// for(int i=0; i < parameterLength[34]; i++){
-	// 	int index = startIndex[34] + i;
-	// 	drinit[i] = sparms2[index];
-	// }
-	// for(int i=0; i < parameterLength[35]; i++){
-	// 	int index = startIndex[35] + i;
-	// 	drcrit[i] = sparms2[index];
-	// }
+	for(int i=0; i < parameterLength[34]; i++){
+		int index = startIndex[34] + i;
+		drinit[i] = sparms2[index];
+		Rprintf("drinit value %i: %g\n", i, drinit[i]);	
+
+	}
+	for(int i=0; i < parameterLength[35]; i++){
+		int index = startIndex[35] + i;
+		drcrit[i] = sparms2[index];
+		Rprintf("drcrit value %i: %g\n", i, drcrit[i]);	
+
+	}
 
 	// NOTE: all indicies -1 because C starts at 0 while R starts at 1
 	// Define p(plant) parameters based on R array
