@@ -912,108 +912,113 @@ void updateSparms(
 	double *R40
 ){
 
-  if(sparms_indicator[0] == 1){
-    p->hmax = hmax[index];
-  }
-  if(sparms_indicator[1] == 1){
-    p->phih = phih[index];
-  }
-  if(sparms_indicator[2] == 1){
-    p->eta = eta[index];
-  }
-  if(sparms_indicator[25] == 1){
-    p->etaB = etaB[index];
-  }
-  if(sparms_indicator[3] == 1){
-    p->swmax = swmax[index];
-  }
-  if(sparms_indicator[4] == 1){
-    p->lamdas = lamdas[index];
-  }
-  if(sparms_indicator[5] == 1){
-    p->lamdah = lamdah[index];
-  }
-  if(sparms_indicator[6] == 1){
-    p->rhomax = rhomax[index];
-  }
-  if(sparms_indicator[6] == 1){ // This needs to be changes if rhomin is used on its own
-    p->rhomin = rhomin[index];
-  }
-  if(sparms_indicator[7] == 1){ 
-    p->f2 = f2[index];
-  }
-  if(sparms_indicator[8] == 1){
-    p->f1 = f1[index];
-  }
-  if(sparms_indicator[9] == 1){
-    p->gammac = gammac[index];
-  }
-  // if(sparms_indicator[] == 1){
-  //   p->gammaw = gammaw[index];
+  // for(int i = 0; i < 33; i++){
+  //   Rprintf("value of index: %i value ofsparms_indicator: %i\n", index, sparms_indicator);
   // }
-  if(sparms_indicator[10] == 1){
-    p->gammax = gammax[index];
-  }
-  if(sparms_indicator[11] == 1){
-    p->cgl = cgl[index];
-  }
-  if(sparms_indicator[12] == 1){
-    p->cgr = cgr[index];
-  }
-  if(sparms_indicator[13] == 1){
-    p->cgw = cgw[index];
-  }
-  if(sparms_indicator[14] == 1){
-    p->deltal = deltal[index];
-  }
-  if(sparms_indicator[15] == 1){
-    p->deltar = deltar[index];
-  }
-  if(sparms_indicator[16] == 1){
-    p->sl = sl[index];
-  }
-  if(sparms_indicator[17] == 1){
-    p->sla = sla[index];
-  }
-  if(sparms_indicator[18] == 1){
-    p->sr = sr[index];
-  }
-  if(sparms_indicator[19] == 1){
-    p->so = so[index];
-  }
-  if(sparms_indicator[20] == 1){
-    p->rr = rr[index];
-  }
-  if(sparms_indicator[21] == 1){
-    p->rhor = rhor[index];
-  }
-  if(sparms_indicator[22] == 1){
-    p->rml = rml[index];
-  }
-  if(sparms_indicator[23] == 1){
-    p->rms = rms[index];
-  }
-  if(sparms_indicator[24] == 1){
-    p->rmr = rmr[index];
-  }
-  if(sparms_indicator[26] == 1){
-    p->K = k[index];
-  }
-  if(sparms_indicator[27] == 1){
-    p->epsg = epsg[index];
-  }
-  if(sparms_indicator[28] == 1){
-    p->M = M[index];
-  }
-  if(sparms_indicator[29] == 1){
-    p->alpha = alpha[index];
-  }
-  if(sparms_indicator[30] == 1){
-    p->R0 = R0[index];
-  }
-  if(sparms_indicator[31] == 1){
-    p->R40 = R40[index];
-  }
+  // if(sparms_indicator[0] > 1){
+  //   p->hmax = hmax[index];
+  // }
+  // //Rprintf("update hmax: %g index: %i\n", hmax[0], index);
+  // if(sparms_indicator[1] > 1){
+  //   p->phih = phih[index];
+  // }
+  // if(sparms_indicator[2] > 1){
+  //   p->eta = eta[index];
+  // }
+  // if(sparms_indicator[25] > 1){
+  //   p->etaB = etaB[index];
+  // }
+  // if(sparms_indicator[3] > 1){
+  //   p->swmax = swmax[index];
+  // }
+  // if(sparms_indicator[4] > 1){
+  //   p->lamdas = lamdas[index];
+  // }
+  // if(sparms_indicator[5] > 1){
+  //   p->lamdah = lamdah[index];
+  // }
+  // if(sparms_indicator[6] > 1){
+  //   p->rhomax = rhomax[index];
+  // }
+  // if(sparms_indicator[6] > 1){ // This needs to be changes if rhomin is used on its own
+  //   p->rhomin = rhomin[index];
+  // }
+  // if(sparms_indicator[7] > 1){ 
+  //   p->f2 = f2[index];
+  // }
+  // if(sparms_indicator[8] > 1){
+  //   p->f1 = f1[index];
+  // }
+  // if(sparms_indicator[9] > 1){
+  //   p->gammac = gammac[index];
+  // }
+  // // if(sparms_indicator[] > 1){
+  // //   p->gammaw = gammaw[index];
+  // // }
+  // if(sparms_indicator[10] > 1){
+  //   p->gammax = gammax[index];
+  // }
+  // if(sparms_indicator[11] > 1){
+  //   p->cgl = cgl[index];
+  // }
+  // if(sparms_indicator[12] > 1){
+  //   p->cgr = cgr[index];
+  // }
+  // if(sparms_indicator[13] > 1){
+  //   p->cgw = cgw[index];
+  // }
+  // if(sparms_indicator[14] > 1){
+  //   p->deltal = deltal[index];
+  // }
+  // if(sparms_indicator[15] > 1){
+  //   p->deltar = deltar[index];
+  // }
+  // if(sparms_indicator[16] > 1){Rprintf("update hmax: %g index: %i\n", hmax[0], index);
+  //   p->sl = sl[index];
+  // }
+  // if(sparms_indicator[17] > 1){
+  //   p->sla = sla[index];
+  //   Rprintf("update sla: %g index: %i\n", sla[index], index);
+  // }
+  // if(sparms_indicator[18] > 1){
+  //   p->sr = sr[index];
+  // }
+  // if(sparms_indicator[19] > 1){
+  //   p->so = so[index];
+  // }
+  // if(sparms_indicator[20] > 1){
+  //   p->rr = rr[index];
+  // }
+  // if(sparms_indicator[21] > 1){
+  //   p->rhor = rhor[index];
+  // }
+  // if(sparms_indicator[22] > 1){
+  //   p->rml = rml[index];
+  // }
+  // if(sparms_indicator[23] > 1){
+  //   p->rms = rms[index];
+  // }
+  // if(sparms_indicator[24] > 1){
+  //   p->rmr = rmr[index];
+  // }
+  // if(sparms_indicator[26] > 1){
+  //   p->K = k[index];
+  // }
+  // if(sparms_indicator[27] > 1){
+  //   p->epsg = epsg[index];
+  // }
+  // if(sparms_indicator[28] > 1){
+  //   p->M = M[index];
+  // }
+  // if(sparms_indicator[29] > 1){
+  //   p->alpha = alpha[index];
+  // }
+  // if(sparms_indicator[30] > 1){
+  //   p->R0 = R0[index];
+  // }
+  // if(sparms_indicator[31] > 1){
+  //   p->R40 = R40[index];
+  // }
   // p->drcrit = 
   // p->drinit = 
 }

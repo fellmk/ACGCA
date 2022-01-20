@@ -139,7 +139,8 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	double alpha[],
 	double R0[],
 	double R40[],
-	int sparms_indicator[]
+	int parameterLength[]
+  //int sparms_indicator[]
   //double *tolout,
   //double *errorout,
   //double *drout,
@@ -243,6 +244,47 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 
 	// gp->T number of years, gp->deltat is increment (=1/16)
 	for (i = 1; i < (ceil(gp->T/gp->deltat) + 1); i++){  //DG: added in plus one
+
+		// this updates the vector p if the length of a parameter is > 1
+		// updateSparms(
+		// 	i, 
+		// 	p, 
+		// 	parameterLength,
+		// 	hmax,
+		// 	phih,
+		// 	eta,
+		// 	swmax,
+		// 	lamdas,
+		// 	lamdah,
+		// 	rhomax,
+		// 	rhomin,
+		// 	f2,
+		// 	f1,
+		// 	gammac,
+		// 	gammaw,
+		// 	gammax,
+		// 	cgl,
+		// 	cgr,
+		// 	cgw,
+		// 	deltal,
+		// 	deltar,
+		// 	sl,
+		// 	sla,
+		// 	sr,
+		// 	so,
+		// 	rr,
+		// 	rhor,
+		// 	rml,
+		// 	rms,
+		// 	rmr,
+		// 	etaB,
+		// 	k,
+		// 	epsg,
+		// 	M,
+		// 	alpha,
+		// 	R0,
+		// 	R40
+		// );
 
   		double APAR[2];
   		APAR[0] = -1;

@@ -1,5 +1,6 @@
 #include "head_files/misc_growth_funcs.h"
 #include "head_files/growthloop.h"
+#include <R.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 // This code is to create a call to the growthloop from R
@@ -64,44 +65,49 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	int *errorind,
   	int *growth_st,
 	  
-	double *hmax, //60
-	double *phih,
-	double *eta,
-	double *swmax,
-	double *lamdas,
-	double *lamdah,
-	double *rhomax,
-	double *rhomin,
-	double *f2,
-	double *f1,
-	double *gammac, //70
-	double *gammaw,
-	double *gammax,
-	double *cgl,
-	double *cgr,
-	double *cgw,
-	double *deltal,
-	double *deltar,
-	double *sl,
-	double *sla,
-	double *sr, //80
-	double *so,
-	double *rr,
-	double *rhor,
-	double *rml,
-	double *rms,
-	double *rmr,
-	double *etaB,
-	double *k,
-	double *epsg,
-	double *M, //90
-	double *alpha,
-	double *R0,
-	double *R40, //93
+	double *sparms2, //60
+	int *startIndex,
+	int *stopIndex,
+	int *parameterLength
 
-	int *sparms_indicator,
-	double *drinit,
-	double *drcrit
+	// double *hmax, //60
+	// double *phih,
+	// double *eta,
+	// double *swmax,
+	// double *lamdas,
+	// double *lamdah,
+	// double *rhomax,
+	// double *rhomin,
+	// double *f2,
+	// double *f1,
+	// double *gammac, //70
+	// double *gammaw,
+	// double *gammax,
+	// double *cgl,
+	// double *cgr,
+	// double *cgw,
+	// double *deltal,
+	// double *deltar,
+	// double *sl,
+	// double *sla,
+	// double *sr, //80
+	// double *so,
+	// double *rr,
+	// double *rhor,
+	// double *rml,
+	// double *rms,
+	// double *rmr,
+	// double *etaB,
+	// double *k,
+	// double *epsg,
+	// double *M, //90
+	// double *alpha,
+	// double *R0,
+	// double *R40, //93
+
+	// int *sparms_indicator,
+	// double *drinit,
+	// double *drcrit
 	)
   //double *tolout,
   //double *errorout,
@@ -110,7 +116,12 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
   //double *odemandout,
   //double *odrout)
 {
+	Rprintf("start function. \n");
 
+	Rprintf("sparms2 values: \n");
+	for(int i = 0; i < 36; i++){
+		Rprintf("%g\n", sparms2[i]);
+	}
 	///////////////////////////////////////////////////////////////////////////
 	// Declare two structs and use them to store the simulation parameters
 	// and the simulation control variables.
@@ -158,8 +169,237 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	// p.drinit = p2[34];
 	// p.drcrit = p2[35];
 
+	// Create sparms2 variables using vectors from R, MKF January 20, 2022
+	double *hmax;
+	hmax = malloc(parameterLength[0]);
+	double *phih;
+	phih = malloc(parameterLength[1]);
+	double *eta;
+	eta = malloc(parameterLength[2]);
+	double *swmax;
+	swmax = malloc(parameterLength[3]);
+	double *lamdas;
+	lamdas = malloc(parameterLength[4]);
+	double *lamdah;
+	lamdah = malloc(parameterLength[5]);
+	double *rhomax;
+	rhomax = malloc(parameterLength[6]);
+	double *f2;
+	f2 = malloc(parameterLength[7]);
+	double *f1;
+	f1 = malloc(parameterLength[8]);
+	double *gammac;
+	gammac = malloc(parameterLength[9]);
+	double *gammax;
+	gammax = malloc(parameterLength[10]);
+	double *cgl;
+	cgl = malloc(parameterLength[11]);
+	double *cgr;
+	cgr = malloc(parameterLength[12]);
+	double *cgw;
+	cgw = malloc(parameterLength[13]);
+	double *deltal;
+	deltal = malloc(parameterLength[14]);
+	double *deltar;
+	deltar = malloc(parameterLength[15]);
+	double *sl;
+	sl = malloc(parameterLength[16]);
+	double *sla;
+	sla = malloc(parameterLength[17]);
+	double *sr;
+	sr = malloc(parameterLength[18]);
+	double *so;
+	so = malloc(parameterLength[19]);
+	double *rr;
+	rr = malloc(parameterLength[20]);
+	double *rhor;
+	rhor = malloc(parameterLength[21]);
+	double *rml;
+	rml = malloc(parameterLength[22]);
+	double *rms;
+	rms = malloc(parameterLength[23]);
+	double *rmr;
+	rmr = malloc(parameterLength[24]);
+	double *etaB;
+	etaB = malloc(parameterLength[25]);
+	double *K;
+	K = malloc(parameterLength[26]);
+	double *epsg;
+	epsg = malloc(parameterLength[27]);
+	double *M;
+	M = malloc(parameterLength[28]);
+	double *alpha;
+	alpha = malloc(parameterLength[29]);
+	double *R0;
+	R0 = malloc(parameterLength[30]);
+	double *R40;
+	R40 = malloc(parameterLength[31]);
+
+	double *rhomin;
+	rhomin = malloc(parameterLength[32]);
+	double *gammaw;
+	gammaw = malloc(parameterLength[33]);
+	double *drinit;
+	drinit = malloc(parameterLength[34]);
+	double *drcrit;
+	drcrit = malloc(parameterLength[35]);
+
+	for(int i=0; i < 36; i++){
+		Rprintf("value of index: %i value of parameterLength: %i\n", i, parameterLength[i]);
+	}
+
+	for(int i=0; i < parameterLength[0]; i++){
+		//Rprintf("i: %i\n", i);
+		int index = startIndex[0] + i;
+		//Rprintf("index: %i\n", index);
+		hmax[i] = sparms2[index];
+		//Rprintf("sparms2[index]: %g\n", sparms2[index]);
+	}
+	for(int i=0; i < parameterLength[1]; i++){
+		int index = startIndex[1] + i;
+		phih[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[2]; i++){
+		int index = startIndex[2] + i;
+		eta[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[3]; i++){
+		int index = startIndex[3] + i;
+		swmax[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[4]; i++){
+		int index = startIndex[4] + i;
+		lamdas[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[5]; i++){
+		int index = startIndex[5] + i;
+		lamdah[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[6]; i++){
+		int index = startIndex[6] + i;
+		rhomax[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[7]; i++){
+		int index = startIndex[7] + i;
+		f2[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[8]; i++){
+		int index = startIndex[8] + i;
+		f1[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[9]; i++){
+		int index = startIndex[9] + i;
+		gammac[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[10]; i++){
+		int index = startIndex[10] + i;
+		gammax[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[11]; i++){
+		int index = startIndex[11] + i;
+		cgl[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[12]; i++){
+		int index = startIndex[12] + i;
+		cgr[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[13]; i++){
+		int index = startIndex[13] + i;
+		cgw[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[14]; i++){
+		int index = startIndex[14] + i;
+		deltal[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[15]; i++){
+		int index = startIndex[15] + i;
+		deltar[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[16]; i++){
+		int index = startIndex[16] + i;
+		sl[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[17]; i++){
+		int index = startIndex[17] + i;
+		sla[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[18]; i++){
+		int index = startIndex[18] + i;
+		sr[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[19]; i++){
+		int index = startIndex[19] + i;
+		so[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[20]; i++){
+		int index = startIndex[20] + i;
+		rr[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[21]; i++){
+		int index = startIndex[21] + i;
+		rhor[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[22]; i++){
+		int index = startIndex[22] + i;
+		rml[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[23]; i++){
+		int index = startIndex[23] + i;
+		rms[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[24]; i++){
+		int index = startIndex[24] + i;
+		rmr[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[25]; i++){
+		int index = startIndex[25] + i;
+		etaB[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[26]; i++){
+		int index = startIndex[26] + i;
+		K[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[27]; i++){
+		int index = startIndex[27] + i;
+		epsg[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[28]; i++){
+		int index = startIndex[28] + i;
+		M[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[29]; i++){
+		int index = startIndex[29] + i;
+		alpha[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[30]; i++){
+		int index = startIndex[30] + i;
+		R0[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[31]; i++){
+		int index = startIndex[31] + i;
+		R40[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[32]; i++){
+		int index = startIndex[32] + i;
+		rhomin[i] = sparms2[index];
+	}
+	for(int i=0; i < parameterLength[33]; i++){
+		int index = startIndex[33] + i;
+		gammaw[i] = sparms2[index];
+	}
+	// for(int i=0; i < parameterLength[34]; i++){
+	// 	int index = startIndex[34] + i;
+	// 	drinit[i] = sparms2[index];
+	// }
+	// for(int i=0; i < parameterLength[35]; i++){
+	// 	int index = startIndex[35] + i;
+	// 	drcrit[i] = sparms2[index];
+	// }
+
 	// NOTE: all indicies -1 because C starts at 0 while R starts at 1
 	// Define p(plant) parameters based on R array
+	///////////////////////////////////////////////////////////////////// TODO make sure to reactivate this 
+
 	p.hmax = hmax[0];
 	p.phih = phih[0];
 	p.eta = eta[0];
@@ -189,7 +429,7 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	p.rms = rms[0]; //exp(0.5499); //
 	p.rmr = rmr[0]; //exp(3.252);//
 	p.etaB = etaB[0];
-	p.K = k[0];
+	p.K = K[0];
 	p.epsg = epsg[0]; //exp(-3.304); //6.75;
 	p.M = M[0];
 	p.alpha = alpha[0];
@@ -309,20 +549,59 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 		rms,
 		rmr,
 		etaB,
-		k,
+		K,
 		epsg,
 		M,
 		alpha,
 		R0,
 		R40,
-		sparms_indicator
-		//tolout,
-		//errorout,
+
+		parameterLength
+	//tolout,
+	//errorout,
     //drout,
     //demandout,
     //odemandout,
     //odrout
 	);
+
+	// Make sure memory is freed before returning to R
+	free(hmax);
+	free(phih);
+	free(eta);
+	free(swmax);
+	free(lamdas);
+	free(lamdah);
+	free(rhomax);
+	free(f2);
+	free(f1);
+	free(gammac);
+	free(gammax);
+	free(cgl);
+	free(cgr);
+	free(cgw);
+	free(deltal);
+	free(deltar);
+	free(sl);
+	free(sla);
+	free(sr);
+	free(so);
+	free(rr);
+	free(rhor);
+	free(rml);
+	free(rms);
+	free(rmr);
+	free(etaB);
+	free(K);
+	free(epsg);
+	free(M);
+	free(alpha);
+	free(R0);
+	free(R40);
+	free(rhomin);
+	free(gammaw);
+	free(drinit);
+	free(drcrit);
 } // End of Rgrowthloop
 
 
