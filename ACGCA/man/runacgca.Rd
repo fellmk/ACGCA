@@ -20,7 +20,7 @@ runacgca(
 )
 }
 \arguments{
-\item{sparms}{A vector containing the parameters for the simulation.
+\item{sparms}{A named list containing the parameters for the simulation. For an example type 'acru' or 'pita' to see included examples.
 \describe{
    \item{hmax}{Maximum tree height (m)}
    \item{phih}{Slope of H vs. r curve at r = 0 m}

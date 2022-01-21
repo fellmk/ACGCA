@@ -253,8 +253,49 @@ extern void APARcalc(double *APARout, LAindex *LAI, Larea *LA, double eta, doubl
                        double Hc, double FLAI, double Io,
                        Forestparms *ForParms);
 
-extern void acruparms(sparms *p);
 
-extern void pitaparms(sparms *p);
+// extern void acruparms(sparms *p);
+
+// extern void pitaparms(sparms *p);
+
+extern void updateSparms(
+  int index,
+  sparms *p, 
+  int *sparms_indicator,
+  double *hmax,
+	double *phih,
+	double *eta,
+	double *swmax,
+	double *lamdas,
+	double *lamdah,
+	double *rhomax,
+  double *rhomin,
+	double *f2,
+	double *f1,
+	double *gammac,
+  double *gammaw,
+	double *gammax,
+	double *cgl,
+	double *cgr,
+	double *cgw,
+	double *deltal,
+	double *deltar,
+	double *sl,
+	double *sla,
+	double *sr,
+	double *so,
+	double *rr,
+	double *rhor,
+	double *rml,
+	double *rms,
+	double *rmr,
+	double *etaB,
+	double *k,
+	double *epsg,
+	double *M,
+	double *alpha,
+	double *R0,
+	double *R40
+);
 
 #endif

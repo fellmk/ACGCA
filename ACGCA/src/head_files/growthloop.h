@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-//#include "head_files/misc_growth_funcs.h"
+#include "misc_growth_funcs.h"
 
 
 
@@ -57,7 +57,44 @@ extern void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 	double LAI2[], 
 	int status2[],
 	int errorind[],
-	int growth_st[]
+	int growth_st[],
+
+	double hmax[],
+	double phih[],
+	double eta[],
+	double swmax[],
+	double lamdas[],
+	double lamdah[],
+	double rhomax[],
+	double rhomin[],
+	double f2[],
+	double f1[],
+	double gammac[],
+	double gammaw[],
+	double gammax[],
+	double cgl[],
+	double cgr[],
+	double cgw[],
+	double deltal[],
+	double deltar[],
+	double sl[],
+	double sla[],
+	double sr[],
+	double so[],
+	double rr[],
+	double rhor[],
+	double rml[],
+	double rms[],
+	double rmr[],
+	double etaB[],
+	double k[],
+	double epsg[],
+	double M[],
+	double alpha[],
+	double R0[],
+	double R40[],
+	int parameterLength[]
+  //int sparms_indicator[]
   //double *tolout,
   //double *errorout,
   //double *drout,

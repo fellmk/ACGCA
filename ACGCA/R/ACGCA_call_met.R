@@ -28,7 +28,7 @@
 #'
 #' This function provides an easy interface for running the ACGCA model.
 #'
-#' @param sparms A vector containing the parameters for the simulation.
+#' @param sparms A named list containing the parameters for the simulation. For an example type 'acru' or 'pita' to see included examples.
 #' \describe{
 #'    \item{hmax}{Maximum tree height (m)}
 #'    \item{phih}{Slope of H vs. r curve at r = 0 m}
@@ -184,6 +184,20 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
     stop("The input for sparms should be a vector with 32 elements. see the
          help page for a description of each.")
   }
+  
+  sparms_indicator <- numeric(length(sparms))
+  for(i in 1:length(sparms)){
+    if(length(sparms[[i]]) == 1){
+      sparms_indicator[i] <- 0
+    }else if(length(sparms[[i]]) == (steps * years + 1)){
+      sparms_indicator[i] <- 1
+    }else{
+      stop(paste0("sparms entry ", names(sparms)[i], " has length ",
+                   length(sparms[[i]]), 
+                   " but must be either 1 or steps x years + 1 = ", 
+                   steps * years + 1))
+    }
+  }
 
   #if(gapsim==TRUE & length(parmax)>1){
   #  stop("For gap simulations the value of parmax should be scalar equal to
@@ -191,13 +205,57 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
   #}
 
   # Add values to sparms after checking its initial size
-  sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32],
-              0.00001, 0.0075)
+  # rhomin = 525500 (overwritten by rhomax in C)
+  # gammaw = 0.000000667
+  # drinit = 0.00001
+  # drcrit = 0.0075
+  # sparms <- c(sparms[1:7], 525000, sparms[8:10], 0.000000667, sparms[11:32],
+  #             0.00001, 0.0075)
+  
+  additional_parameters <- list(
+    # rhomin = 525500,
+    rhomin = sparms$rho,
+    gammaw = 0.000000667,
+    drinit = 0.00001,
+    drcrit = 0.0075
+  )
+  
+  # Add values to list
+  sparms <- append(sparms, additional_parameters)
+  
+  sparmsC <- numeric()
+  startIndex <- numeric(length(sparms))*NA
+  stopIndex <- numeric(length(sparms))*NA
+  parameterLength <- numeric(length(sparms))*NA
+  lastIndex <- 0
+  
+  # create a single input vector and vectors of start and stop indicies
+  for(i in 1:length(sparms)){
+    parameterLength[i] <- length(sparms[[i]])
+    startIndex[i] <- lastIndex
+    sparmsC <- c(sparmsC, sparms[[i]])
+    lastIndex <- lastIndex + parameterLength[i]
+    stopIndex[i] <- lastIndex-1
+  }
+  # print("sparmsC")
+  # print(sparmsC)
+  # print("startIndex")
+  # print(startIndex)
+  # print("stopIndex")
+  # print(stopIndex)
+  # print("parameterLentgh")
+  # print(parameterLength)
+  # print("sparmsC index test")
+  # for(i in 1:length(sparms)){
+  #   print(paste0("parameter: ", names(sparms)[i], " values: ", sparmsC[(startIndex[i]+1):(stopIndex[i]+1)]))
+  # }
+  
+  
 
   ##### Checks added to ensure proper use 2/27/2018 #####
-  if(!is.matrix(sparms)){
-    sparms <- as.matrix(sparms)
-  }
+  # if(!is.matrix(sparms)){
+  #   sparms <- as.matrix(sparms)
+  # }
 
   #if(r0 < 0.0054){
   #  stop("The radius must be greater than 0.0054 or the function will fail.")
@@ -253,15 +311,18 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
                   cs=numeric(0), clr=numeric(0),
                   growth_st=as.integer(numeric(0)))
 
+  
+  #stop("STOP don't run .C right now")
   #Forparms=list(kF=0.6,
    #             HFmax=40, LAIFmax=6.0)
     # Call the growthloop function using R's C interface.
-    output1<- .C("Rgrowthloop",p=as.double(sparms), gp=as.double(gparms),
+    output1<- .C("Rgrowthloop", gp=as.double(gparms),
                  Io=as.double(parmax), r0=as.double(r0), t=integer(1),
                  Hc=as.double(Hc), LAIF=as.double(LAIF),
                  kF=as.double(Forparms$kF), intF=as.double(Forparms$intF),
                  slopeF=as.double(Forparms$slopeF), 
-	  APARout=double(lenvars),
+	               APARout=double(lenvars),
+                 
       h=double(lenvars),
       hh=double(lenvars),
       hC=double(lenvars),
@@ -301,7 +362,7 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       rfs=double(lenvars),
 
       egrow=double(lenvars),
-      ex=double(lenvars),
+      ex=double(lenvars), #50
       rtrans=double(lenvars),
       light=double(lenvars),
       nut=double(lenvars),
@@ -310,9 +371,54 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
       status=integer(lenvars),
       #dim=as.integer(dim),
       lenvars=as.integer(lenvars),
-
       errorind=integer(lenvars),
-      growth_st=integer(lenvars)
+      growth_st=integer(lenvars),
+      
+      sparms2=as.double(sparmsC), #60
+      startIndex=as.integer(startIndex),
+      stopIndex=as.integer(stopIndex),
+      parameterLength=as.integer(parameterLength)
+      
+	    # hmax=as.double(sparms$hmax), #60
+	    # phih=as.double(sparms$phih),
+	    # eta=as.double(sparms$eta),
+	    # swmax=as.double(sparms$swmax),
+	    # lamdas=as.double(sparms$lamdas),
+	    # lamdah=as.double(sparms$lamdah),
+	    # rhomax=as.double(sparms$rho),
+
+      # f2=as.double(sparms$f2),
+	    # f1=as.double(sparms$f1), 
+	    # gammac=as.double(sparms$gammac), #70
+	    
+	    # gammax=as.double(sparms$gammax),
+	    # cgl=as.double(sparms$cgl),
+	    # cgr=as.double(sparms$cgr),
+	    # cgw=as.double(sparms$cgw),
+	    # deltal=as.double(sparms$deltal),
+	    # deltar=as.double(sparms$deltar),
+	    # sl=as.double(sparms$sl),
+	    # sla=as.double(sparms$sla), 
+	    # sr=as.double(sparms$sr), #80
+	    # so=as.double(sparms$so),
+	    # rr=as.double(sparms$rr),
+	    # rhor=as.double(sparms$rhor),
+	    # rml=as.double(sparms$rml),
+	    # rms=as.double(sparms$rms),
+	    # rmr=as.double(sparms$rmr),
+	    # etaB=as.double(sparms$etaB),
+	    # k=as.double(sparms$k),
+	    # epsg=as.double(sparms$epsg), 
+	    # M=as.double(sparms$M), #90
+	    # alpha=as.double(sparms$alpha),
+	    # R0=as.double(sparms$R0),
+	    # R40=as.double(sparms$R40), #93,
+	    # 
+      # rhomin=as.double(sparms$rho), # set to rhomax. Listed as rho in papers. 
+      # gammaw=as.double(gammaw), # not user defined
+      # drcrit=as.double(drcrit), #96
+      # drinit=as.double(drinit),
+	    
 	    #tolout=double(lenvars*1000),
 	    #errorout=double(lenvars*1000),
 	    #drout=double(lenvars*1000),

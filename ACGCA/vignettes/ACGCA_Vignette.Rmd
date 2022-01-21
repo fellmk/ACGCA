@@ -21,26 +21,30 @@ The Allometrically Constrained Growth and Carbon Allocation (ACGCA) model is an 
 
 Carbon dynamics within the tree are essential to this model. Carbon is allocated between a structural and two storage pools in a way that satisfies the aforementioned allometric relationships (Ogle and Pacala (2009). One storage pool is associated with leaf and fine root tissue. Labile carbon in this pool is retranslocated when the tissue senesceses (Ogle and Pacala 2009). The other storage pool is in the sapwood and is used in times of stress (high labile carbon demand relative to carbon inputs). Finally there is a transient labile carbon pool representative of recent photosynthate and retranslocated carbon. It is not associated with a specific tissue and is immediately redistributed within the tree to accommodate biomass production, respiration, and allocation to storage. If the labile carbon available to the tree is depleted the tree dies (Ogle and Pacala 2009).
 
-There are six possible physiological states in the ACGCA model: healthy, static, shrinking, recovering, recovered, or dead (Ogle and Pacala 2009). Each state is described by a set of difference equations satisfying mass-balance relationshipts between structural and labile carbon pools. The only environmental driver included in the model is parmax (annual radiation for a site). 
+There are six possible physiological states in the ACGCA model: healthy, static, shrinking, recovering, recovered, or dead (Ogle and Pacala 2009). Each state is described by a set of difference equations satisfying mass-balance relationships between structural and labile carbon pools. The only environmental driver included in the model is parmax (annual radiation for a site). 
 
 For a full description of the model see Ogle and Pacala (2009) and the accompanying supplemental material. The model has also been used in several other studies (Fell et al. 2018 and Gemoets et al 2013).
 
 ## Using the Model
-To use the model requires setting up a vector of parameters. The following parameter values are taken from Ogle and Pacala (2009), and are based on inputs to the C version of the code translated from Matlab by Darren Gemoets. Units for each parameter can be found in Ogle and Pacala (2009), Fell el al. (2018), and the runacgca function documentation. Fell et al. (2018). is published in Ecosphere, an open source journal, and thus should be available to all users of this code.
+Using the model requires setting up a list of parameters. The following parameter values are taken from Ogle and Pacala (2009), and are based on inputs to the C version of the code translated from Matlab by Darren Gemoets. Units for each parameter can be found in Ogle and Pacala (2009), Fell el al. (2018), and the runacgca function documentation. Fell et al. (2018). is published in Ecosphere, an open source journal, and thus should be available to all users of this code. Parameters for the species presented in Ogle and Pacala (2009) are included with the package and can be accessed by typing acru or pita.
 
 ```{r, echo=FALSE}
 # A code block to show the values for acru taken from Ogle and Pacala (2009)
 
-load("../data/acru.rda")
-load("../data/parms.rda")
+load("../data/acgca_species.rda")
 
 # disable scientific notation
 options(scipen = 999) # default is 1
 
-acru.data <- cbind(parms, acru)
+acruvalues <- numeric(length(acru))
+for(i in 1:length(acru)){
+  acruvalues[i] <- acru[[i]]
+}
+
+acru.data <- cbind(names(acru), acru)
 library(knitr)
 library(kableExtra)
-knitr::kable(data.frame(parameter.names=parms, parameter.values=acru), "html") %>%
+knitr::kable(data.frame(parameter.names=names(acru), parameter.values=acruvalues), "html") %>%
   kableExtra::kable_styling(full_width=FALSE, position = "left")
 
 # return to default setting
@@ -51,7 +55,8 @@ Once the data are loaded they can be used to call the ACGCA model. There are a f
 
 ```{r}
 # Call the ACGCA model (runacgca)
-acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, years = 50, fulloutput = FALSE)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060*0.5, 
+                            years = 50, fulloutput = FALSE)
 
 # Plot the radius and height output from the model.
 par(mar=c(4,4,1,1))
@@ -68,7 +73,8 @@ acgcaout <- ACGCA::runacgca(sparms = acru,
                             years=50,
                             steps=16, 
                             breast.height=1.37, 
-                            Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0, intF=3.4, slopeF=-5.5), 
+                            Forparms=list(kF=0.6, HFmax=40, LAIFmax=6.0, 
+                                          intF=3.4, slopeF=-5.5), 
                             gapvars=list(gt=50, ct=10, tbg=200), 
                             tolerance=0.00001, 
                             gapsim=FALSE,
@@ -88,7 +94,8 @@ decrease <- rep(x = decrease, each = 10*16) # repeat each value years * steps ti
 parmax <- c(0, rep(2060, 50*16)*decrease)
 
 # run the ACGCA model
-acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = parmax, years = 50, steps = 16, fulloutput = FALSE)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = parmax, 
+                            years = 50, steps = 16, fulloutput = FALSE)
 
 # make a plot of the radius over time and the growth state over time.
 par(mar=c(4,4,1,1))
@@ -104,7 +111,9 @@ Gap simulations similar to those described in Ogle and Pacala (2009) and Fell et
 ```{r}
 # run the ACGCA model
 gapvariables <- list(gt=2, ct=3, tbg=20)
-acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, years = 100, steps = 16, gapvars=gapvariables, gapsim=TRUE, fulloutput = TRUE)
+acgcaout <- ACGCA::runacgca(sparms = acru, r0 = 0.0054, parmax = 2060, 
+                            years = 100, steps = 16, gapvars=gapvariables, 
+                            gapsim=TRUE, fulloutput = TRUE)
 
 # make a plot of the radius over time and the growth state over time.
 par(mar=c(4,4,1,1))
