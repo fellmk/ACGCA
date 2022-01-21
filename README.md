@@ -46,6 +46,25 @@ Rather than installing the package with `devtools` as shown above it is also pos
 ### Modifying Carbon Inputs (Photosynthesis)
 The model of photosynthesis used in the model is extreamly simple (Ogle and Pacala 2009). It can be modified by changing the code in `photosynthesis.c` and `photosynthesis.h`. It may also be necessary to modify the inputs to this code on line 300 of `growthloop.c`. Currently the state vector and tree trait values are passed to the `photosynthesis(p, &st)` function. The struct `st` contains the state variables of the tree (most of the values are covered in the R help file as outputs) for the current timestep. The values that are output to R are stored into vectors at the end of the `growthloop()` function. The input `p` is a pointer to a struct containing the tree's trait values passed from R. Other parameters for a model could be added but they would either need to be passed into the growthloop from R or read into a new function directly from a data file. 
 
+### Adding C inputs
+Due to the limitations of the `.C()` function in R used to run C code only 65 arguments can be passed to C. To add new inputs the easiest approach is to add them to the sparms list. A block of code in `ACGCA_call_met.R` in the R source folder converts the list to a vector and produces a variable containing the start index for each input as well as its length. These values are used to convert the values back into unique variables in C within `Rgrowthloop.c`. For each new input memory needs to be allocated in C. This is done as shown below for hmax. the index for the variable is the possition in the sparms list in R minus 1. 
+```{C}
+	double *hmax;
+	drcrit = malloc(parameterLength[0]*sizeof(double));
+```
+The new variable in C then needs to have values read into it. Given all values in sparms are assumed to be of length 1 or `steps * years + 1` for loops are used to populate the variables passed to `growthloop.c` as follows:
+```{C}
+	for(int i=0; i < parameterLength[0]; i++){
+		int index = startIndex[0] + i;
+		hmax[i] = sparms2[index];
+	}
+```
+Code should also be added to the end of `Rgrowthloop.c` to free the memory before execution is returned to R after the growthloop finishes running. this is done by adding a `free()` call at the end of the file.
+```{C}
+free(hmax);
+```
+The variable also needs to be added to the call for the growthloop in `Rgrowthloop.c` as well as to the function declaration in `growthloop.c` and its header file `growthloop.h`. At this point the variable can be used within the growthloop. 
+
 ## References
 
 Fell, M., J. Barber, J. W. Lichstein, and K. Ogle. 2018. Multidimensional trait space informed by a mechanistic model of tree growth and carbon allocation. Ecosphere 9. DOI:10.1002/ecs2.2060
