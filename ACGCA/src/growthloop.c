@@ -286,7 +286,7 @@ void growthloop(sparms *p, gparms *gp, double *Io, double *r0, int *t,
 			R40
 		);
 
-		Rprintf("p.sla value: %g for iteration: %i\n", p->sla, i);
+		// Rprintf("p.sla value: %g for iteration: %i\n", p->sla, i);
 
   		double APAR[2];
   		APAR[0] = -1;

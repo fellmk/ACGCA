@@ -4,23 +4,22 @@ library("roxygen2")
 
 setwd("./ACGCA")
 document()
-devtools::build(vignettes = FALSE)
+devtools::build(vignettes = TRUE)
 
 setwd("..")
-install("ACGCA", build_vignettes = FALSE)
+install("ACGCA", build_vignettes = TRUE)
 
 library(ACGCA)
-# help(package="ACGCA")
-# browseVignettes("ACGCA")
+help(package="ACGCA")
+browseVignettes("ACGCA")
 
-source("ACGCA/R/acru_pita_lists.R")
+# Run these to test single vs variable values
 test <- runacgca(acru)
 acru2 <- acru
 acru2$sla <- seq(0.0141, 0.0141, length.out = 801)
 test2 <- runacgca(acru2)
-# for(i in 1:1){
-#   test2 <- runacgca(acru2)
-# }
-
 plot(test2$r - test$r)
 
+acru2$sla <- seq(0.0141, 0.1, length.out = 801)
+test2 <- runacgca(acru2)
+plot(test2$r - test$r)
