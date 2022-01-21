@@ -49,15 +49,15 @@ The model of photosynthesis used in the model is extreamly simple (Ogle and Paca
 ### Adding C inputs
 Due to the limitations of the `.C()` function in R used to run C code only 65 arguments can be passed to C. To add new inputs the easiest approach is to add them to the sparms list. A block of code in `ACGCA_call_met.R` in the R source folder converts the list to a vector and produces a variable containing the start index for each input as well as its length. These values are used to convert the values back into unique variables in C within `Rgrowthloop.c`. For each new input memory needs to be allocated in C. This is done as shown below for hmax. the index for the variable is the possition in the sparms list in R minus 1. 
 ```{C}
-	double *hmax;
-	drcrit = malloc(parameterLength[0]*sizeof(double));
+double *hmax;
+drcrit = malloc(parameterLength[0]*sizeof(double));
 ```
 The new variable in C then needs to have values read into it. Given all values in sparms are assumed to be of length 1 or `steps * years + 1` for loops are used to populate the variables passed to `growthloop.c` as follows:
 ```{C}
-	for(int i=0; i < parameterLength[0]; i++){
-		int index = startIndex[0] + i;
-		hmax[i] = sparms2[index];
-	}
+for(int i=0; i < parameterLength[0]; i++){
+	int index = startIndex[0] + i;
+	hmax[i] = sparms2[index];
+}
 ```
 Code should also be added to the end of `Rgrowthloop.c` to free the memory before execution is returned to R after the growthloop finishes running. this is done by adding a `free()` call at the end of the file.
 ```{C}
