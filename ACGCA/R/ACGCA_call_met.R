@@ -28,7 +28,7 @@
 #'
 #' This function provides an easy interface for running the ACGCA model.
 #'
-#' @param sparms A vector containing the parameters for the simulation.
+#' @param sparms A named list containing the parameters for the simulation.
 #' \describe{
 #'    \item{hmax}{Maximum tree height (m)}
 #'    \item{phih}{Slope of H vs. r curve at r = 0 m}
@@ -237,19 +237,18 @@ runacgca <- function(sparms, r0=0.05, parmax=2060, years=50,
     lastIndex <- lastIndex + parameterLength[i]
     stopIndex[i] <- lastIndex-1
   }
-  print("sparmsC")
-  print(sparmsC)
-  print("startIndex")
-  print(startIndex)
-  print("stopIndex")
-  print(stopIndex)
-  print("parameterLentgh")
-  print(parameterLength)
-  
-  print("sparmsC index test")
-  for(i in 1:length(sparms)){
-    print(paste0("parameter: ", names(sparms)[i], " values: ", sparmsC[(startIndex[i]+1):(stopIndex[i]+1)]))
-  }
+  # print("sparmsC")
+  # print(sparmsC)
+  # print("startIndex")
+  # print(startIndex)
+  # print("stopIndex")
+  # print(stopIndex)
+  # print("parameterLentgh")
+  # print(parameterLength)
+  # print("sparmsC index test")
+  # for(i in 1:length(sparms)){
+  #   print(paste0("parameter: ", names(sparms)[i], " values: ", sparmsC[(startIndex[i]+1):(stopIndex[i]+1)]))
+  # }
   
   
 

@@ -116,12 +116,12 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
   //double *odemandout,
   //double *odrout)
 {
-	Rprintf("start function. \n");
+	// Rprintf("start function. \n");
 
-	Rprintf("sparms2 values: \n");
-	for(int i = 0; i < 36; i++){
-		Rprintf("%g\n", sparms2[i]);
-	}
+	// Rprintf("sparms2 values: \n");
+	// for(int i = 0; i < 36; i++){
+	// 	Rprintf("%g\n", sparms2[i]);
+	// }
 	///////////////////////////////////////////////////////////////////////////
 	// Declare two structs and use them to store the simulation parameters
 	// and the simulation control variables.
@@ -207,9 +207,9 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 
 	double *sla;
 	sla = malloc(parameterLength[17]*sizeof(double));
-	Rprintf("sla length: %i\n", parameterLength[17]);
-	Rprintf("sizeof double %i\n", sizeof(double));
-	Rprintf("sizeof sla %i\n", sizeof(sla));
+	// Rprintf("sla length: %i\n", parameterLength[17]);
+	// Rprintf("sizeof double %i\n", sizeof(double));
+	// Rprintf("sizeof sla %i\n", sizeof(sla));
 
 	double *sr;
 	sr = malloc(parameterLength[18]*sizeof(double));
@@ -248,9 +248,9 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	double *drcrit;
 	drcrit = malloc(parameterLength[35]*sizeof(double));
 
-	for(int i=0; i < 36; i++){
-		Rprintf("value of index: %i value of parameterLength: %i\n", i, parameterLength[i]);
-	}
+	// for(int i=0; i < 36; i++){
+	// 	Rprintf("value of index: %i value of parameterLength: %i\n", i, parameterLength[i]);
+	// }
 
 	for(int i=0; i < parameterLength[0]; i++){
 		//Rprintf("i: %i\n", i);
@@ -326,12 +326,12 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	for(int i=0; i < parameterLength[17]; i++){
 		int index = startIndex[17] + i;
 		sla[i] = sparms2[index];
-		Rprintf("SLA value %i: %g\n", i, sla[i]);	
+		// Rprintf("SLA value %i: %g\n", i, sla[i]);	
 	}
 
-	Rprintf("sla length: %i\n", parameterLength[17]);
-	Rprintf("sizeof double %i\n", sizeof(double));
-	Rprintf("sizeof sla %i\n", sizeof(sla));
+	// Rprintf("sla length: %i\n", parameterLength[17]);
+	// Rprintf("sizeof double %i\n", sizeof(double));
+	// Rprintf("sizeof sla %i\n", sizeof(sla));
 
 	for(int i=0; i < parameterLength[18]; i++){
 		int index = startIndex[18] + i;
@@ -400,14 +400,12 @@ void Rgrowthloop(double *gp2, double *Io, double *r0, int *t,
 	for(int i=0; i < parameterLength[34]; i++){
 		int index = startIndex[34] + i;
 		drinit[i] = sparms2[index];
-		Rprintf("drinit value %i: %g\n", i, drinit[i]);	
-
+		// Rprintf("drinit value %i: %g\n", i, drinit[i]);	
 	}
 	for(int i=0; i < parameterLength[35]; i++){
 		int index = startIndex[35] + i;
 		drcrit[i] = sparms2[index];
-		Rprintf("drcrit value %i: %g\n", i, drcrit[i]);	
-
+		// Rprintf("drcrit value %i: %g\n", i, drcrit[i]);	
 	}
 
 	// NOTE: all indicies -1 because C starts at 0 while R starts at 1

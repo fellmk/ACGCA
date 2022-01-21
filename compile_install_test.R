@@ -16,9 +16,11 @@ library(ACGCA)
 source("ACGCA/R/acru_pita_lists.R")
 test <- runacgca(acru)
 acru2 <- acru
-acru2$sla <- seq(0.01, 0.02, length.out = 801)
-for(i in 1:100){
-  test2 <- runacgca(acru2)
-}
+acru2$sla <- seq(0.0141, 0.0141, length.out = 801)
+test2 <- runacgca(acru2)
+# for(i in 1:1){
+#   test2 <- runacgca(acru2)
+# }
 
-plot(test$h - test2$h)
+plot(test2$r - test$r)
+
