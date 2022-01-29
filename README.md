@@ -4,7 +4,7 @@
   * [Using the ACGCA model](#using-the-acgca-model)
     * [Installing the ACGCA Package](#installation)
     * [Quick Test](#quicktest)
-* [Package Structure](#package structure)
+* [Package structure](#package-structure)
 * [Advanced](#advanced)
 * [References](#references)
 
@@ -29,13 +29,13 @@ library(ACGCA)
 ```
 The first command `.libPaths()` is not necessarily needed but will list available R libraries on your system. The second line installs the devtools package which is required for installing the ACGCA package. The third line loads devtools. The final two lines install and load the ACGCA package. Where `lib="LIBRARYPATH"` insert the R library where you would like the package to install. The default will be used if this is not specified.
 
-### Quick Test
+### Quick test
 Run a quick test to make sure the ACGCA model is working
 ```{R}
 test <- runacgca(sparms = acru, parmax = 1000, years = 50, steps = 16) # acru contains a set of parameters
 plot(x=1:800/16, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)")
 ```
-## Package Structure
+## Package structure
 The ACGCA package was built using `roxygen2` and `devtools`. For more information on using these tools see Hadley Wickham's book on R package development `https://r-pkgs.org/`. In the main repository folder `compile_install_test.R` can be opened via `ACGCA.Rproj` to compile the package from source. Depending on the operating system being used additional packages for either R or the operating system may be required. When compiled the ACGCA package contains a single function, `runacgca()` and two data sets, one for *acer rubrum*, and another for *pinus taeda* which can be accessed once the package is loaded by typing `acru` or `pita` in the R console respectively. The parameters for both species are taken from Ogle and Pacala (2009). 
 
 ### Source Code
