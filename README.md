@@ -33,7 +33,7 @@ The first command `.libPaths()` is not necessarily needed but will list availabl
 Run a quick test to make sure the ACGCA model is working
 ```{R}
 test <- runacgca(sparms = acru, parmax = 1000, years = 50, steps = 16) # acru contains a set of parameters
-plot(x=1:800/16, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)")
+plot(x=0:50, y = test$h, type="l", xlab = "time (years)", ylab = "height (m)")
 ```
 
 ### More help
